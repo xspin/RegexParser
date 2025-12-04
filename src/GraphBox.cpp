@@ -1,0 +1,296 @@
+#include <numeric>
+#include <iostream>
+#include "GraphBox.h"
+#include <unordered_map>
+
+enum Table {
+    TAB_LEFT_TOP = 0,
+    TAB_H_LINE,
+    TAB_RIGHT_TOP,
+    TAB_V_LINE,
+    TAB_LEFT_BOTTOM,
+    TAB_RIGHT_BOTTOM,
+    TAB_RIGHT_T,
+    TAB_LEFT_T,
+    TAB_UP_T,
+    TAB_DOWN_T,
+    TAB_MAX
+};
+
+static const std::vector<std::vector<std::string>> s_tables = {
+    {"┌", "─", "┐", "│", "└", "┘", "┤", "├", "┬", "┴"}, // Default / Normal
+    {"╭", "╴", "╮", "┆", "╰", "╯", "┼", "┼", "┬", "┴"}, // Dashed / Group
+    {"┏", "━", "┓", "┃", "┗", "┛", "┫", "┣", "┳", "┻"}, // Bold / Class
+    {"┏", "┅", "┓", "┃", "┗", "┛", "┫", "┣", "┳", "┻"}, // BoldDashed / Neg-Class
+    {"╔", "═", "╗", "║", "╚", "╝", "╣", "╠", "╦", "╩"}, // Double
+    {" ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, // Empty
+};
+
+static std::unordered_map<std::string,std::string> s_map;
+
+std::string rotate(const std::string& s) {
+    if (s.size() <= 1) return s;
+    if (s_map.empty()) {
+        for (size_t i=0; i<s_tables.size()-1; i++) {
+            const auto& tb = s_tables[i];
+            s_map[tb[TAB_LEFT_TOP]] = tb[TAB_RIGHT_TOP];
+            s_map[tb[TAB_RIGHT_TOP]] = tb[TAB_RIGHT_BOTTOM];
+            s_map[tb[TAB_RIGHT_BOTTOM]] = tb[TAB_LEFT_BOTTOM];
+            s_map[tb[TAB_LEFT_BOTTOM]] = tb[TAB_LEFT_TOP];
+            s_map[tb[TAB_H_LINE]] = tb[TAB_V_LINE];
+            s_map[tb[TAB_V_LINE]] = tb[TAB_H_LINE];
+            s_map[tb[TAB_RIGHT_T]] = tb[TAB_DOWN_T];
+            s_map[tb[TAB_DOWN_T]] = tb[TAB_LEFT_T];
+            s_map[tb[TAB_LEFT_T]] = tb[TAB_UP_T];
+            s_map[tb[TAB_UP_T]] = tb[TAB_RIGHT_T];
+        }
+    }
+    auto it = s_map.find(s);
+    if (it != s_map.end()) return it->second;
+    return s;
+}
+
+/*
+    make each line same length
+*/
+static Rows rows_pad(const Rows& lines) {
+    size_t width = 0;
+    size_t min_width = INT_MAX;
+    for (const auto& s : lines) {
+        width =  std::max(width, visual_len(s));
+        min_width =  std::min(min_width, visual_len(s));
+    }
+    if (min_width == width) return lines;
+
+    Rows res;
+    for (auto& line : lines) {
+        res.push_back(visual_str_pad(line, width, Utils::Align::LEFT));
+    }
+    return res;
+}
+
+
+/*
+    Expand each line
+
+    Make sure all lines same length
+*/
+Rows box_expand(const Rows& lines, size_t width, const std::string& link) {
+    assert(!lines.empty());
+
+    if (width <= visual_len(lines.front())) {
+        return lines;
+    }
+
+    size_t w = width - visual_len(lines.front());
+
+    size_t mid = lines.size() / 2;
+    size_t lw = w / 2;
+    size_t rw = w - lw;
+    std::string lspaces = std::string(lw, ' ');
+    std::string rspaces = std::string(rw, ' ');
+
+    Rows res;
+    for (size_t i=0; i<lines.size(); i++) {
+        if (i == mid && !link.empty()) {
+            res.push_back(Utils::str_repeat(link, lw) + lines[i] + Utils::str_repeat(link, rw));
+        } else {
+            res.push_back(lspaces + lines[i] + rspaces);
+        }
+    }
+    return res;
+}
+
+
+/* Make sure each line same length */
+Rows box_bottom(const Rows& lines, const std::string& tag, bool dashed) {
+    assert(!lines.empty());
+    Rows res;
+    size_t height = lines.size();
+    size_t mid = height / 2;
+    size_t width = visual_len(lines.front());
+
+    Rows rows;
+    if (width < visual_len(tag)) {
+        width = visual_len(tag);
+        rows = box_expand(lines, width, Line::HORIZON);
+    } else {
+        rows = lines;
+    }
+
+    std::string vline = dashed? Line::VERTICAL_DASHED : Line::VERTICAL;
+    std::string hline = Line::HORIZON;
+
+    size_t i = 0;
+
+    if (is_even(height+1)) {
+        res.push_back(std::string(width+4, ' '));
+    }
+
+    for (; i < mid; i++) {
+        res.push_back("  " + rows[i] + "  ");
+    }
+
+    res.push_back(Line::HORIZON + Line::UP_T + rows[i++] + Line::UP_T + Line::HORIZON);
+
+    for (; i < height; i++) {
+        res.push_back(" " + vline + rows[i] + vline + " ");
+    }
+
+    res.push_back(
+        " " + Line::LEFT_BOTTOM 
+        + visual_str_pad(tag, width, Utils::Align::CENTER, hline) 
+        + Line::RIGHT_BOTTOM + " ");
+
+    return res;
+}
+
+Rows box_table(TableId id, const Rows& lines, const std::string& top) {
+    assert(!lines.empty());
+    Rows res;
+    const auto& tab = s_tables[static_cast<int>(id)];
+
+    // pad each line to same length
+    Rows rows = rows_pad(lines);
+
+    size_t width = visual_len(rows.front());
+
+    size_t len = visual_len(top);
+
+    if (width < len) {
+        if (id == TableId::DASHED) { // for Group
+            rows = box_expand(rows, len, Line::HORIZON);
+        } else {
+            rows = box_expand(rows, len, "");
+        }
+    }
+
+    width = std::max(width, len) + 2;
+
+    size_t margin = 1;
+    size_t height = rows.size() + 2;
+
+    std::string padding = Utils::str_repeat(" ", margin);
+    std::string link = Utils::str_repeat(Line::HORIZON, margin);
+    // std::string rlink = Utils::str_repeat(Line::HORIZON, margin-1) + ">";
+
+    size_t mid = height / 2;
+
+    std::string h_line = Utils::str_repeat(tab[TAB_H_LINE], width-2);
+
+    res.push_back(padding + tab[TAB_LEFT_TOP] 
+        + visual_str_pad(top, width-2, Utils::Align::CENTER, tab[TAB_H_LINE]) 
+        + tab[TAB_RIGHT_TOP] + padding);
+
+    for (const auto& line : rows) {
+        size_t i = res.size();
+        if (i == mid) {
+            res.push_back(link + tab[TAB_RIGHT_T]
+                + visual_str_pad(line, width-2, Utils::Align::CENTER)
+                + tab[TAB_LEFT_T] + link);
+        } else {
+            res.push_back(padding + tab[TAB_V_LINE]
+                + visual_str_pad(line, width-2, Utils::Align::CENTER)
+                + tab[TAB_V_LINE] + padding);
+        }
+        
+    }
+    res.push_back(padding + tab[TAB_LEFT_BOTTOM] + h_line + tab[TAB_RIGHT_BOTTOM] + padding);
+
+    return res;
+}
+
+
+std::unique_ptr<RootBox> expr_to_box(ExprNode* expr) {
+    assert(expr);
+
+    std::stack<std::pair<int,GraphBox*>> stk;
+
+    int level = 0;
+    expr->travel([&level](ExprNode* node) {
+        ++level;
+    },  [&](ExprNode* node) {
+        GraphBox* p = nullptr;
+        GraphBox* t = stk.empty()? nullptr : stk.top().second;
+
+        if (node == nullptr) {
+            p = new EmptyBox();
+        } else if (node->isType(ExprType::T_CLASS)) {
+            auto cls = static_cast<Class*>(node);
+            assert(t);
+            p = new ClassBox(t, cls->negative);
+            stk.pop();
+        } else if (node->isType(ExprType::T_GROUP)) {
+            auto group = static_cast<Group*>(node);
+            assert(t);
+            p = new GroupBox(t, group->id);
+            stk.pop();
+        } else if (node->isType(ExprType::T_QUANTIFIER)) {
+            assert(t);
+            p = new QuantBox(t);
+            stk.pop();
+        } else if (node->isType(ExprType::T_SEQUENCE)) {
+            std::vector<GraphBox*> tmp;
+            while (!stk.empty() && level+1 == stk.top().first) {
+                tmp.push_back(stk.top().second);
+                stk.pop();
+            }
+            p = new LinkBox(tmp);
+        } else if (node->isType(ExprType::T_OR)) {
+            std::vector<GraphBox*> tmp;
+            while (!stk.empty() && level+1 == stk.top().first) {
+                tmp.push_back(stk.top().second);
+                stk.pop();
+            }
+            p = new BranchBox(tmp);
+        } else if (node->isType(ExprType::T_LOOKAHEAD)) {
+            assert(t);
+            auto look = static_cast<Lookahead*>(node);
+            p = new AssertionBox(t, look->negative? "?!" : "?=");
+            stk.pop();
+        } else if (node->isType(ExprType::T_LOOKBEHIND)) {
+            assert(t);
+            auto look = static_cast<Lookbehind*>(node);
+            p = new AssertionBox(t, look->negative? "?<!" : "?<=");
+            stk.pop();
+        } else if (node->isType(ExprType::T_ANCHOR)) {
+            p = new AnchorBox(node->str(false));
+        } else if (node->isType(ExprType::T_ANY)) {
+            p = new AnchorBox(".");
+        } else if (node->isType(ExprType::T_ESCAPED)) {
+            p = new EscapedBox(node->str());
+        } else if (node->isType(ExprType::T_RANGE)) {
+            p = new RangeBox(node->str());
+        } else {
+            // T_LITERAL,
+            p = new NormalBox(node->str());
+        }
+
+        if (p) {
+            p->set_expr(node);
+            stk.emplace(level, p);
+            // DEBUG_OS << "push: " << level << " " << p << " " << (node? node->str():"null") << "\n";
+        }
+        --level;
+    }, true);
+
+    assert(!stk.empty());
+
+    RootBox* root = new RootBox(stk.top().second);
+
+    stk.pop();
+    while (!stk.empty()) {
+        auto t = stk.top().second;
+        DEBUG_OS << "pop: " << stk.top().first << " " << t
+            << (t->get_expr()?t->get_expr()->str() : "")
+            << " Maybe something wrong!\n";
+        stk.pop();
+    }
+
+    root->render();
+
+    return std::unique_ptr<RootBox>(root);
+};
+
+bool GraphBox::color = false;
+bool GraphBox::utf8_encoding = false;
