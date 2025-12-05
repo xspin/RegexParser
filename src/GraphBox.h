@@ -2,12 +2,10 @@
 #include <vector>
 #include <stack>
 #include "utils.h"
-#include "parser.h"
+#include "Parser.h"
 #include "unicode.h"
 
 using Rows = std::vector<std::string>;
-
-// static const std::string space = "⏡";
 
 enum class TableId {
     DEFAULT = 0,
@@ -32,15 +30,18 @@ namespace Line {
     const std::string LEFT_T = "├";
     const std::string UP_T =  "┬";
     const std::string DOWN_T =  "┴";
-    const std::string TERMINAL = "●";
+    const std::string START = "●";
+    const std::string TERMINAL = "◎";
 };
+
+using Align = Utils::Align;
 
 static inline size_t visual_len(const std::string& s) {
     return visual_width(s);
 }
 
 static inline std::string visual_str_pad(const std::string& s, size_t n,
-    Utils::Align align, const std::string& p=" ") {
+    Align align, const std::string& p=" ") {
     size_t w = visual_len(s);
     if (n < w) DEBUG_OS << "length exceeds\n";
     if (n <= w) return s;
@@ -82,7 +83,8 @@ Rows box_bottom(
 
 Rows box_expand(
     const Rows& lines, size_t width,
-    const std::string& link=Line::HORIZON);
+    const std::string& link=Line::HORIZON, 
+    Align align=Align::CENTER);
 
 static inline Rows box_ext(TableId id,
     const Rows& lines,
@@ -204,6 +206,7 @@ public:
 
     void set_quantifier(const Quantifier* q) {
         quant = std::make_unique<Quant>(q);
+        quant->str = pack_color(quant->str);
     }
 
     const std::vector<GraphBox*>* get_child() {
@@ -298,7 +301,7 @@ public:
     void render() {
         child.front()->render();
         const Rows& rows = child.front()->get_rows();
-        this->rows = box_group(rows, top, quant.get());
+        this->rows = box_group(rows, pack_color(top), quant.get());
     }
 };
 
@@ -553,8 +556,13 @@ public:
         auto p = child.front();
         p->render();
 
-        Rows tmp = box_expand(p->get_rows(), p->get_width()+2, Line::HORIZON);
-        this->rows = box_expand(tmp, p->get_width()+4, Line::TERMINAL);
+        size_t w = p->get_width();
+        w += 2;
+        Rows tmp = box_expand(p->get_rows(), w, Line::HORIZON);
+        w += 1;
+        tmp = box_expand(tmp, w, Line::START, Align::RIGHT);
+        w += 1;
+        this->rows = box_expand(tmp, w, Line::TERMINAL, Align::LEFT);
     }
 };
 

@@ -2,7 +2,7 @@
 #include <iostream>
 #include <iomanip>
 #include <FlexLexer.h>
-#include "parser.h"
+#include "Parser.h"
 #include "y.tab.hh"
 
 // #define YYDEBUG 1

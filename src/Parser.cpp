@@ -1,4 +1,4 @@
-#include "parser.h"
+#include "Parser.h"
 
 int ExprNode::indent = 0;
 
@@ -49,6 +49,33 @@ static inline std::pair<std::string,std::string> parse_range(const std::string& 
     return {a, b};
 }
 
+/* ExprNode */
+
+ExprNode::ExprNode(ExprType t): type(t) { }
+
+bool ExprNode::isType(ExprType t) {
+    return type == t;
+}
+
+bool ExprNode::isQuantifier() {
+    return isType(ExprType::T_QUANTIFIER);
+}
+
+bool ExprNode::isOR() {
+    return isType(ExprType::T_OR);
+}
+
+bool ExprNode::isSequence() {
+    return isType(ExprType::T_SEQUENCE);
+}
+
+bool ExprNode::isGroup() {
+    return isType(ExprType::T_GROUP);
+}
+
+bool ExprNode::isLiteral() {
+    return isType(ExprType::T_LITERAL);
+}
 
 std::string ExprNode::prefix(int indent) {
     if (this->indent > 0) {
@@ -73,8 +100,7 @@ std::string ExprNode::format(int indent, bool color) {
             }
         }
 
-        std::string s = std::string(width, '=') + f + std::string(width, '=');
-        return s;
+        return f;
     } else {
         return this->fmt(0, color);
     }

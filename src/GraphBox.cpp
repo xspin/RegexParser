@@ -64,7 +64,7 @@ static Rows rows_pad(const Rows& lines) {
 
     Rows res;
     for (auto& line : lines) {
-        res.push_back(visual_str_pad(line, width, Utils::Align::LEFT));
+        res.push_back(visual_str_pad(line, width, Align::LEFT));
     }
     return res;
 }
@@ -75,7 +75,7 @@ static Rows rows_pad(const Rows& lines) {
 
     Make sure all lines same length
 */
-Rows box_expand(const Rows& lines, size_t width, const std::string& link) {
+Rows box_expand(const Rows& lines, size_t width, const std::string& link, Align align) {
     assert(!lines.empty());
 
     if (width <= visual_len(lines.front())) {
@@ -93,9 +93,21 @@ Rows box_expand(const Rows& lines, size_t width, const std::string& link) {
     Rows res;
     for (size_t i=0; i<lines.size(); i++) {
         if (i == mid && !link.empty()) {
-            res.push_back(Utils::str_repeat(link, lw) + lines[i] + Utils::str_repeat(link, rw));
+            if (align == Align::LEFT) {
+                res.push_back(lines[i] + Utils::str_repeat(link, w));
+            } else if (align == Align::RIGHT) {
+                res.push_back(Utils::str_repeat(link, w) + lines[i]);
+            } else {
+                res.push_back(Utils::str_repeat(link, lw) + lines[i] + Utils::str_repeat(link, rw));
+            }
         } else {
-            res.push_back(lspaces + lines[i] + rspaces);
+            if (align == Align::LEFT) {
+                res.push_back(lines[i] + lspaces + rspaces);
+            } else if (align == Align::RIGHT) {
+                res.push_back(lspaces + rspaces + lines[i]);
+            } else {
+                res.push_back(lspaces + lines[i] + rspaces);
+            }
         }
     }
     return res;
@@ -139,7 +151,7 @@ Rows box_bottom(const Rows& lines, const std::string& tag, bool dashed) {
 
     res.push_back(
         " " + Line::LEFT_BOTTOM 
-        + visual_str_pad(tag, width, Utils::Align::CENTER, hline) 
+        + visual_str_pad(tag, width, Align::CENTER, hline) 
         + Line::RIGHT_BOTTOM + " ");
 
     return res;
@@ -179,18 +191,18 @@ Rows box_table(TableId id, const Rows& lines, const std::string& top) {
     std::string h_line = Utils::str_repeat(tab[TAB_H_LINE], width-2);
 
     res.push_back(padding + tab[TAB_LEFT_TOP] 
-        + visual_str_pad(top, width-2, Utils::Align::CENTER, tab[TAB_H_LINE]) 
+        + visual_str_pad(top, width-2, Align::CENTER, tab[TAB_H_LINE]) 
         + tab[TAB_RIGHT_TOP] + padding);
 
     for (const auto& line : rows) {
         size_t i = res.size();
         if (i == mid) {
             res.push_back(link + tab[TAB_RIGHT_T]
-                + visual_str_pad(line, width-2, Utils::Align::CENTER)
+                + visual_str_pad(line, width-2, Align::CENTER)
                 + tab[TAB_LEFT_T] + link);
         } else {
             res.push_back(padding + tab[TAB_V_LINE]
-                + visual_str_pad(line, width-2, Utils::Align::CENTER)
+                + visual_str_pad(line, width-2, Align::CENTER)
                 + tab[TAB_V_LINE] + padding);
         }
         

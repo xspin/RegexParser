@@ -69,32 +69,41 @@ int parse_args(Args& args, int argc, char* argv[]) {
         << "    -h           show this helpful usage message\n"
         << "    -v           show version info\n"
         << "    -o           specify output file path (default stdout)\n"
-        << "    -f s|g|t|p   specify output format: svg/s, graph/g, tree/t, simple/p (default graph)\n"
+        << "    -f [FORMAT]  specify output format (default graph):\n"
+        << "                     svg/s, graph/g, tree/t, simple/p, nfa/n, dfa/d\n"
+        << "                     multiply example: g,t,d\n"
         << "    -c           print with color\n"
         << "    -g           generate a random regular expression with specified length limit\n"
-        << "    -u           utf8 encoding (default false)\n"
-        << "   [REGEX]       specify regular expression input (read from stdin if without this)\n";
+        << "    -u           enable utf8 encoding (default off)\n"
+        << "   [REGEX]       specify regular expression input (read from stdin if missing)\n";
 
-    args.format = FMT::GRAPH;
+    args.format = 0;
     args.color = false;
     args.debug = false;
     args.utf8 = false;
     args.rand = 0;
 
-    auto parse_format = [&args](const std::string& s) {
-        FMT fmt;
-        if (s == "s" || s == "svg") {
-            fmt = FMT::SVG;
-        } else if (s == "g" || s == "graph") {
-            fmt = FMT::GRAPH;
-        } else if (s == "t" || s == "tree") {
-            fmt = FMT::TREE;
-        } else if (s == "p" || s == "simple") {
-            fmt = FMT::SIMPLE;
-        } else {
-            return false;
+    auto parse_format = [&args](const std::string& arg) {
+        for (auto [i, k] : split(arg, ',')) {
+            FMT fmt;
+            std::string s = arg.substr(i, k);
+            if (s == "s" || s == "svg") {
+                fmt = FMT_SVG;
+            } else if (s == "g" || s == "graph") {
+                fmt = FMT_GRAPH;
+            } else if (s == "t" || s == "tree") {
+                fmt = FMT_TREE;
+            } else if (s == "p" || s == "simple") {
+                fmt = FMT_SIMPLE;
+            } else if (s == "n" || s == "nfa") {
+                fmt = FMT_NFA;
+            } else if (s == "d" || s == "dfa") {
+                fmt = FMT_DFA;
+            } else {
+                return false;
+            }
+            args.format |= fmt;
         }
-        args.format = fmt;
         return true;
     };
 
@@ -154,6 +163,8 @@ int parse_args(Args& args, int argc, char* argv[]) {
         }
         if (parse_opt()) return -1; 
     }
+
+    if (args.format == 0) args.format = FMT_GRAPH;
 
     if (args.rand > 0) {
         RegexGenerator g;

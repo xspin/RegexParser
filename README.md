@@ -26,7 +26,7 @@ make test
 # Parse a specified regular expression
 build/regexparser '^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$'
 
-# Print Colored result
+# Print ansi-colored result
 build/regexparser -c '[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\.?'
 
 # Generate and parse a random regular expression
@@ -40,7 +40,7 @@ build/regexparser -g 20 -f tree
 build/regexparser -h
 ```
 
-A output example:
+An output example:
 
 ```
 Parsed Expr: ((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}

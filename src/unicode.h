@@ -1,6 +1,7 @@
 #ifndef __UNICODE_H__
 #define __UNICODE_H__
 
+#include <cassert>
 #include <iostream>
 #include <string>
 #include <sstream>

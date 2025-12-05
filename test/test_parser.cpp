@@ -1,11 +1,8 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-#include "parser.h"
+#include "Parser.h"
 
-std::unique_ptr<char> fn() {
-    return std::make_unique<char>(10);
-}
 
 TEST(PARSER, regex_parse) {
     std::string expr;

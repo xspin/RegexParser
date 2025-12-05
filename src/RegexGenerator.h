@@ -85,7 +85,7 @@ private:
         output("}");
     }
 
-    bool prob(int percent=50) {
+    bool prob(size_t percent=50) {
         return rand(1, 100) <= percent;
     }
 

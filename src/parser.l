@@ -6,7 +6,7 @@
 #include <sstream>
 #include <iomanip>
 
-#include "parser.h"
+#include "Parser.h"
 #include "y.tab.hh"
 #include "utils.h"
 

@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#define APP_VERSION "0.1.0"
+#define APP_VERSION "0.2.0"
 
 
 #define DEBUG_OS \
@@ -17,17 +17,19 @@
 
 namespace Utils
 {
-enum class FMT {
-    GRAPH,
-    SVG,
-    TREE,
-    SIMPLE
+enum FMT {
+    FMT_GRAPH = 0x1,
+    FMT_SVG = 0x2,
+    FMT_TREE = 0x4,
+    FMT_SIMPLE = 0x8,
+    FMT_NFA = 0x10,
+    FMT_DFA = 0x20,
 };
 
 struct Args {
     std::string output;
     std::string expr;
-    FMT format;
+    int format;
     bool color;
     bool debug;
     bool utf8;

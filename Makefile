@@ -1,25 +1,46 @@
-BUILD_DIR := build
+
+OS ?= unix
+
+ifeq ($(OS), windows)
+    CC      = x86_64-w64-mingw32-gcc
+    CXX     = x86_64-w64-mingw32-g++
+    LD      = x86_64-w64-mingw32-ld
+    SUFFIX  = .exe
+    CFLAGS  = -static
+    LDFLAGS = -static
+	BIN_DIR := C:/bin
+	BUILD_DIR := build_win
+	INC = -I/Library/Developer/CommandLineTools/usr/include/ -I/usr/local/include
+else
+    CC      = gcc
+    CXX     = clang++
+    LD      = ld
+    SUFFIX  =
+    CFLAGS  = 
+    LDFLAGS =
+	BIN_DIR := /usr/local/bin
+	BUILD_DIR := build
+endif
+
 OBJ_DIR := $(BUILD_DIR)/obj
 SRC_DIR := src
 TEST_DIR := test
-BIN_DIR := /usr/local/bin
 
 # YACC = /usr/local/opt/bison/bin/yacc
 # BISON = /usr/local/opt/bison/bin/bison
 YACC := flex
 BISON := bison
 
-CC := clang++
-CFLAGS := -Wall -std=c++17 -I./src -I./build 
+CFLAGS += -Wall -std=c++17 -I./src -I./$(BUILD_DIR) $(INC) -g 
 
 GTEST_FLAGS := -lgtest -lgtest_main 
 
 LEX_CC := $(BUILD_DIR)/lex.yy.cc
 BISON_CC := $(BUILD_DIR)/y.tab.cc
 BISON_HH := $(BUILD_DIR)/y.tab.hh
-TARGET := $(BUILD_DIR)/regexparser
-TARGET_BIN := $(BIN_DIR)/regexparser
-TARGET_TEST := $(BUILD_DIR)/test_parser
+TARGET := $(BUILD_DIR)/regexparser$(SUFFIX)
+TARGET_BIN := $(BIN_DIR)/regexparser$(SUFFIX)
+TARGET_TEST := $(BUILD_DIR)/test_parser$(SUFFIX)
 LEX_BIN := $(BUILD_DIR)/lexer
 
 DEPENDS := $(SRC_DIR)/parser.l $(SRC_DIR)/parser.y $(wildcard $(SRC_DIR)/*.h)
@@ -49,23 +70,23 @@ uninstall:
 	rm -f $(TARGET_BIN)
 
 $(LEX_BIN): $(LEX_CC) $(BISON_HH)
-	$(CC) $(CFLAGS) -o $@ $< $(BISON_CC) $(SRC_DIR)/parser.cpp $(SRC_DIR)/utils.cpp -DLEXER_BIN
+	$(CXX) $(CFLAGS) -o $@ $< $(BISON_CC) $(SRC_DIR)/Parser.cpp $(SRC_DIR)/utils.cpp -DLEXER_BIN
 
 $(TARGET): $(OBJ)
-	$(CC) $(CFLAGS) -o $@ $(OBJ) 
+	$(CXX) $(CFLAGS) -o $@ $(OBJ) 
 
-$(LEX_CC): $(SRC_DIR)/parser.l $(SRC_DIR)/parser.h
+$(LEX_CC): $(SRC_DIR)/parser.l $(SRC_DIR)/Parser.h
 	$(YACC) -o $@ $< 
 
 $(BISON_HH) $(BISON_CC): $(SRC_DIR)/parser.y
 	$(BISON) -o $(BISON_CC) -d $^ --report=all -k
 
 $(OBJ_DIR)/%.o: $(BUILD_DIR)/%.cc 
-	$(CC) $(CFLAGS) -c $< -o $@ 
+	$(CXX) $(CFLAGS) -c $< -o $@ 
 	@echo "cc $< → $@"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp $(DEPENDS)
-	$(CC) $(CFLAGS) -c $< -o $@ 
+	$(CXX) $(CFLAGS) -c $< -o $@ 
 	@echo "cc $< → $@"
 
 $(OBJ_DIR):
@@ -73,7 +94,7 @@ $(OBJ_DIR):
 	@echo "mkdir: $@"
 
 $(TARGET_TEST): $(TEST_OBJS) $(TEST_SRC)
-	$(CC) $(CFLAGS) $(GTEST_FLAGS) -o $@ $^
+	$(CXX) $(CFLAGS) $(GTEST_FLAGS) -o $@ $^
 
 clean:
 	-rm -rf $(BUILD_DIR)/*

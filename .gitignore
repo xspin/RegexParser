@@ -1,5 +1,6 @@
 .vscode
 build
+build_win
 lines.txt
 regular_expression.md
 test.sh

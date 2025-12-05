@@ -1,10 +1,11 @@
 #include <fstream>
+#include <exception>
 #include "utils.h"
-#include "parser.h"
+#include "Parser.h"
 #include "unicode.h"
 #include "GraphBox.h"
 #include "RegexGenerator.h"
-#include <exception>
+#include "DFA.h"
 
 
 int run(int argc, char* argv[]) {
@@ -31,17 +32,35 @@ int run(int argc, char* argv[]) {
             assert(root->str() == args.expr);
         }
 
-        if (args.format == Utils::FMT::TREE) {
+        if (args.format & Utils::FMT_TREE) {
             os << root->format(4, args.color) << std::endl;
-        } else if (args.format == Utils::FMT::GRAPH) {
+        } 
+
+        if (args.format & Utils::FMT_GRAPH) {
             GraphBox::set_encoding(args.utf8);
             GraphBox::set_color(args.color);
             std::unique_ptr<RootBox> box(expr_to_box(root.get()));
             box->dump(os);
-        } else if (args.format == Utils::FMT::SVG) {
+        }
+
+        if (args.format & Utils::FMT_NFA) {
+            NFA nfa;
+            nfa.generate(root.get(), args.utf8);
+            nfa.dump(os);
+        }
+
+        if (args.format & Utils::FMT_DFA) {
+            NFA nfa;
+            nfa.generate(root.get(), args.utf8);
+
+            DFA dfa(&nfa);
+            dfa.generate();
+            dfa.dump(os);
+        } 
+
+        if (args.format & Utils::FMT_SVG) {
+            throw std::invalid_argument("Not implemented yet for svg!");
             // todo
-        } else if (args.format == Utils::FMT::SIMPLE) {
-            // do nothing
         }
     };
 

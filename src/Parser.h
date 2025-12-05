@@ -1,6 +1,8 @@
 #ifndef __PARSER_H__
 #define __PARSER_H__
 
+#include <cassert>
+#include <memory>
 #include <cstdint>
 #include <string>
 #include <cstring>
@@ -37,6 +39,25 @@ enum class ExprType {
     T_ESCAPED,
 };
 
+static inline std::string exprTypeName(ExprType t) {
+    switch (t)
+    {
+    case ExprType::T_LITERAL: return "Literal";
+    case ExprType::T_QUANTIFIER: return "Quantifier";
+    case ExprType::T_RANGE: return "Range";
+    case ExprType::T_ANY: return "Any";
+    case ExprType::T_SEQUENCE: return "Sequence";
+    case ExprType::T_CLASS: return "Class";
+    case ExprType::T_GROUP: return "Group";
+    case ExprType::T_OR: return "Or";
+    case ExprType::T_ANCHOR: return "Anchor";
+    case ExprType::T_LOOKAHEAD: return "Lookahead";
+    case ExprType::T_LOOKBEHIND: return "Lookbehind";
+    case ExprType::T_ESCAPED: return "Escaped";
+    default:
+        return "Unknown";
+    }
+}
 
 extern void yyerror_throw(const std::string& msg);
 
@@ -59,31 +80,18 @@ struct ExprNode {
     ExprType type;
     static int indent;
 
-    ExprNode(ExprType t): type(t) { }
+    ExprNode(ExprType t);
 
-    bool isType(ExprType t) {
-        return type == t;
+    std::string typeName() {
+        return exprTypeName(this->type);
     }
 
-    bool isQuantifier() {
-        return isType(ExprType::T_QUANTIFIER);
-    }
-
-    bool isOR() {
-        return isType(ExprType::T_OR);
-    }
-
-    bool isSequence() {
-        return isType(ExprType::T_SEQUENCE);
-    }
-
-    bool isGroup() {
-        return isType(ExprType::T_GROUP);
-    }
-
-    bool isLiteral() {
-        return isType(ExprType::T_LITERAL);
-    }
+    bool isType(ExprType t);
+    bool isQuantifier();
+    bool isOR();
+    bool isSequence();
+    bool isGroup();
+    bool isLiteral();
 
     std::string prefix(int indent);
 
@@ -136,6 +144,9 @@ struct Escaped: ExprNode {
     std::string str(bool color);
     std::string fmt(int indent, bool color);
     void travel(TravelFunc preFn, TravelFunc postFn, bool postorder);
+    bool isUnicode() {
+        return ch.size() == 6 && ch.substr(0,2) == "\\u";
+    }
 };
 
 struct Anchor: ExprNode {
