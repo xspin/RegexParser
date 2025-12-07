@@ -147,6 +147,9 @@ struct Escaped: ExprNode {
     bool isUnicode() {
         return ch.size() == 6 && ch.substr(0,2) == "\\u";
     }
+    bool isHex() {
+        return ch.size() == 4 && ch.substr(0,2) == "\\x";
+    }
 };
 
 struct Anchor: ExprNode {

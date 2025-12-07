@@ -1,3 +1,6 @@
+#ifndef __GRAPHBOX_H__
+#define __GRAPHBOX_H__
+
 #include <string>
 #include <vector>
 #include <stack>
@@ -7,14 +10,40 @@
 
 using Rows = std::vector<std::string>;
 
+enum class Dir {
+    Center,
+    Left,
+    Right,
+    Up,
+    Down,
+    Horizon,
+    Vertical
+};
+
 enum class TableId {
     DEFAULT = 0,
+    ROUND,
     DASHED,
     BOLD,
     BOLD_DASHED,
     DOUBLE,
     EMPTY
 };
+
+enum TableLine {
+    TAB_LEFT_TOP = 0,
+    TAB_H_LINE,
+    TAB_RIGHT_TOP,
+    TAB_V_LINE,
+    TAB_LEFT_BOTTOM,
+    TAB_RIGHT_BOTTOM,
+    TAB_RIGHT_T,
+    TAB_LEFT_T,
+    TAB_UP_T,
+    TAB_DOWN_T,
+    TAB_MAX
+};
+
 
 namespace Line {
     const std::string HORIZON = "─";
@@ -32,10 +61,23 @@ namespace Line {
     const std::string DOWN_T =  "┴";
     const std::string START = "●";
     const std::string TERMINAL = "◎";
+    const std::string LU_CORNER = "╭";
+    const std::string LD_CORNER = "╰";
+    const std::string RU_CORNER = "╮";
+    const std::string RD_CORNER = "╯";
+    const std::string ARROW_UP = "↑";
+    const std::string ARROW_DOWN = "↓";
+    const std::string ARROW_LEFT = "←";
+    const std::string ARROW_RIGHT = "→";
 };
 
 using Align = Utils::Align;
 
+std::string get_table_line(TableId id, TableLine t);
+
+/**
+ * \brief get the visual width of a string
+ */
 static inline size_t visual_len(const std::string& s) {
     return visual_width(s);
 }
@@ -43,11 +85,16 @@ static inline size_t visual_len(const std::string& s) {
 static inline std::string visual_str_pad(const std::string& s, size_t n,
     Align align, const std::string& p=" ") {
     size_t w = visual_len(s);
-    if (n < w) DEBUG_OS << "length exceeds\n";
+    // if (n < w) DEBUG_OS << "length exceeds\n";
     if (n <= w) return s;
     return Utils::str_pad(s, n-w, align, p);
 }
 
+using Block = std::vector<std::vector<std::string>>;
+
+Block build_block(size_t width, size_t height, const std::string& tag="", TableId id=TableId::DEFAULT);
+
+Block block_concat(const Block& a, const Block& b, size_t spaces=0, Dir d=Dir::Horizon);
 
 static inline std::string get_quantifier(int min, int max, bool lazy) {
     std::string arrow = lazy? "⇢" : "→";
@@ -522,13 +569,13 @@ public:
             s = "Non-Space";
         } else if (symbol.size() == 4 && symbol.substr(0,2) == "\\x") {
             s = "0x" + symbol.substr(2);
-            std::transform(s.begin()+2, s.end(), s.begin()+2, [](char c){return std::toupper(c);});
+            std::transform(s.begin()+2, s.end(), s.begin()+2, ::toupper);
         } else if (symbol.size() == 6 && symbol.substr(0,2) == "\\u") {
             if (utf8_encoding) {
                 s = uhhhh_to_utf8(symbol);
             } else {
                 s = "U+" + symbol.substr(2);
-                std::transform(s.begin(), s.end(), s.begin(), [](char c){return std::toupper(c);});
+                std::transform(s.begin(), s.end(), s.begin(), ::toupper);
             }
         } else {
             // todo ...
@@ -567,3 +614,5 @@ public:
 };
 
 std::unique_ptr<RootBox> expr_to_box(ExprNode* root);
+
+#endif // __GRAPHBOX_H__

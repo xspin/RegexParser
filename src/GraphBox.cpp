@@ -3,22 +3,9 @@
 #include "GraphBox.h"
 #include <unordered_map>
 
-enum Table {
-    TAB_LEFT_TOP = 0,
-    TAB_H_LINE,
-    TAB_RIGHT_TOP,
-    TAB_V_LINE,
-    TAB_LEFT_BOTTOM,
-    TAB_RIGHT_BOTTOM,
-    TAB_RIGHT_T,
-    TAB_LEFT_T,
-    TAB_UP_T,
-    TAB_DOWN_T,
-    TAB_MAX
-};
-
 static const std::vector<std::vector<std::string>> s_tables = {
     {"┌", "─", "┐", "│", "└", "┘", "┤", "├", "┬", "┴"}, // Default / Normal
+    {"╭", "─", "╮", "│", "╰", "╯", "┼", "┼", "┬", "┴"}, // Round
     {"╭", "╴", "╮", "┆", "╰", "╯", "┼", "┼", "┬", "┴"}, // Dashed / Group
     {"┏", "━", "┓", "┃", "┗", "┛", "┫", "┣", "┳", "┻"}, // Bold / Class
     {"┏", "┅", "┓", "┃", "┗", "┛", "┫", "┣", "┳", "┻"}, // BoldDashed / Neg-Class
@@ -27,6 +14,10 @@ static const std::vector<std::vector<std::string>> s_tables = {
 };
 
 static std::unordered_map<std::string,std::string> s_map;
+
+std::string get_table_line(TableId id, TableLine t) {
+    return s_tables[static_cast<int>(id)][t];
+}
 
 std::string rotate(const std::string& s) {
     if (s.size() <= 1) return s;
@@ -71,7 +62,7 @@ static Rows rows_pad(const Rows& lines) {
 
 
 /*
-    Expand each line
+    Expand each line to left to right
 
     Make sure all lines same length
 */
@@ -212,6 +203,93 @@ Rows box_table(TableId id, const Rows& lines, const std::string& top) {
     return res;
 }
 
+
+Block build_block(size_t width, size_t height, const std::string& tag, TableId id) {
+    assert(width>=2 && height>=2);
+    const auto& tab = s_tables[static_cast<int>(id)];
+
+    Block res(height, std::vector<std::string>(width, " "));
+    for (size_t j=1; j < width-1; j++) {
+        res.front()[j] = tab[TAB_H_LINE];
+        res.back()[j] = tab[TAB_H_LINE];
+    }
+    for (size_t i=1; i < height-1; i++) {
+        res[i].front() = tab[TAB_V_LINE];
+        res[i].back() = tab[TAB_V_LINE];
+    }
+    res[0].front() = tab[TAB_LEFT_TOP];
+    res[0].back() = tab[TAB_RIGHT_TOP];
+    res.back().front() = tab[TAB_LEFT_BOTTOM];
+    res.back().back() = tab[TAB_RIGHT_BOTTOM];
+
+    if (!tag.empty()) {
+        size_t empty = (width-2)*(height-2);
+        auto r = utf8_split(tag);
+        size_t x = r.size() >= empty ? 0 : (empty-r.size())/2;
+        size_t k = 0;
+
+        for (size_t i = 1; i < height-1; i++) {
+            for (size_t j = 1; j < width-1; j++) {
+                if (x > 0) {
+                    x--;
+                } else if (k < r.size()) {
+                    res[i][j] = tag.substr(r[k].first, r[k].second);
+                    k++;
+                }
+            }
+        }
+    }
+
+    return res;
+}
+
+Block block_concat(const Block& a, const Block& b, size_t spaces, Dir d) {
+    if (a.empty()) return b;
+    if (b.empty()) return a;
+
+    auto append_spaces = [](std::vector<std::string>& vec, size_t n) {
+        while (n--) vec.push_back(" ");
+    };
+
+    auto append_vec = [](std::vector<std::string>& lhs, const std::vector<std::string>& rhs) {
+        for (const std::string& s : rhs) {
+            lhs.push_back(s);
+        }
+    };
+
+    Block rows;
+    for (size_t i = 0; i < a.size(); i++) {
+        rows.push_back(a[i]);
+    }
+    if (d == Dir::Vertical) {
+        if (a.front().size() < b.front().size()) {
+            size_t d = b.front().size() - a.front().size();
+            for (size_t i = 0; i < a.size(); i++) {
+                append_spaces(rows[i], d);
+            }
+        }
+        for (size_t i = 0; i < spaces; i++) {
+            rows.push_back(std::vector<std::string>(rows.front().size(), " "));
+        }
+        for (size_t i = 0; i < b.size(); i++) {
+            rows.push_back(b[i]);
+            append_spaces(rows.back(), rows.front().size()-b[i].size());
+        }
+    } else { // Horizon
+        std::string s = std::string(spaces, ' ');
+        size_t i = 0;
+        for (; i<std::min(a.size(), b.size()); i++) {
+            append_spaces(rows[i], spaces);
+            append_vec(rows[i], b[i]);
+        }
+        for (; i<b.size(); i++) {
+            rows.push_back({});
+            append_spaces(rows.back(), a.back().size() + spaces);
+            append_vec(rows.back(), b[i]);
+        }
+    }
+    return rows;
+}
 
 std::unique_ptr<RootBox> expr_to_box(ExprNode* expr) {
     assert(expr);

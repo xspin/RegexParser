@@ -252,17 +252,18 @@ static inline size_t utf8_len(const std::string& utf8_str) {
     size_t char_count = 0;
     const char* data = utf8_str.data();
     size_t len = utf8_str.size();
+    size_t i = 0;
 
-    while (len > 0) {
+    while (i < len) {
         uint8_t first_byte = *data;
         // 判断是否为字符首字节（非续字节）
         if (!is_utf8_continuation(first_byte)) {
             char_count++;
         }
 
-        size_t k = utf8_next(data, len);
+        size_t k = utf8_next(data, len - i);
         data += k;
-        len -= k;
+        i += k;
     }
 
     return char_count;
@@ -336,6 +337,7 @@ static inline bool is_empty_width_char(uint32_t c) {
 }
 
 static inline size_t ansi_size(const std::string& str) {
+    if (str.empty()) return 0;
     // 正则表达式：匹配所有 ANSI 转义序列
     // \x1B：ESC 字符（\033）；\[：匹配 [；[0-9;]*：匹配数字/分号；[a-zA-Z]：匹配结束符（m/H/J/K 等）
     std::regex ansi_regex("\x1B\\[[0-9;]*[a-zA-Z]");
@@ -367,6 +369,20 @@ static inline size_t visual_width(const std::string& utf8_str) {
     }
     char_count -= ansi_size(utf8_str);
     return char_count;
+}
+
+static inline std::vector<std::pair<size_t,size_t>> utf8_split(const std::string& s) {
+    std::vector<std::pair<size_t,size_t>> res;
+    const char* data = s.data();
+    size_t len = s.size();
+    size_t i = 0;
+    while (i < len) {
+        size_t n = utf8_next(data, len-i);
+        res.emplace_back(i, n);
+        data += n;
+        i += n;
+    }
+    return res;
 }
 
 #endif

@@ -44,18 +44,22 @@ int run(int argc, char* argv[]) {
         }
 
         if (args.format & Utils::FMT_NFA) {
-            NFA nfa;
+            NFA nfa(args.color);
             nfa.generate(root.get(), args.utf8);
             nfa.dump(os);
         }
 
         if (args.format & Utils::FMT_DFA) {
-            NFA nfa;
+            NFA nfa(args.color);
             nfa.generate(root.get(), args.utf8);
 
             DFA dfa(&nfa);
             dfa.generate();
             dfa.dump(os);
+
+            DFAGraph g(&dfa);
+            g.render();
+            g.dump(os);
         } 
 
         if (args.format & Utils::FMT_SVG) {

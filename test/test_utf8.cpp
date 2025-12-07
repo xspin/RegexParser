@@ -37,7 +37,7 @@ TEST(UTF8, uhhhh_to_utf8) {
     EXPECT_STREQ(s.c_str(), "\u4E00-\u9FA5");
 }
 
-TEST(UTF8, Others) {
+TEST(UTF8, uhhhh) {
     int v;
     v = uhhhh_cmp("\\uabcd", "\\uABCD");
     EXPECT_EQ(v, 0);
@@ -67,4 +67,20 @@ TEST(UTF8, visual_width) {
     EXPECT_EQ(visual_width("hello\033[0m测试abc\033[0m"), 12);
 
     EXPECT_EQ(visual_width("┌─┐│└┘"), 6);
+    
+    EXPECT_EQ(ansi_size("12297829382473034410"), 0);
+    EXPECT_EQ(ansi_size(""), 0);
+    EXPECT_EQ(visual_width(""), 0);
+}
+
+TEST(UTF8, split) {
+    std::string s = "as中文xx测试fff";
+    auto r = utf8_split(s);
+    EXPECT_EQ(r.size(), utf8_len(s));
+    EXPECT_EQ(r[0].first, 0);
+    EXPECT_EQ(r[0].second, 1);
+    EXPECT_EQ(r[2].first, 2);
+    EXPECT_EQ(r[2].second, 3);
+    EXPECT_EQ(r[utf8_len(s)-1].first, s.size()-1);
+    EXPECT_EQ(r[utf8_len(s)-1].second, 1);
 }

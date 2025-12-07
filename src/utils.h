@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#define APP_VERSION "0.2.0"
+#define APP_VERSION "0.3.0"
 
 
 #define DEBUG_OS \
@@ -44,10 +44,16 @@ enum class Align {
     RIGHT,
 };
 
+
+std::string concat(std::vector<std::string> vec, const std::string& s="");
 std::vector<std::pair<size_t,size_t>> split(const std::string& s, char c, size_t n=0);
 std::string str_repeat(const std::string& s, size_t n);
+/*
+    pad n times of p around s
+ */
 std::string str_pad(const std::string& s, size_t n, Align align=Align::CENTER, const std::string& p=" ");
 
 
 } // namespace Utils
-#endif
+
+#endif // __UTILS_H__

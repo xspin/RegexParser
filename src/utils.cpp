@@ -11,6 +11,17 @@
 
 namespace Utils {
 
+std::string concat(std::vector<std::string> vec, const std::string& s) {
+    std::stringstream ss;
+    for (size_t i = 0; i < vec.size(); i++) {
+        if (i > 0) {
+            ss << s;
+        }
+        ss << vec[i];
+    }
+    return ss.str();
+}
+
 std::vector<std::pair<size_t,size_t>> split(const std::string& s, char c, size_t n) {
     std::vector<std::pair<size_t,size_t>> res;
     size_t k = 0;
@@ -166,12 +177,13 @@ int parse_args(Args& args, int argc, char* argv[]) {
 
     if (args.format == 0) args.format = FMT_GRAPH;
 
-    if (args.rand > 0) {
-        RegexGenerator g;
-        args.expr = g.generate(args.rand);
-    } else if (args.expr.empty()) {
-        std::getline(std::cin, args.expr); 
-        return 0;
+    if (args.expr.empty()) {
+        if (args.rand > 0) {
+            RegexGenerator g;
+            args.expr = g.generate(args.rand);
+        } else {
+            std::getline(std::cin, args.expr); 
+        }
     }
 
     if (args.expr.empty()) {
