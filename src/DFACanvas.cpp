@@ -100,7 +100,8 @@ void DFACanvas::init(const std::vector<std::vector<State>> &paths) {
     size_t cols = max_blocks * (BLOCK_WIDTH + col_block_spaces) + col_block_spaces;
     size_t rows = paths.size() * (BLOCK_HEIGHT + row_block_spaces) + row_block_spaces;
 
-    this->Resize(rows, cols);
+    // this->Resize(rows, cols);
+    canvas = std::make_unique<TextCanvas>(rows, cols);
 
     size_t i = row_block_spaces;
     for (auto& path : paths) {
@@ -121,10 +122,10 @@ void DFACanvas::init(const std::vector<std::vector<State>> &paths) {
         } else {
             color = {"",""};
         }
-        this->Rect(pos, BLOCK_HEIGHT, BLOCK_WIDTH, id, color);
+        canvas->Rect(pos, BLOCK_HEIGHT, BLOCK_WIDTH, id, color);
 
         Pos center = {pos.first + BLOCK_HEIGHT/2, pos.second + BLOCK_WIDTH/2};
-        this->Text(center, std::to_string(s), Align::CENTER);
+        canvas->Text(center, std::to_string(s), Align::CENTER);
     }
 }
 
@@ -157,22 +158,22 @@ void DFACanvas::link(State a, State b, Token tok) { // a --> b
         if (ai < bi) {
             auto [ax, ay] = get_down_out_line(pa, down_d);
             auto [bx, by] = get_up_in_line(pb, up_d);
-            Line(ax, ay);
-            Line(bx, by);
+            canvas->Line(ax, ay);
+            canvas->Line(bx, by);
             u = ay;
             v = by;
         } else if (ai > bi) {
             auto [ax, ay] = get_up_out_line(pa, up_d);
             auto [bx, by] = get_down_in_line(pb, down_d);
-            Line(ax, ay);
-            Line(bx, by);
+            canvas->Line(ax, ay);
+            canvas->Line(bx, by);
             u = ay;
             v = by;
         } else {
             auto [ax, ay] = get_up_out_line(pa, up_d);
             auto [bx, by] = get_up_in_line(pb, up_d);
-            Line(ax, ay);
-            Line(bx, by);
+            canvas->Line(ax, ay);
+            canvas->Line(bx, by);
             u = ay;
             v = by;
         }
@@ -189,30 +190,30 @@ void DFACanvas::link(State a, State b, Token tok) { // a --> b
     if (ai == bi && is_neighbor(aj, bj) && nblink.find(linkHash(a,b,0))==nblink.end()) {
         auto [ax, ay] = get_right_out_pos(pa);
         auto [bx, by] = get_left_in_pos(pb);
-        Line({ax,ay}, {bx,by});
-        Text({ax-1,ay}, tokname);
-        Text({bx, by}, ">");
+        canvas->Line({ax,ay}, {bx,by});
+        canvas->Text({ax-1,ay}, tokname);
+        canvas->Text({bx, by}, ">");
         nblink.insert(linkHash(a,b,0)); // 只连一条
         return;
     } 
 
     auto [u, v] = func(); // u -> v
     if (u.first == v.first) { // neighbor line
-        Line(u, v);
+        canvas->Line(u, v);
         if (u.second < v.second) {
-            Text({u.first, u.second+1}, ">");
-            Text({u.first-1, u.second+1}, tokname);
+            canvas->Text({u.first, u.second+1}, ">");
+            canvas->Text({u.first-1, u.second+1}, tokname);
         } else {
-            Text({u.first, u.second-1}, "<");
-            Text({u.first-1, u.second-1}, tokname, Align::RIGHT);
+            canvas->Text({u.first, u.second-1}, "<");
+            canvas->Text({u.first-1, u.second-1}, tokname, Align::RIGHT);
         }
     } else { // 
         size_t j = u.second + get_right_dist(id);
-        Line(u, {u.first, j});
-        Line(v, {v.first, j});
-        Line({u.first, j}, {v.first, j});
-        Text({u.first, u.second+1}, ">");
-        Text({u.first-1, u.second+1}, tokname);
+        canvas->Line(u, {u.first, j});
+        canvas->Line(v, {v.first, j});
+        canvas->Line({u.first, j}, {v.first, j});
+        canvas->Text({u.first, u.second+1}, ">");
+        canvas->Text({u.first-1, u.second+1}, tokname);
     }
 }
 
@@ -290,68 +291,78 @@ void DFACanvas::render() {
 
 
 void DFACanvas::dump(std::ostream& os) {
-    for (size_t i = 0; i < canvas.size(); i++) {
+    // canvas->Dump(os);
+    auto [h, w] = canvas->Size();
+
+    size_t sz = 0;
+    for (size_t i = 0; i < h; i++) {
         if (omit_row.count(i)) continue;
-        for (size_t j = 0; j < canvas[i].size(); ++j) {
+        for (size_t j = 0; j < w; ++j) {
             if (omit_col.count(j)) continue;
-            os << canvas[i][j];
+            std::string s = canvas->Get({i,j});
+            os << s;
+            sz += s.size();
         }
         os << "\n";
     }
+    LOG_DEBUG("Canvas %lux%lu Dumped %lu Bytes\n", h, w, sz);
 }
 
 void DFACanvas::postprocess() {
-
-    this->Render();
 
     std::unordered_set<size_t> skip_rows, skip_cols;
     for (auto [s, pos] : positions) {
         auto [i, j] = pos;
         if (i + j == 0) continue;
-        for (size_t row = std::max((size_t)0, i-1); row <= i + BLOCK_HEIGHT; row++) {
+        for (size_t row = i>1?i-1:0; row <= i + BLOCK_HEIGHT; row++) {
             skip_rows.insert(row);
         }
-        for (size_t col = std::max(j-2, (size_t)0); col <= j+1 + BLOCK_WIDTH; col++) {
+        for (size_t col = j>2?j-2:0; col <= j+1 + BLOCK_WIDTH; col++) {
             skip_cols.insert(col);
         }
         int ui = i;
         int uj = j+1;
-        if (!str_empty(canvas[ui-1][uj])) {
-            canvas[ui-1][uj] = Line::ARROW_DOWN;
-            canvas[ui][uj] = dfa->is_accepted(s) ? 
-                get_table_line(TableId::DOUBLE, TableLine::TAB_DOWN_T) : Line::DOWN_T;
+        if (!str_empty(canvas->Get({ui-1,uj}))) {
+            canvas->Set({ui-1,uj}, Line::ARROW_DOWN);
+            canvas->Set({ui,uj}, dfa->is_accepted(s) ? 
+                get_table_line(TableId::DOUBLE, TableLine::TAB_DOWN_T) : Line::DOWN_T);
         }
         uj = j + BLOCK_WIDTH - 2;
-        if (!str_empty(canvas[ui-1][uj])) {
-            // canvas[ui-1][uj] = Line::ARROW_UP;
-            canvas[ui][uj] = dfa->is_accepted(s) ? 
-                get_table_line(TableId::DOUBLE, TableLine::TAB_DOWN_T) : Line::DOWN_T;
+        if (!str_empty(canvas->Get({ui-1,uj}))) {
+            canvas->Set({ui,uj}, dfa->is_accepted(s) ? 
+                get_table_line(TableId::DOUBLE, TableLine::TAB_DOWN_T) : Line::DOWN_T);
         }
 
         int di = i + BLOCK_HEIGHT - 1;
         int dj = j+1;
-        if (!str_empty(canvas[di+1][dj])) {
-            canvas[di+1][dj] = Line::ARROW_UP;
-            canvas[di][dj] = dfa->is_accepted(s) ? 
-                get_table_line(TableId::DOUBLE, TableLine::TAB_UP_T) : Line::UP_T;
+        if (!str_empty(canvas->Get({di+1,dj}))) {
+            canvas->Set({di+1,dj}, Line::ARROW_UP);
+            canvas->Set({di,dj}, dfa->is_accepted(s) ? 
+                get_table_line(TableId::DOUBLE, TableLine::TAB_UP_T) : Line::UP_T);
         }
         dj = j + BLOCK_WIDTH - 2;
-        if (!str_empty(canvas[di+1][dj])) {
-            canvas[di][dj] = dfa->is_accepted(s) ? 
-                get_table_line(TableId::DOUBLE, TableLine::TAB_UP_T) : Line::UP_T;
+        if (!str_empty(canvas->Get({di+1,dj}))) {
+            canvas->Set({di,dj}, dfa->is_accepted(s) ? 
+                get_table_line(TableId::DOUBLE, TableLine::TAB_UP_T) : Line::UP_T);
         }
     }
 
+    auto p0 = get_left_in_pos(positions[dfa->state_initial]);
+    canvas->Arrow(p0, Dir::Right);
 
-    for (size_t i = 0; i < canvas.size(); i++) {
+
+    auto [h, w] = canvas->Size();
+
+    for (size_t i = 0; i < h; i++) {
         if (skip_rows.count(i)) continue;
         bool vline = false;
         bool hline = false;
-        for (size_t j = 0; j < canvas[i].size(); ++j) {
-            if (str_empty(canvas[i][j])) continue;
-            if (canvas[i][j] == Line::HORIZON) {
+        for (size_t j = 0; j < w; ++j) {
+            std::string s = canvas->Get({i,j});
+            if (str_empty(s)) continue;
+            if (s == Line::HORIZON) {
                 hline = true;
-            } else if (canvas[i][j] == Line::VERTICAL) {
+            } else if (s == Line::VERTICAL) {
                 vline = true;
             } else {
                 vline = true;
@@ -364,15 +375,16 @@ void DFACanvas::postprocess() {
         }
     }
 
-    for (size_t j = 0; j < canvas[0].size(); ++j) {
+    for (size_t j = 0; j < w; ++j) {
         if (skip_cols.count(j)) continue;
         bool vline = false;
         bool hline = false;
-        for (size_t i = 0; i < canvas.size(); i++) {
-            if (str_empty(canvas[i][j])) continue;
-            if (canvas[i][j] == Line::HORIZON) {
+        for (size_t i = 0; i < h; i++) {
+            std::string s = canvas->Get({i,j});
+            if (str_empty(s)) continue;
+            if (s == Line::HORIZON) {
                 hline = true;
-            } else if (canvas[i][j] == Line::VERTICAL) {
+            } else if (s == Line::VERTICAL) {
                 vline = true;
             } else {
                 vline = true;
@@ -384,5 +396,4 @@ void DFACanvas::postprocess() {
             omit_col.insert(j);
         }
     }
-
 }

@@ -19,7 +19,7 @@ int run(int argc, char* argv[]) {
 
     args.expr = utf8_to_uhhhh(args.expr);
 
-    std::cout << " Input Expr: " << args.expr << std::endl;
+    if (g_debug) std::cout << " Input Expr: " << args.expr << std::endl;
 
     std::unique_ptr<ExprNode> root(regex_parse(args.expr, args.debug));
     if (!root) {

@@ -3,16 +3,23 @@
 
 #include <vector>
 #include <string>
+#include <unordered_map>
 #include "utils.h"
 #include "GraphBox.h"
 
-using VS = std::vector<std::string>;
-using VVS = std::vector<VS>;
+// using VS = std::vector<std::string>;
+// using VVS = std::vector<VS>;
 using Pos = std::pair<size_t,size_t>;
+
+using MS = std::unordered_map<size_t,std::string>;
+using MMS = std::unordered_map<size_t,MS>;
+
+using MU = std::unordered_map<size_t,uint8_t>;
+using MMU = std::unordered_map<size_t,MU>;
 
 class TextCanvas {
 public:
-    TextCanvas();
+    TextCanvas(size_t height=100, size_t width=100);
 
     void Resize(size_t height, size_t width);
 
@@ -21,16 +28,24 @@ public:
         const std::pair<std::string,std::string>& color={});
     void Text(const Pos& p, const std::string& s, Align align=Align::LEFT);
     void Arrow(const Pos& p, Dir d);
+
+    std::string Get(const Pos& p);
+    void Set(const Pos& p, const std::string& s);
+
     void Dump(std::ostream& os=std::cout);
 
     // <height, width>
     std::pair<size_t,size_t> Size();
 
-    virtual void Render() final;
+    // [spaces, empty, vline, hline, other]
+    // std::vector<size_t> RowCount(size_t row);
 
-protected:
-    VVS canvas;
-    std::vector<std::vector<uint8_t>> overlay;
+
+private:
+    size_t height;
+    size_t width;
+    MMS canvas;
+    MMU overlay;
 };
 
 #endif // __TEXTCANVAS_H__

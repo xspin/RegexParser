@@ -3,13 +3,17 @@
 
 #include <string>
 #include <vector>
+#include <cstdio>
 
-#define APP_VERSION "0.3.0"
+#define APP_VERSION "0.4.0"
 
+extern bool g_debug;
 
 #define DEBUG_OS \
     std::cerr << "[DEBUG][" << __FILE_NAME__ << ":" << __LINE__ << "][" << __FUNCTION__ << "] "
 
+#define LOG_DEBUG(fmt,...) \
+    if (g_debug) fprintf(stderr, "DBG|%s:%d|%s| " fmt, __FILE_NAME__, __LINE__, __FUNCTION__, __VA_ARGS__)
 
 #define is_odd(v) ((v)&1)
 #define is_even(v) (!is_odd(v))
@@ -18,10 +22,10 @@
 namespace Utils
 {
 enum FMT {
+    FMT_NULL = 0,
     FMT_GRAPH = 0x1,
     FMT_SVG = 0x2,
     FMT_TREE = 0x4,
-    FMT_SIMPLE = 0x8,
     FMT_NFA = 0x10,
     FMT_DFA = 0x20,
 };

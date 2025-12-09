@@ -6,8 +6,7 @@
 #include <numeric>
 #include <queue>
 
-using Pos = std::pair<int,int>;
-#define BASE 10000
+// using Pos = std::pair<int,int>;
 
 static std::string special_token(const std::string& s) {
     return "(" + s + ")";
@@ -251,7 +250,7 @@ void NFA::generate(ExprNode* expr, bool utf8_encoding) {
         } else {
             // not supported
             std::string err = "DFA not support for: " + node->typeName();
-            DEBUG_OS << err << "\n";
+            LOG_DEBUG("%s\n", err.c_str());
             throw std::runtime_error(err);
         }
 
@@ -570,6 +569,7 @@ void DFA::simplify() {
             valids.erase(s);
         }
     }
+    LOG_DEBUG("DFA total invalid states: %lu\n", dfa.size()-valids.size());
 }
 
 void DFA::generate() {

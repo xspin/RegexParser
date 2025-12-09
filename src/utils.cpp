@@ -9,6 +9,7 @@
 #include "unicode.h"
 #include "RegexGenerator.h"
 
+bool g_debug = false;
 namespace Utils {
 
 std::string concat(std::vector<std::string> vec, const std::string& s) {
@@ -81,14 +82,14 @@ int parse_args(Args& args, int argc, char* argv[]) {
         << "    -v           show version info\n"
         << "    -o           specify output file path (default stdout)\n"
         << "    -f [FORMAT]  specify output format (default graph):\n"
-        << "                   svg/s, graph/g, tree/t, simple/p, nfa/n, dfa/d\n"
+        << "                   svg/s, graph/g, tree/t, nfa/n, dfa/d\n"
         << "                   (multiply example: g,t,d)\n"
         << "    -c           print with color\n"
         << "    -g           generate a random regular expression with specified length limit\n"
         << "    -u           enable utf8 encoding (default off)\n"
         << "   [REGEX]       specify regular expression input (read from stdin if missing)\n";
 
-    args.format = 0;
+    args.format = FMT_NULL;
     args.color = false;
     args.debug = false;
     args.utf8 = false;
@@ -104,8 +105,6 @@ int parse_args(Args& args, int argc, char* argv[]) {
                 fmt = FMT_GRAPH;
             } else if (s == "t" || s == "tree") {
                 fmt = FMT_TREE;
-            } else if (s == "p" || s == "simple") {
-                fmt = FMT_SIMPLE;
             } else if (s == "n" || s == "nfa") {
                 fmt = FMT_NFA;
             } else if (s == "d" || s == "dfa") {
@@ -175,7 +174,7 @@ int parse_args(Args& args, int argc, char* argv[]) {
         if (parse_opt()) return -1; 
     }
 
-    if (args.format == 0) args.format = FMT_GRAPH;
+    if (args.format == FMT_NULL) args.format = FMT_GRAPH;
 
     if (args.expr.empty()) {
         if (args.rand > 0) {
@@ -192,6 +191,10 @@ int parse_args(Args& args, int argc, char* argv[]) {
         return -1;
     }
 
+    g_debug = args.debug;
+
+    LOG_DEBUG("options: {format: 0x%x, color: %d, utf8: %d, rand: %d}\n",
+        args.format, args.color, args.utf8, args.rand);
     return 0;
 }
 

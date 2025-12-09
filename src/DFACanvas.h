@@ -4,7 +4,7 @@
 #include "DFA.h"
 #include "TextCanvas.h"
 
-class DFACanvas: public TextCanvas {
+class DFACanvas {
 public:
     DFACanvas(DFA* dfa);
     void render();
@@ -25,6 +25,7 @@ private:
     std::unordered_set<size_t> omit_row;
     std::unordered_set<size_t> omit_col;
 
+    std::unique_ptr<TextCanvas> canvas;
 };
 
 #endif // __DFACANVAS_H__
