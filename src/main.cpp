@@ -6,6 +6,7 @@
 #include "GraphBox.h"
 #include "RegexGenerator.h"
 #include "DFA.h"
+#include "DFACanvas.h"
 
 
 int run(int argc, char* argv[]) {
@@ -57,9 +58,9 @@ int run(int argc, char* argv[]) {
             dfa.generate();
             dfa.dump(os);
 
-            DFAGraph g(&dfa);
-            g.render();
-            g.dump(os);
+            DFACanvas t(&dfa);
+            t.render();
+            t.dump(os);
         } 
 
         if (args.format & Utils::FMT_SVG) {

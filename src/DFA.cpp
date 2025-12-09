@@ -1,8 +1,10 @@
-#include "iostream"
+#include <iostream>
+#include <cmath>
 #include "unicode.h"
 #include "DFA.h"
 #include "GraphBox.h"
 #include <numeric>
+#include <queue>
 
 using Pos = std::pair<int,int>;
 #define BASE 10000
@@ -52,13 +54,12 @@ void NFA::dump(std::ostream& os) {
     size_t w = 10;
     for (State s = 0; s < nfa.size(); s++) {
         std::string ss = std::to_string(s);
-        if (s == state_initial) ss += ">";
-        else if (s == state_final) ss += "*";
         ss = ("State " + ss + ":");
+        if (s == state_initial) ss = ">" + ss;
+        else if (s == state_final) ss = "*" + ss;
         if (color && (s == state_initial || s == state_final)) {
             ss = iter_color_pack(ss);
         }
-        // os << std::setw(w) << std::right << 
         os << visual_str_pad(ss, w, Align::RIGHT) << "\n";
         for (auto it = nfa[s].begin(); it != nfa[s].end(); ++it) {
             Token t = it->first;
@@ -189,8 +190,14 @@ void NFA::generate(ExprNode* expr, bool utf8_encoding) {
             if (range->start.size() == 1 && range->end.size() == 1) {
                 char a = range->start[0];
                 char b = range->end[0];
-                for (char c=a; c<=b; c++) {
-                    Token t = get_token({c});
+                if (b - a < 30) {
+                    for (char c=a; c<=b; c++) {
+                        Token t = get_token({c});
+                        add_jump(begin, t, next);
+                    }
+                } else {
+                    // keep it if range too large
+                    Token t = get_token(range->start + "-" + range->end);
                     add_jump(begin, t, next);
                 }
             } else {
@@ -251,8 +258,6 @@ void NFA::generate(ExprNode* expr, bool utf8_encoding) {
     };
 
     expr->travel(fn);
-
-    // simplify();
 }
 
 void NFA::simplify()
@@ -267,21 +272,6 @@ void NFA::simplify()
     }
 }
 
-Bits DFA::find_closure(const Bits& b, Token t) {
-    Bits res(b.size(), false);
-    for (State s=0; s<b.size(); s++) {
-        if (!b[s]) continue;
-        auto it = nfa->nfa[s].find(t);
-        if (it == nfa->nfa[s].end()) continue;
-        for (State next : it->second) {
-            res[next] = true;
-            for (State x : epsClosure[next]) {
-                res[x] = true;
-            }
-        }
-    }
-    return res;
-}
 
 void DFA::add_jump(State a, Token t, State b) {
     while (dfa.size() <= std::max(a, b)) dfa.push_back({});
@@ -314,30 +304,24 @@ void DFA::dump(std::ostream& os) {
     for (const std::string& t : tokens) {
         if (t == EPSILON) continue;
         auto tk = pack_color(t);
-        // size_t w = tk.size()-visual_width(tk);
-        // os << std::setw(width + w) << std::right << tk;
-        // os << Utils::str_pad(tk, std::max(width-visual_width(tk),0ul), Utils::Align::RIGHT);
         os << visual_str_pad(tk, width, Align::RIGHT);
     }
     os << "\n";
 
     for (State s=0; s < dfa.size(); s++) {
         if (!is_valid(s)) continue;;
-        std::string ss = std::to_string(s);
+        std::string ss = "State " + std::to_string(s) + ":";
         bool c = false;
         if (s == 0) {
-            ss += ">";
+            ss = ">" + ss;
             c = true;
         }
         if (terminals.find(s) != terminals.end()) {
-            ss += "*";
+            ss = "*" + ss;
             c = true;
         }
-        ss = "State " + ss + ":";
         if (c) ss = pack_color(ss);
-        // os << Utils::str_pad(ss, std::max(header_len-visual_width(ss), 0ul), Utils::Align::RIGHT);
         os << visual_str_pad(ss, header_len, Align::RIGHT);
-        // os << std::setw(10) << std::right << ("State " + ss + ":");
 
         auto& mp = dfa[s];
         for (Token tok = 0; tok < tokens.size(); tok++) {
@@ -352,9 +336,10 @@ void DFA::dump(std::ostream& os) {
         os << "\n";
     }
 
-    os << "    Terminal: ";
+    os << "Accept States: ";
     bool first = true;
     for (State s : terminals) {
+        if (!is_valid(s)) continue;
         if (!first) os << ", ";
         os << s;
         first = false;
@@ -367,39 +352,74 @@ bool DFA::is_color() {
     return nfa->color;
 }
 
-void DFA::epsilon_closure(State x, State s) {
-    std::unordered_set<State>& closure = epsClosure[x];
-    if (closure.find(s) != closure.end()) return;
-    closure.insert(s);
-    if (s < x) {
-        for (State next : epsClosure[s]) {
-            closure.insert(next);
-        }
-        return;
-    }
-    auto it = nfa->nfa[s].find(TOK_EPSILON);
-    if (it != nfa->nfa[s].end()) {
-        for (State next : it->second) {
-            epsilon_closure(x, next);
-        }
-    }
-};
+
 
 void DFA::nfa_to_dfa() {
-    auto findClosureId = [this](const Bits& bs) {
-        for (State s=0; s<nfa_closure.size(); s++) {
-            if (bs == nfa_closure[s]) {
+    std::vector<std::unordered_set<State>> epsClosure;
+
+    std::function<void(State,State)> epsilon_closure = [&epsilon_closure,this,&epsClosure](State x, State s) {
+        std::unordered_set<State>& closure = epsClosure[x];
+        if (closure.find(s) != closure.end()) return;
+        closure.insert(s);
+        if (s < x) {
+            for (State next : epsClosure[s]) {
+                closure.insert(next);
+            }
+            return;
+        }
+        auto it = nfa->nfa[s].find(TOK_EPSILON);
+        if (it != nfa->nfa[s].end()) {
+            for (State next : it->second) {
+                epsilon_closure(x, next);
+            }
+        }
+    };
+
+    auto find_closure = [this,&epsClosure](const Bits& b, Token t) {
+        Bits res(b.size(), 0);
+        for (State s=0; s<b.size(); s++) {
+            if (!b[s]) continue;
+            auto it = nfa->nfa[s].find(t);
+            if (it == nfa->nfa[s].end()) continue;
+            for (State next : it->second) {
+                res[next] = true;
+                for (State x : epsClosure[next]) {
+                    res[x] = true;
+                }
+            }
+        }
+        return res;
+    };
+
+    size_t states = nfa->nfa.size();
+    for (State s = 0; s < states; s++) {
+        epsClosure.push_back({});
+        epsilon_closure(s, s);
+    }
+
+    std::vector<Bits> nfa_closure; // [dfa state: {nfa states closure...}, ...]
+    
+    nfa_closure.emplace_back(states, false);
+
+    // initial state
+    for (auto s : epsClosure[0]) {
+        nfa_closure[0][s] = true;
+    }
+
+    auto findClosureId = [](const std::vector<Bits>& closures, const Bits& bs) {
+        for (State s = 0; s < closures.size(); s++) {
+            if (bs == closures[s]) {
                 return s;
             }
         }
-        return nfa_closure.size();
+        return closures.size();
     };
 
     State s = 0;
     while (s < nfa_closure.size()) {
         for (Token tok = TOK_EPSILON+1; tok < nfa->tokens.size(); tok++) {
             Bits r = find_closure(nfa_closure[s], tok);
-            State next = findClosureId(r);
+            State next = findClosureId(nfa_closure, r);
             if (next == nfa_closure.size()) {
                 nfa_closure.push_back(r);
             }
@@ -410,13 +430,14 @@ void DFA::nfa_to_dfa() {
         }
         s++;
     }
+
 }
 
 bool DFA::is_valid(State s) {
-    return s!=TOK_INVALID && valids.find(s) != valids.end();
+    return s!=INVALID_STATE && valids.find(s) != valids.end();
 }
 
-bool DFA::is_terminal(State s) {
+bool DFA::is_accepted(State s) {
     return terminals.find(s) != terminals.end();
 }
 
@@ -424,7 +445,7 @@ State DFA::next(State s, Token t) {
     auto& mp = dfa[s];
     auto it = mp.find(t);
     if (it == mp.end()) {
-        return TOK_INVALID;
+        return INVALID_TOKEN;
     }
     return it->second;
 }
@@ -447,49 +468,90 @@ const std::vector<std::string> DFA::get_tokens() {
 }
 
 void DFA::simplify() {
-    auto is_terminal = [this](State s) {
-        return terminals.find(s) != terminals.end();
-    };
-
     std::vector<bool> visited(dfa.size(), false);
-    std::function<bool(State)> dfs = [&is_terminal,&dfs,&visited,this](State s) {
-        if (is_valid(s) || is_terminal(s)) return true;
-        if (visited[s]) return false;
+
+    std::function<void(State)> dfs = [&dfs,&visited,this](State s) {
+        if (visited[s]) return;
         visited[s] = true;
-        for (auto it = this->dfa[s].begin(); it != this->dfa[s].end(); ++it) {
-            State next = it->second;
-            if (dfs(next)) {
+        if (is_accepted(s)) {
+            valids.insert(s);
+        }
+        for (auto [tok, next] : dfa[s]) {
+            dfs(next);
+            if (valids.count(next)) {
                 valids.insert(s);
-                return true;
             }
         }
-        return false;
     };
 
     // 查找无效节点
+    dfs(state_initial);
+
+    std::vector<State> a, b;
     for (State s = 0; s < dfa.size(); s++) {
-        if (dfs(s)) valids.insert(s);
+        if (!is_valid(s)) continue;
+        if (is_accepted(s)) {
+            a.push_back(s);
+        } else {
+            b.push_back(s);
+        }
     }
+    std::unordered_map<State,size_t> setid;
+    setid[INVALID_STATE] = INVALID_STATE;
+    for (State s : a) {
+        setid[s] = a[0];
+    }
+    for (State s : b) {
+        setid[s] = b[0];
+    }
+    std::queue<std::vector<State>> equiv_sets;
+    equiv_sets.push(a);
+    equiv_sets.push(b);
 
+    std::vector<std::vector<State>> nexts(dfa.size(), std::vector<State>(nfa->tokens.size(), INVALID_STATE));
+    for (State s : valids) {
+        for (auto [tok, next] : dfa[s]) {
+            nexts[s][tok] = next;
+        }
+    };
+    auto next_equal = [this, &nexts, &setid](State a, State b) {
+        for (size_t i = 0; i < nfa->tokens.size(); i++) {
+            if (setid[nexts[a][i]] != setid[nexts[b][i]]) return false;
+        }
+        return true;
+    };
 
-    // 合并等价节点
-    std::vector<int> fa(dfa.size(), -1);
-    for (State x = 0; x < dfa.size(); x++) {
-        // print(x, nfa_closure[x]);
-        for (State y = x+1; y < dfa.size(); y++) {
-            if ((is_terminal(x) && is_terminal(y)) || (!is_terminal(x) && !is_terminal(y))) {
-                if (nfa_closure[x] == nfa_closure[y]) {
-                    fa[y] = fa[x]<0? x : fa[x];
-                    // DEBUG_OS << "State " << y << " -> " << fa[y] << "\n";
-                }
+    auto find_equiv = [&](std::vector<std::pair<State,std::vector<State>>>&mp, State s) {
+        for (auto& [x, p] : mp) {
+            if (next_equal(s, x)) {
+                p.push_back(s);
+                return;
+            }
+        }
+        mp.emplace_back(s, std::vector<State>{s});
+    };
+
+    while (!equiv_sets.empty()) {
+        auto vec = equiv_sets.front();
+        equiv_sets.pop();
+        if (vec.size() <= 1) continue;
+
+        std::vector<std::pair<State,std::vector<State>>> mp;
+        for (State s : vec) {
+            find_equiv(mp, s);
+        }
+        if (mp.size() > 1) {
+            for (auto& [x, xs] : mp) {
+                equiv_sets.push(xs);
+                for (auto y : xs) setid[y] = x;
             }
         }
     }
 
     for (State s = 0; s < dfa.size(); s++) {
         auto& mp = dfa[s];
-        if (!is_valid(s)) {
-            mp.clear();
+        if (setid[s] != s) {
+            dfa[s].clear();
             continue;
         }
         for (auto it = mp.begin(); it != mp.end();) {
@@ -497,33 +559,27 @@ void DFA::simplify() {
             if (!is_valid(next)) {
                 it = mp.erase(it);
                 continue;;
-            } else if (fa[next] >= 0) {
-                it->second = fa[next];
+            } else {
+                it->second = setid[next];
             }
             ++it;
+        }
+    }
+    for (State s = 0; s < dfa.size(); s++) {
+        if (setid[s] != s) {
+            valids.erase(s);
         }
     }
 }
 
 void DFA::generate() {
-    size_t states = nfa->nfa.size();
-    for (State s = 0; s < states; s++) {
-        epsClosure.push_back({});
-        epsilon_closure(s, s);
-    }
-    
-    nfa_closure.emplace_back(states, false);
-
-    // initial state
-    for (auto s : epsClosure[0]) {
-        nfa_closure[0][s] = true;
-    }
 
     nfa_to_dfa();
 
     simplify();
 }
 
+#if 0
 DFAGraph::DFAGraph(DFA* dfa): dfa(dfa) {
     assert(dfa);
 }
@@ -774,15 +830,15 @@ std::vector<std::vector<State>> DFAGraph::find_paths() {
     std::vector<bool> visited(dfa->states(), false);
 
     std::function<bool(State,std::vector<State>&,bool)> find_path = 
-    [&find_path, &visited, this](State s,std::vector<State>&path, bool visited_top) {
+    [&find_path, &visited, this](State s,std::vector<State>&path, bool visited_ret) {
         if (!dfa->is_valid(s)) return false;
-        if (visited[s]) return visited_top;
+        if (visited[s]) return visited_ret;
         visited[s] = true;
         path.push_back(s);
         for (auto [tok, next] : *dfa->next(s)) {
-            if (find_path(next, path, visited_top)) return true;
+            if (find_path(next, path, visited_ret)) return true;
         }
-        if (dfa->is_terminal(s)) {
+        if (dfa->is_accepted(s)) {
             return true;
         }
         path.pop_back();
@@ -877,13 +933,13 @@ void DFAGraph::to_rows(size_t block_width, size_t block_height,
         int uj = j+1;
         if (!str_empty(canvas[ui-1][uj])) {
             canvas[ui-1][uj] = Line::ARROW_DOWN;
-            canvas[ui][uj] = dfa->is_terminal(s) ? 
+            canvas[ui][uj] = dfa->is_accepted(s) ? 
                 get_table_line(TableId::DOUBLE, TableLine::TAB_DOWN_T) : Line::DOWN_T;
         }
         uj = j + block_width - 2;
         if (!str_empty(canvas[ui-1][uj])) {
             // canvas[ui-1][uj] = Line::ARROW_UP;
-            canvas[ui][uj] = dfa->is_terminal(s) ? 
+            canvas[ui][uj] = dfa->is_accepted(s) ? 
                 get_table_line(TableId::DOUBLE, TableLine::TAB_DOWN_T) : Line::DOWN_T;
         }
 
@@ -891,12 +947,12 @@ void DFAGraph::to_rows(size_t block_width, size_t block_height,
         int dj = j+1;
         if (!str_empty(canvas[di+1][dj])) {
             canvas[di+1][dj] = Line::ARROW_UP;
-            canvas[di][dj] = dfa->is_terminal(s) ? 
+            canvas[di][dj] = dfa->is_accepted(s) ? 
                 get_table_line(TableId::DOUBLE, TableLine::TAB_UP_T) : Line::UP_T;
         }
         dj = j + block_width - 2;
         if (!str_empty(canvas[di+1][dj])) {
-            canvas[di][dj] = dfa->is_terminal(s) ? 
+            canvas[di][dj] = dfa->is_accepted(s) ? 
                 get_table_line(TableId::DOUBLE, TableLine::TAB_UP_T) : Line::UP_T;
         }
     }
@@ -956,13 +1012,14 @@ void DFAGraph::to_rows(size_t block_width, size_t block_height,
     }
 }
 
+
 std::vector<Pos> DFAGraph::init_canvas(const std::vector<std::vector<State>> &paths,
     std::pair<size_t,size_t> wxh, std::pair<size_t,size_t> line_size) {
 
     auto [block_width, block_height] = wxh;
     auto [row_line_size, col_line_size] = line_size;
 
-    size_t max_blocks = std::reduce(paths.begin(), paths.end(), 0ul, [](size_t k, const auto& b) {
+    size_t max_blocks = std::accumulate(paths.begin(), paths.end(), (size_t)0, [](size_t k, const auto& b) {
         return std::max(k, b.size());
     });
 
@@ -971,6 +1028,7 @@ std::vector<Pos> DFAGraph::init_canvas(const std::vector<std::vector<State>> &pa
 
     size_t cols = max_blocks * (block_width + col_block_spaces) + col_block_spaces;
     size_t rows = paths.size() * (block_height + row_block_spaces) + row_block_spaces;
+
 
     canvas = std::vector<std::vector<std::string>>(rows, std::vector<std::string>(cols, " "));
 
@@ -981,9 +1039,9 @@ std::vector<Pos> DFAGraph::init_canvas(const std::vector<std::vector<State>> &pa
     for (auto& path : paths) {
         j = col_block_spaces;
         for (State s : path) {
-            TableId id = dfa->is_terminal(s) ? TableId::DOUBLE : TableId::ROUND;
+            TableId id = dfa->is_accepted(s) ? TableId::DOUBLE : TableId::ROUND;
             auto b = build_block(block_width, block_height, std::to_string(s), id);
-            if (dfa->is_color() && (s == dfa->state_initial || dfa->is_terminal(s))) {
+            if (dfa->is_color() && (s == dfa->state_initial || dfa->is_accepted(s))) {
                 auto color = iter_color();
                 for (size_t r=0; r<b.size(); r++) {
                     b[r].front() = color + b[r].front();
@@ -1037,7 +1095,7 @@ void DFAGraph::render() {
         Block b = build_block(block_width, block_height, " ", TableId::EMPTY);
         tmp = block_concat(tmp, b, block_spaces, Dir::Horizon);
         for (State s : path) {
-            TableId id = dfa->is_terminal(s) ? TableId::DOUBLE : TableId::ROUND;
+            TableId id = dfa->is_accepted(s) ? TableId::DOUBLE : TableId::ROUND;
             b = build_block(block_width, block_height, std::to_string(s), id);
             tmp = block_concat(tmp, b, block_spaces, Dir::Horizon);
         }
@@ -1066,3 +1124,4 @@ void DFAGraph::dump(std::ostream& os) {
         os << line << "\n";
     }
 }
+#endif

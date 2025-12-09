@@ -15,7 +15,8 @@ using Bits = std::vector<bool>;
 
 #define TOK_EPSILON 0
 #define EPSILON "ε"
-#define TOK_INVALID INT_MAX
+#define INVALID_TOKEN   INT_MAX
+#define INVALID_STATE   INT_MAX
 
 class DFA;
 
@@ -45,11 +46,12 @@ private:
     bool color;
 };
 
-class DFAGraph;
+class DFACanvas;
 
 class DFA {
 public:
-    friend class DFAGraph;
+    // friend class DFAGraph;
+    friend class DFACanvas;
 
     DFA(NFA* nfa): nfa(nfa), state_initial(0) {
     }
@@ -57,7 +59,7 @@ public:
     void generate();
     void dump(std::ostream& os=std::cout);
     bool is_valid(State s);
-    bool is_terminal(State s);
+    bool is_accepted(State s);
     State next(State s, Token t);
     const std::unordered_map<Token,State>* next(State s);
     size_t states();
@@ -66,22 +68,19 @@ public:
 
 private:
     bool is_color();
-    void epsilon_closure(State x, State s);
-    Bits find_closure(const Bits& b, Token t);
     void nfa_to_dfa();
     void simplify();
     void add_jump(State a, Token t, State b);
 
 private:
     std::vector<std::unordered_map<Token,State>> dfa;
-    std::vector<std::unordered_set<State>> epsClosure;
     std::unordered_set<State> terminals;
     std::unordered_set<State> valids;
-    std::vector<Bits> nfa_closure; // [dfa state: {nfa states closure...}, ...]
     NFA* nfa;
     State state_initial;
 };
 
+#if 0
 class DFAGraph {
 public:
     DFAGraph(DFA* dfa);
@@ -105,6 +104,7 @@ private:
     Rows rows;
     Block canvas;
 };
+#endif
 
 /*
 (a[ab]c|b[bc]c|c[ac]c)
