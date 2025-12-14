@@ -51,6 +51,7 @@ void TextCanvas::Resize(size_t height, size_t width) {
     this->width = width;
     canvas.clear();
     overlay.clear();
+    size = 0;
 }
 
 void TextCanvas::Set(const Pos& p, const std::string& s) {
@@ -61,9 +62,14 @@ void TextCanvas::Set(const Pos& p, const std::string& s) {
     }
     if (s.empty()) {
         overlay[i][j] = EMPTY;
+        size++;
     } else {
         overlay[i][j] = FILLED;
         canvas[i][j] = s;
+        size += 1;
+    }
+    if (size > 1024*1024*20) {
+        throw std::overflow_error("TextCanvas " + std::to_string(size) + " elements, too large!");
     }
 }
 
@@ -106,19 +112,23 @@ void TextCanvas::Line(const Pos& a, const Pos& b) {
         for (size_t j = x; j <= y; j++) {
             if (j > x && j < y) {
                 overlay[ai][j] |= FROM_LEFT | FROM_RIGHT;
+                size++;
             }
         }
         overlay[ai][x] |= FROM_RIGHT;
         overlay[ai][y] |= FROM_LEFT;
+        size += 2;
     } else if (aj == bj) {
         auto [x, y] = std::minmax(ai, bi);
         for (size_t i = x; i <= y; i++) {
             if (i > x && i < y) {
                 overlay[i][aj] |= FROM_UP | FROM_DOWN;
+                size++;
             }
         }
         overlay[x][aj] |= FROM_DOWN;
         overlay[y][aj] |= FROM_UP;
+        size += 2;
     } else {
         DEBUG_OS << ai << ", " << aj << "    " << bi << ", " << bj << "\n";
         throw std::invalid_argument("invalid args");
@@ -140,34 +150,15 @@ void TextCanvas::Rect(const Pos& p, size_t height, size_t width,
     for (size_t k = j+1; k < b; k++) {
         Set({i,k}, tab_line(TableLine::TAB_H_LINE));
         Set({a,k}, tab_line(TableLine::TAB_H_LINE));
-
-        // canvas[i][k] = tab_line(TableLine::TAB_H_LINE);
-        // canvas[a][k] = tab_line(TableLine::TAB_H_LINE);
-        // overlay[i][k] = FILLED;
-        // overlay[a][k] = FILLED;
     }
     for (size_t k = i+1; k < a; k++) {
         Set({k,j}, start + tab_line(TableLine::TAB_V_LINE));
         Set({k,b}, tab_line(TableLine::TAB_V_LINE) + end);
-
-        // canvas[k][j] = start + tab_line(TableLine::TAB_V_LINE);
-        // canvas[k][b] = tab_line(TableLine::TAB_V_LINE) + end;
-        // overlay[k][j] = FILLED;
-        // overlay[k][b] = FILLED;
     }
     Set({i, j}, start + tab_line(TableLine::TAB_LEFT_TOP));
     Set({i, b}, tab_line(TableLine::TAB_RIGHT_TOP) + end);
     Set({a, j}, start + tab_line(TableLine::TAB_LEFT_BOTTOM));
     Set({a, b}, tab_line(TableLine::TAB_RIGHT_BOTTOM) + end);
-
-    // canvas[i][j] = start + tab_line(TableLine::TAB_LEFT_TOP);
-    // canvas[i][b] = tab_line(TableLine::TAB_RIGHT_TOP) + end;
-    // canvas[a][j] = start + tab_line(TableLine::TAB_LEFT_BOTTOM);
-    // canvas[a][b] = tab_line(TableLine::TAB_RIGHT_BOTTOM) + end;
-    // overlay[i][j] = FILLED;
-    // overlay[i][b] = FILLED;
-    // overlay[a][j] = FILLED;
-    // overlay[a][b] = FILLED;
 }
 
 std::pair<size_t,size_t> TextCanvas::Size() {
@@ -177,31 +168,22 @@ std::pair<size_t,size_t> TextCanvas::Size() {
 void TextCanvas::Text(const Pos& p, const std::string& s, Align align) {
     auto [i, j] = p;
     size_t n = visual_len(s);
-    // overlay[i][j] = 0;
-    // canvas[i][j] = s;
     Set({i,j}, s);
     if (n <= 1) return;
     if (align == Align::LEFT) {
         for (size_t k = j+1; k <= std::min(j+n-1, width-1); k++) {
-            // canvas[i][k] = "";
-            // overlay[i][k] = 0;
             Set({i,k}, "");
         }
     } else if (align == Align::RIGHT) {
         for (size_t k = j>=n?j-(n-1):0; k <= j-1; k++) {
-            // canvas[i][k] = "";
-            // overlay[i][k] = 0;
             Set({i,k}, "");
         }
     } else { // center
         size_t a = j - n/2;
         size_t b = j + n/2 - 1 + (n&1);
         for (size_t k = a; k <= b; k++) {
-            // canvas[i][k] = "";
-            // overlay[i][k] = 0;
             Set({i,k}, "");
         }
-        // canvas[i][j] = s;
         Set({i,j}, s);
     }
 }

@@ -46,6 +46,7 @@ private:
     size_t width;
     MMS canvas;
     MMU overlay;
+    size_t size = 0;
 };
 
 #endif // __TEXTCANVAS_H__
