@@ -3,16 +3,16 @@
 #include <sstream>
 #include "unicode.h"
 
-#define CHARS "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#%&=_`~'\""
-#define ESCAPED "nftvfr0bBsSdwW[]{}().*+?|^$\\- "
-#define HEX "ABCDEFabcdef0123456789"
+#define __CHARS__ "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#%&=_`~'\""
+#define __ESCAPED__ "nftvfr0bBsSdwW[]{}().*+?|^$\\- "
+#define __HEX__ "ABCDEFabcdef0123456789"
 
 class RegexGenerator {
 public:
     RegexGenerator(long long seed=time(nullptr)): rand_engine(seed) {
-        chars = CHARS;
-        escaped = ESCAPED;
-        hex = HEX;
+        chars = __CHARS__;
+        escaped = __ESCAPED__;
+        hex = __HEX__;
     }
 
     void seed(long long s) {

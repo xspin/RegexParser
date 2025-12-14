@@ -5,7 +5,7 @@
 #include <vector>
 #include <cstdio>
 
-#define APP_VERSION "0.4.0"
+#define APP_VERSION "0.4.1"
 
 extern bool g_debug;
 

@@ -7,6 +7,7 @@
 #include "RegexGenerator.h"
 #include "DFA.h"
 #include "DFACanvas.h"
+#include "GraphSvg.h"
 
 
 int run(int argc, char* argv[]) {
@@ -19,7 +20,7 @@ int run(int argc, char* argv[]) {
 
     args.expr = utf8_to_uhhhh(args.expr);
 
-    if (g_debug) std::cout << " Input Expr: " << args.expr << std::endl;
+    if (g_debug) std::cout << "  Input Expression: " << args.expr << std::endl;
 
     std::unique_ptr<ExprNode> root(regex_parse(args.expr, args.debug));
     if (!root) {
@@ -27,7 +28,9 @@ int run(int argc, char* argv[]) {
     }
 
     auto dump = [&args, &root](std::ostream& os) {
-        os << "Parsed Expr: " << root->stringify(args.color) << std::endl;
+        if (args.format != Utils::FMT_SVG) {
+            os << "Regular Expression: " << root->stringify(args.color) << std::endl;
+        }
 
         if (args.debug) {
             assert(root->str() == args.expr);
@@ -42,6 +45,14 @@ int run(int argc, char* argv[]) {
             GraphBox::set_color(args.color);
             std::unique_ptr<RootBox> box(expr_to_box(root.get()));
             box->dump(os);
+        }
+
+        if (args.format & Utils::FMT_SVG) {
+            GraphBox::set_encoding(false);
+            GraphBox::set_color(false);
+            std::unique_ptr<RootBox> box(expr_to_box(root.get()));
+            SvgRoot svg(box.get(), args.expr);
+            svg.dump(os);
         }
 
         if (args.format & Utils::FMT_NFA) {
@@ -62,11 +73,6 @@ int run(int argc, char* argv[]) {
             t.render();
             t.dump(os);
         } 
-
-        if (args.format & Utils::FMT_SVG) {
-            throw std::invalid_argument("Not implemented yet for svg!");
-            // todo
-        }
     };
 
     if (args.output.empty()) {

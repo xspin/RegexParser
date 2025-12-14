@@ -66,11 +66,13 @@ static Rows rows_pad(const Rows& lines) {
 
     Make sure all lines same length
 */
-Rows box_expand(const Rows& lines, size_t width, const std::string& link, Align align) {
+std::pair<Rows,Span> box_expand(const Rows& lines, size_t width, const std::string& link, Align align) {
     assert(!lines.empty());
 
+    Span span;
+
     if (width <= visual_len(lines.front())) {
-        return lines;
+        return {lines, span};
     }
 
     size_t w = width - visual_len(lines.front());
@@ -80,6 +82,15 @@ Rows box_expand(const Rows& lines, size_t width, const std::string& link, Align 
     size_t rw = w - lw;
     std::string lspaces = std::string(lw, ' ');
     std::string rspaces = std::string(rw, ' ');
+
+    if (align == Align::LEFT) {
+        span.right = lw + rw;
+    } else if (align == Align::RIGHT) {
+        span.left = lw + rw;
+    } else {
+        span.left = lw;
+        span.right = rw;
+    }
 
     Rows res;
     for (size_t i=0; i<lines.size(); i++) {
@@ -101,14 +112,15 @@ Rows box_expand(const Rows& lines, size_t width, const std::string& link, Align 
             }
         }
     }
-    return res;
+    return {res, span};
 }
 
 
 /* Make sure each line same length */
-Rows box_bottom(const Rows& lines, const std::string& tag, bool dashed) {
+std::pair<Rows,Span> box_bottom(const Rows& lines, const std::string& tag, bool dashed) {
     assert(!lines.empty());
     Rows res;
+    Span span;
     size_t height = lines.size();
     size_t mid = height / 2;
     size_t width = visual_len(lines.front());
@@ -116,7 +128,9 @@ Rows box_bottom(const Rows& lines, const std::string& tag, bool dashed) {
     Rows rows;
     if (width < visual_len(tag)) {
         width = visual_len(tag);
-        rows = box_expand(lines, width, Line::HORIZON);
+        auto t = box_expand(lines, width, Line::HORIZON);
+        rows = t.first;
+        span = t.second;
     } else {
         rows = lines;
     }
@@ -124,12 +138,15 @@ Rows box_bottom(const Rows& lines, const std::string& tag, bool dashed) {
     std::string vline = dashed? Line::VERTICAL_DASHED : Line::VERTICAL;
     std::string hline = Line::HORIZON;
 
-    size_t i = 0;
+    span.left += 2;
+    span.right += 2;
+    span.bottom += 1; 
 
     if (is_even(height+1)) {
         res.push_back(std::string(width+4, ' '));
     }
 
+    size_t i = 0;
     for (; i < mid; i++) {
         res.push_back("  " + rows[i] + "  ");
     }
@@ -145,12 +162,13 @@ Rows box_bottom(const Rows& lines, const std::string& tag, bool dashed) {
         + visual_str_pad(tag, width, Align::CENTER, hline) 
         + Line::RIGHT_BOTTOM + " ");
 
-    return res;
+    return {res,span};
 }
 
-Rows box_table(TableId id, const Rows& lines, const std::string& top) {
+std::pair<Rows,Span> box_table(TableId id, const Rows& lines, const std::string& top) {
     assert(!lines.empty());
     Rows res;
+    Span span;
     const auto& tab = s_tables[static_cast<int>(id)];
 
     // pad each line to same length
@@ -160,12 +178,15 @@ Rows box_table(TableId id, const Rows& lines, const std::string& top) {
 
     size_t len = visual_len(top);
 
+    std::pair<Rows,Span> t;
     if (width < len) {
         if (id == TableId::DASHED) { // for Group
-            rows = box_expand(rows, len, Line::HORIZON);
+            t = box_expand(rows, len, Line::HORIZON);
         } else {
-            rows = box_expand(rows, len, "");
+            t = box_expand(rows, len, "");
         }
+        rows = t.first;
+        span = t.second;
     }
 
     width = std::max(width, len) + 2;
@@ -176,11 +197,14 @@ Rows box_table(TableId id, const Rows& lines, const std::string& top) {
     std::string padding = Utils::str_repeat(" ", margin);
     std::string link = Utils::str_repeat(Line::HORIZON, margin);
     // std::string rlink = Utils::str_repeat(Line::HORIZON, margin-1) + ">";
+    span.left += margin + 1;
+    span.right += margin + 1;
 
     size_t mid = height / 2;
 
     std::string h_line = Utils::str_repeat(tab[TAB_H_LINE], width-2);
 
+    span.top += 1;
     res.push_back(padding + tab[TAB_LEFT_TOP] 
         + visual_str_pad(top, width-2, Align::CENTER, tab[TAB_H_LINE]) 
         + tab[TAB_RIGHT_TOP] + padding);
@@ -199,8 +223,9 @@ Rows box_table(TableId id, const Rows& lines, const std::string& top) {
         
     }
     res.push_back(padding + tab[TAB_LEFT_BOTTOM] + h_line + tab[TAB_RIGHT_BOTTOM] + padding);
+    span.bottom += 1;
 
-    return res;
+    return {res, span};
 }
 
 
@@ -378,6 +403,7 @@ std::unique_ptr<RootBox> expr_to_box(ExprNode* expr) {
     }
 
     root->render();
+    root->layout();
 
     return std::unique_ptr<RootBox>(root);
 };

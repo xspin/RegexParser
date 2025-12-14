@@ -76,14 +76,14 @@ int parse_args(Args& args, int argc, char* argv[]) {
     std::string app = basename(argv[0]);
 
     std::stringstream help;
-    help << "Usage: " << app << " [OPTIONS] [REGEX]\n"
+    help 
         << "Version " << APP_VERSION << " (Tool to parse and display regular expression)\n"
+        << "Usage: " << app << " [OPTIONS] [REGEX]\n"
         << "    -h           show this helpful usage message\n"
         << "    -v           show version info\n"
         << "    -o           specify output file path (default stdout)\n"
         << "    -f [FORMAT]  specify output format (default graph):\n"
-        << "                   svg/s, graph/g, tree/t, nfa/n, dfa/d\n"
-        << "                   (multiply example: g,t,d)\n"
+        << "                   graph/g, tree/t, nfa/n, dfa/d, svg/s (multiply example: g,t,d)\n"
         << "    -c           print with color\n"
         << "    -g           generate a random regular expression with specified length limit\n"
         << "    -u           enable utf8 encoding (default off)\n"
