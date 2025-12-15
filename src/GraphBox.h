@@ -269,6 +269,10 @@ public:
 
     std::string pack_color(const std::string& s) {
         if (!GraphBox::color) return s;
+        if (s.empty()) {
+            iter_color();
+            return s;
+        }
         return iter_color_pack(s);
     }
 
@@ -310,18 +314,28 @@ protected:
     static bool utf8_encoding;
 };
 
+static inline std::string unescape(const std::string& s) {
+    std::string res;
+    size_t n = s.size();
+    for (size_t i = 0; i < n; ++i) {
+        if (s[i] == '\\' && i+1 < n) {
+            res += s[i+1];
+            ++i;
+        } else {
+            res += s[i];
+        }
+    }
+    return res;
+}
+
 class NormalBox: public GraphBox {
 public:
     NormalBox(const std::string& s): GraphBox(BoxType::NORMAL) {
-        if (s.size() == 2 && s[0] == '\\') {
-            this->raw = pack_color(s);
-        } else {
-            this->raw = s;
-        }
+        this->raw = unescape(s);
     }
 
     void render() {
-        auto t = box_normal({raw}, quant.get());
+        auto t = box_normal({this->raw}, quant.get());
         this->rows = t.first;
         this->span = t.second;
     }
@@ -337,10 +351,11 @@ public:
 class RangeBox: public GraphBox {
 public:
     RangeBox(const std::string& s): GraphBox(BoxType::RANGE) {
-        this->raw = pack_color(s);
+        this->raw = s;
     }
 
     void render() {
+        raw = pack_color(raw);
         auto t = box_normal({raw}, quant.get());
         this->rows = t.first;
         this->span = t.second;
@@ -366,23 +381,36 @@ public:
 
     void render() {
         Rows lines;
+
+        auto append_line = [&lines](GraphBox* box) {
+            std::string s = box->get_raw();
+            if (s.empty()) return;
+            if (GraphBox::color && box->get_type() != BoxType::NORMAL) {
+                s = UNDERLINE + s + NC;
+            }
+            lines.push_back(s);
+        };
+
+        // align color iterator
+        auto tp = pack_color(top);
+
+        child.front()->render();
+
         // child may just be a NormalBox
-        auto tmp = child.front()->get_raw();
-        if (!tmp.empty()) lines.push_back(tmp);
+        append_line(child.front());
 
         auto link_box = child.front();
         auto items = link_box->get_child(); 
         for (auto sub : *items) {
-            sub->render();
-            lines.push_back(sub->get_raw());
+            append_line(sub);
         }
         assert(!lines.empty());
 
         std::pair<Rows,Span> t;
         if (negative) {
-            t = box_negclass(lines, top, quant.get());
+            t = box_negclass(lines, tp, quant.get());
         } else {
-            t = box_class(lines, top, quant.get());
+            t = box_class(lines, tp, quant.get());
         }
         this->rows = t.first;
         this->span = t.second;
@@ -412,9 +440,10 @@ public:
     }
 
     void render() {
+        auto tp = pack_color(top);
         child.front()->render();
         const Rows& rows = child.front()->get_rows();
-        auto t = box_group(rows, pack_color(top), quant.get());
+        auto t = box_group(rows, tp, quant.get());
         this->rows = t.first;
         this->span = t.second;
     }
@@ -447,9 +476,10 @@ public:
             top = tag;
             DEBUG_OS << "Not implement for " << tag << "\n";
         }
+        auto tp = pack_color(top);
         child.front()->render();
         const Rows& rows = child.front()->get_rows();
-        auto t = box_group(rows, top);
+        auto t = box_group(rows, tp);
         this->rows = t.first;
         this->span = t.second;
     }
@@ -487,6 +517,7 @@ public:
     }
 
     void render() {
+        iter_color(); // align color iterator
         size_t width = 0;
         size_t height = 0;
         for (auto branch : child) {
@@ -707,10 +738,11 @@ public:
             // todo ...
             s = symbol;
         }
-        raw = pack_color(s);
+        raw = s;
     }
 
     void render() {
+        raw = pack_color(raw);
         auto t = box_special({raw}, symbol, quant.get());
         rows = t.first;
         span = t.second;

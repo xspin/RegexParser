@@ -569,7 +569,7 @@ void DFA::simplify() {
             valids.erase(s);
         }
     }
-    LOG_DEBUG("DFA total invalid states: %lu\n", dfa.size()-valids.size());
+    LOG_DEBUG("DFA total invalid states: %zu\n", dfa.size()-valids.size());
 }
 
 void DFA::generate() {

@@ -77,17 +77,18 @@ int parse_args(Args& args, int argc, char* argv[]) {
 
     std::stringstream help;
     help 
-        << "Version " << APP_VERSION << " (Tool to parse and display regular expression)\n"
-        << "Usage: " << app << " [OPTIONS] [REGEX]\n"
-        << "    -h           show this helpful usage message\n"
-        << "    -v           show version info\n"
-        << "    -o           specify output file path (default stdout)\n"
-        << "    -f [FORMAT]  specify output format (default graph):\n"
-        << "                   graph/g, tree/t, nfa/n, dfa/d, svg/s (multiply example: g,t,d)\n"
-        << "    -c           print with color\n"
-        << "    -g           generate a random regular expression with specified length limit\n"
-        << "    -u           enable utf8 encoding (default off)\n"
-        << "   [REGEX]       specify regular expression input (read from stdin if missing)\n";
+        << "Version " << APP_VERSION << " (Tool to parse and visualize regular expression)\n"
+        << "Usage: " << app << " [-h|-v|-c|-u] [-o path] [-f format(s)] [-g len] [REGEX]\n"
+        << "Options:\n"
+        << "  -h           show this helpful usage message\n"
+        << "  -v           show version info\n"
+        << "  -o path      specify output file path (default stdout)\n"
+        << "  -f format    specify output format (default graph):\n"
+        << "                  graph/g, tree/t, nfa/n, dfa/d, svg/s, html/m (multiply example: g,t,d)\n"
+        << "  -c           print with ansi color\n"
+        << "  -g           generate a random regular expression with specified length limit\n"
+        << "  -u           enable utf8 encoding\n"
+        << "  [REGEX]      specify regular expression input (read from stdin if missing)\n";
 
     args.format = FMT_NULL;
     args.color = false;
@@ -109,6 +110,8 @@ int parse_args(Args& args, int argc, char* argv[]) {
                 fmt = FMT_NFA;
             } else if (s == "d" || s == "dfa") {
                 fmt = FMT_DFA;
+            } else if (s == "m" || s == "html") {
+                fmt = FMT_HTML;
             } else {
                 return false;
             }

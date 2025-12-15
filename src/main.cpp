@@ -8,6 +8,7 @@
 #include "DFA.h"
 #include "DFACanvas.h"
 #include "GraphSvg.h"
+#include "GraphHtml.h"
 
 
 int run(int argc, char* argv[]) {
@@ -28,8 +29,9 @@ int run(int argc, char* argv[]) {
     }
 
     auto dump = [&args, &root](std::ostream& os) {
-        if (args.format != Utils::FMT_SVG) {
-            os << "Regular Expression: " << root->stringify(args.color) << std::endl;
+        std::string expr_str = root->stringify(args.color);
+        if (args.format != Utils::FMT_SVG && args.format != Utils::FMT_HTML) {
+            os << "Regular Expression: " << expr_str << std::endl;
         }
 
         if (args.debug) {
@@ -45,6 +47,17 @@ int run(int argc, char* argv[]) {
             GraphBox::set_color(args.color);
             std::unique_ptr<RootBox> box(expr_to_box(root.get()));
             box->dump(os);
+
+        }
+
+        if (args.format & Utils::FMT_HTML) {
+            GraphBox::set_encoding(args.utf8);
+            GraphBox::set_color(args.color);
+            std::unique_ptr<RootBox> box(expr_to_box(root.get()));
+            std::stringstream html_os;
+            box->dump(html_os);
+            GraphHtml html(expr_str, html_os.str());
+            html.dump(os);
         }
 
         if (args.format & Utils::FMT_SVG) {

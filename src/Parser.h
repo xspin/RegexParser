@@ -22,6 +22,7 @@
 #define PURPLE "\033[35m"
 #define CYAN "\033[36m"
 #define WHITE "\033[37m"
+#define UNDERLINE "\033[04m"
 #define NC "\033[0m"
 
 enum class ExprType {

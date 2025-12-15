@@ -45,7 +45,7 @@ TextCanvas::TextCanvas(size_t height, size_t width): height(height),width(width)
 void TextCanvas::Resize(size_t height, size_t width) {
     assert(height > 0 && width > 0);
 
-    LOG_DEBUG("Change Canvas size %lu x %lu\n", height, width);
+    LOG_DEBUG("Change Canvas size %zu x %zu\n", height, width);
 
     this->height = height;
     this->width = width;

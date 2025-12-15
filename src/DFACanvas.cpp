@@ -137,7 +137,7 @@ void print(const std::string& s, const Pos &p) {
 void DFACanvas::link(State a, State b, Token tok) { // a --> b
 
     auto is_neighbor = [this](int aj, int bj) {
-        return aj<bj && bj-aj <= BLOCK_WIDTH + degrees*s_line_width;
+        return aj<bj && (unsigned)bj-aj <= BLOCK_WIDTH + degrees*s_line_width;
     };
 
     size_t id = linkid[linkHash(a, b, tok)];
@@ -305,7 +305,7 @@ void DFACanvas::dump(std::ostream& os) {
         }
         os << "\n";
     }
-    LOG_DEBUG("Canvas %lux%lu Dumped %lu Bytes\n", h, w, sz);
+    LOG_DEBUG("Canvas %zux%zu Dumped %zu Bytes\n", h, w, sz);
 }
 
 void DFACanvas::postprocess() {

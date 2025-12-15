@@ -294,6 +294,8 @@ static inline bool uhhhh_is_chinese(const std::string& u) {
 
 // 判断 Unicode 编码是否为双宽度字符
 static inline bool is_double_width_char(uint32_t unicode) {
+    if (unicode < 0x1100) return false; // 基本拉丁字母及常用符号均为单宽度
+    if (unicode >= 0x25C0 && unicode <= 0x25CF) return false; // 几何形状（部分双宽度）
     // 1. 全宽 ASCII 兼容区（U+FF01 ~ U+FF5E）
     if (unicode >= 0xFF01 && unicode <= 0xFF5E) return true;
     // 2. CJK 核心汉字区（U+4E00 ~ U+9FFF）
@@ -306,6 +308,9 @@ static inline bool is_double_width_char(uint32_t unicode) {
     if ((unicode >= 0xAC00 && unicode <= 0xD7AF) || (unicode >= 0x3130 && unicode <= 0x318F)) return true;
     // 6. CJK 扩展 B-F 区（极少使用，可选）
     if ((unicode >= 0x20000 && unicode <= 0x2EBEF)) return true;
+
+    if (unicode >= 0x2f900 && unicode <= 0x2FA1F) return true; // CJK 扩展 G 区
+    if (unicode >= 0xfd90 && unicode <= 0xfdef) return true;   // 私用区兼容汉字
 
     // 表意文字描述符	U+2FF0 ~ U+2FFF	CJK 字符扩展描述符
     // 中日韩兼容字符	U+F900 ~ U+FAFF	兼容旧字体的重复汉字（如 両 (U+F976)）
