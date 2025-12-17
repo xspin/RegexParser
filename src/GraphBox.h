@@ -44,6 +44,7 @@ enum TableLine {
     TAB_MAX
 };
 
+#define SPACE "☐"
 
 namespace Line {
     const std::string HORIZON = "─";
@@ -297,7 +298,7 @@ public:
     }
 
     virtual void render() =0;
-    virtual void layout() =0;
+    // virtual void layout() =0;
 
 protected:
     BoxType type;
@@ -307,7 +308,7 @@ protected:
     std::vector<GraphBox*> child;
     std::string top;
     std::unique_ptr<Quant> quant;
-    Span span;
+    // Span span;
     size_t x = 0;
     size_t y = 0;
     static bool color;
@@ -321,6 +322,8 @@ static inline std::string unescape(const std::string& s) {
         if (s[i] == '\\' && i+1 < n) {
             res += s[i+1];
             ++i;
+        } else if (s[i] == ' ') {
+            res += SPACE;
         } else {
             res += s[i];
         }
@@ -337,13 +340,13 @@ public:
     void render() {
         auto t = box_normal({this->raw}, quant.get());
         this->rows = t.first;
-        this->span = t.second;
+        // this->span = t.second;
     }
 
-    void layout() {
-        x += span.left;
-        y += span.top;
-    }
+    // void layout() {
+    //     x += span.left;
+    //     y += span.top;
+    // }
 
 };
 
@@ -358,13 +361,13 @@ public:
         raw = pack_color(raw);
         auto t = box_normal({raw}, quant.get());
         this->rows = t.first;
-        this->span = t.second;
+        // this->span = t.second;
     }
 
-    void layout() {
-        x += span.left;
-        y += span.top;
-    }
+    // void layout() {
+    //     x += span.left;
+    //     y += span.top;
+    // }
 };
 
 class ClassBox: public GraphBox {
@@ -413,9 +416,10 @@ public:
             t = box_class(lines, tp, quant.get());
         }
         this->rows = t.first;
-        this->span = t.second;
+        // this->span = t.second;
     }
 
+    /*
     void layout() {
         auto dx = this->span.left;
         auto dy = this->span.top;
@@ -427,6 +431,7 @@ public:
             // sub->layout(); // raw data no need layout
         }
     }
+    */
 
 private:
     bool negative;
@@ -445,15 +450,15 @@ public:
         const Rows& rows = child.front()->get_rows();
         auto t = box_group(rows, tp, quant.get());
         this->rows = t.first;
-        this->span = t.second;
+        // this->span = t.second;
     }
 
-    void layout() {
-        size_t dx = this->span.left;
-        size_t dy = this->span.top;
-        child.front()->set_position(x+dx, y+dy);
-        child.front()->layout();
-    }
+    // void layout() {
+    //     size_t dx = this->span.left;
+    //     size_t dy = this->span.top;
+    //     child.front()->set_position(x+dx, y+dy);
+    //     child.front()->layout();
+    // }
 };
 
 class AssertionBox: public GraphBox {
@@ -481,15 +486,15 @@ public:
         const Rows& rows = child.front()->get_rows();
         auto t = box_group(rows, tp);
         this->rows = t.first;
-        this->span = t.second;
+        // this->span = t.second;
     }
 
-    void layout() {
-        size_t dx = this->span.left;
-        size_t dy = this->span.top;
-        child.front()->set_position(x+dx, y+dy);
-        child.front()->layout();
-    }
+    // void layout() {
+    //     size_t dx = this->span.left;
+    //     size_t dy = this->span.top;
+    //     child.front()->set_position(x+dx, y+dy);
+    //     child.front()->layout();
+    // }
 
 private:
     std::string tag;
@@ -501,11 +506,11 @@ public:
     }
     void render() {
         rows.push_back(Line::HORIZON);
-        this->span = Span{0,0,0,0};
+        // this->span = Span{0,0,0,0};
     }
-    void layout() {
+    // void layout() {
         // do nothing
-    }
+    // }
 };
 
 class BranchBox: public GraphBox {
@@ -561,13 +566,14 @@ public:
         // keep height odd
         if (is_even(height)) {
             rows.push_back(std::string(width+2, ' '));
-            this->span.bottom += 1;
+            // this->span.bottom += 1;
         }
         auto t = box_expand(rows, width+4);
         this->rows = t.first;
-        this->span += t.second;
+        // this->span += t.second;
     }
 
+    /*
     void layout() {
         size_t dx = this->span.left + 2;
         size_t dy = this->span.top;
@@ -577,7 +583,7 @@ public:
             dy += sub->get_height();
             sub->layout();
         }
-    }
+    }*/
 };
 
 
@@ -596,17 +602,17 @@ public:
         child.front()->set_quantifier(q);
         child.front()->render();
         this->rows = child.front()->get_rows();
-        this->span = {0};
+        // this->span = {0};
     }
 
-    void layout() {
-        child.front()->set_position(x + span.left, y + span.top);
-        child.front()->layout();
-    }
+    // void layout() {
+    //     child.front()->set_position(x + span.left, y + span.top);
+    //     child.front()->layout();
+    // }
 };
 
 class LinkBox: public GraphBox {
-    std::vector<size_t> span_tops;
+    // std::vector<size_t> span_tops;
 
 public:
     LinkBox(std::vector<GraphBox*> items): GraphBox(BoxType::LINK) {
@@ -630,7 +636,7 @@ public:
 
     void link(GraphBox* box, size_t mid) {
         size_t i = mid - box->get_height()/2;
-        span_tops.push_back(i);
+        // span_tops.push_back(i);
 
         std::string spaces(box->get_width(), ' ');
         for (size_t j=0; j<i; j++) {
@@ -646,15 +652,15 @@ public:
         }
     }
 
-    void layout() {
-        size_t dx = span.left;
-        for (size_t i = 0; i < child.size(); i++) {
-            auto sub = child[i];
-            sub->set_position(x+dx, y + span.top + span_tops[i]);
-            dx += sub->get_width();
-            sub->layout();
-        }
-    }
+    // void layout() {
+    //     size_t dx = span.left;
+    //     for (size_t i = 0; i < child.size(); i++) {
+    //         auto sub = child[i];
+    //         sub->set_position(x+dx, y + span.top + span_tops[i]);
+    //         dx += sub->get_width();
+    //         sub->layout();
+    //     }
+    // }
 };
 
 class AnchorBox: public GraphBox {
@@ -672,9 +678,9 @@ public:
         } else if (symbol == "$") {
             s = "End";
         } else if (symbol == "\\b") {
-            s = "Word Bound";
+            s = "Word Boundary";
         } else if (symbol == "\\B") {
-            s = "Non-Word Bound";
+            s = "Non-Word Boundary";
         } else if (symbol == ".") {
             s = "Any";
         } else {
@@ -683,12 +689,12 @@ public:
         }
         auto t = box_special({pack_color(s)}, symbol, quant.get());
         rows = t.first;
-        span = t.second;
+        // span = t.second;
     }
-    void layout() {
-        x += span.left;
-        y += span.top;
-    }
+    // void layout() {
+    //     x += span.left;
+    //     y += span.top;
+    // }
 };
 
 class EscapedBox: public GraphBox {
@@ -745,13 +751,13 @@ public:
         raw = pack_color(raw);
         auto t = box_special({raw}, symbol, quant.get());
         rows = t.first;
-        span = t.second;
+        // span = t.second;
     }
 
-    void layout() {
-        x += span.left;
-        y += span.top;
-    }
+    // void layout() {
+    //     x += span.left;
+    //     y += span.top;
+    // }
 
 private:
     std::string symbol;
@@ -772,9 +778,9 @@ public:
         w += 2;
         auto t = box_expand(p->get_rows(), w, Line::HORIZON);
         Rows tmp = t.first;
-        this->span = t.second;
-        this->span.left += 2;
-        this->span.right += 2;
+        // this->span = t.second;
+        // this->span.left += 2;
+        // this->span.right += 2;
 
         w += 1;
         t = box_expand(tmp, w, Line::START, Align::RIGHT);
@@ -785,13 +791,13 @@ public:
         this->rows = t.first;
     }
 
-    void layout() {
-        x = 0;
-        y = 0;
-        auto p = child.front();
-        p->set_position(x + span.left, y + span.top);
-        p->layout();
-    }
+    // void layout() {
+    //     x = 0;
+    //     y = 0;
+    //     auto p = child.front();
+    //     p->set_position(x + span.left, y + span.top);
+    //     p->layout();
+    // }
 };
 
 std::unique_ptr<RootBox> expr_to_box(ExprNode* root);

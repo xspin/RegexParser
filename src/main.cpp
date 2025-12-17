@@ -30,42 +30,36 @@ int run(int argc, char* argv[]) {
 
     auto dump = [&args, &root](std::ostream& os) {
         std::string expr_str = root->stringify(args.color);
-        if (args.format != Utils::FMT_SVG && args.format != Utils::FMT_HTML) {
-            os << "Regular Expression: " << expr_str << std::endl;
-        }
 
         if (args.debug) {
             assert(root->str() == args.expr);
         }
+
+        GraphBox::set_encoding(args.utf8);
+        GraphBox::set_color(args.color);
+        std::unique_ptr<RootBox> box(expr_to_box(root.get()));
+
+        // html and svg is exclusive
+        if (args.format & Utils::FMT_HTML) {
+            std::stringstream html_os;
+            box->dump(html_os);
+            GraphHtml html(expr_str, html_os.str());
+            html.dump(os);
+            return;
+        }else if (args.format & Utils::FMT_SVG) {
+            GraphSvg svg(expr_str, box->get_rows());
+            svg.dump(os);
+            return;
+        }
+
+        os << "Regular Expression: " << expr_str << std::endl;
 
         if (args.format & Utils::FMT_TREE) {
             os << root->format(4, args.color) << std::endl;
         } 
 
         if (args.format & Utils::FMT_GRAPH) {
-            GraphBox::set_encoding(args.utf8);
-            GraphBox::set_color(args.color);
-            std::unique_ptr<RootBox> box(expr_to_box(root.get()));
             box->dump(os);
-
-        }
-
-        if (args.format & Utils::FMT_HTML) {
-            GraphBox::set_encoding(args.utf8);
-            GraphBox::set_color(args.color);
-            std::unique_ptr<RootBox> box(expr_to_box(root.get()));
-            std::stringstream html_os;
-            box->dump(html_os);
-            GraphHtml html(expr_str, html_os.str());
-            html.dump(os);
-        }
-
-        if (args.format & Utils::FMT_SVG) {
-            GraphBox::set_encoding(false);
-            GraphBox::set_color(false);
-            std::unique_ptr<RootBox> box(expr_to_box(root.get()));
-            SvgRoot svg(box.get(), args.expr);
-            svg.dump(os);
         }
 
         if (args.format & Utils::FMT_NFA) {

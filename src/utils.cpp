@@ -12,15 +12,21 @@
 bool g_debug = false;
 namespace Utils {
 
-std::string concat(std::vector<std::string> vec, const std::string& s) {
+std::string concat(const std::vector<const std::string>::iterator& begin,
+    const std::vector<const std::string>::iterator& end,
+    const std::string& s) {
     std::stringstream ss;
-    for (size_t i = 0; i < vec.size(); i++) {
-        if (i > 0) {
+    for (auto it = begin; it != end; ++it) {
+        if (it != begin) {
             ss << s;
         }
-        ss << vec[i];
+        ss << *it;
     }
     return ss.str();
+}
+
+std::string concat(const std::vector<std::string>& vec, const std::string& s) {
+    return concat(vec.begin(), vec.end(), s);
 }
 
 std::vector<std::pair<size_t,size_t>> split(const std::string& s, char c, size_t n) {
@@ -84,7 +90,7 @@ int parse_args(Args& args, int argc, char* argv[]) {
         << "  -v           show version info\n"
         << "  -o path      specify output file path (default stdout)\n"
         << "  -f format    specify output format (default graph):\n"
-        << "                  graph/g, tree/t, nfa/n, dfa/d, svg/s, html/m (multiply example: g,t,d)\n"
+        << "                  graph/g, tree/t, nfa/n, dfa/d, svg/s, html/h (multiply example: g,t,d)\n"
         << "  -c           print with ansi color\n"
         << "  -g           generate a random regular expression with specified length limit\n"
         << "  -u           enable utf8 encoding\n"
@@ -110,7 +116,7 @@ int parse_args(Args& args, int argc, char* argv[]) {
                 fmt = FMT_NFA;
             } else if (s == "d" || s == "dfa") {
                 fmt = FMT_DFA;
-            } else if (s == "m" || s == "html") {
+            } else if (s == "h" || s == "html") {
                 fmt = FMT_HTML;
             } else {
                 return false;

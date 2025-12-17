@@ -11,7 +11,7 @@ static const char* html_tpl = R"(
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Regular Expression Visualization</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px;}
+        body {  margin: 20px;}
         pre { background: #f4f4f4; padding: 10px; border-radius: 5px; }
         .diagram {
             line-height: 1.3;
@@ -44,23 +44,6 @@ static const char* html_tpl = R"(
 </html>
 )";
 
-static inline std::string esc_code_color(const std::string& code) {
-    std::string color;
-    if (code == RED) {
-        color = "red";
-    } else if (code == GREEN) {
-        color = "green";
-    } else if (code == YELLOW) {
-        color = "orange";
-    } else if (code == BLUE) {
-        color = "blue";
-    } else if (code == PURPLE) {
-        color = "purple";
-    } else if (code == CYAN) {
-        color = "cyan";
-    }
-    return color;
-}
 
 static inline std::string color_replace(const std::string& s) {
     std::stringstream ss;

@@ -107,7 +107,7 @@ static inline std::pair<uint32_t, size_t> utf8_to_unicode(const char* data, size
     }
     // 无效 UTF-8 字节
     else {
-        throw std::runtime_error("Invalid UTF-8 leading byte");
+        throw std::runtime_error("Invalid UTF-8 leading byte: " + std::to_string(first_byte));
     }
 
     return {codepoint, i};

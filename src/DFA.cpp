@@ -48,6 +48,9 @@ Token NFA::get_token(const std::string& tok) {
 };
 
 void NFA::dump(std::ostream& os) {
+    auto pack_color = [this](const std::string& s) {
+        return this->color ? iter_color_pack(s) : s;
+    };
     std::string border(20, '#');
     os << "\n" << border << " NFA Start " << border << "\n";
     size_t w = 10;
@@ -57,14 +60,14 @@ void NFA::dump(std::ostream& os) {
         if (s == state_initial) ss = ">" + ss;
         else if (s == state_final) ss = "*" + ss;
         if (color && (s == state_initial || s == state_final)) {
-            ss = iter_color_pack(ss);
+            ss = pack_color(ss);
         }
         os << visual_str_pad(ss, w, Align::RIGHT) << "\n";
         for (auto it = nfa[s].begin(); it != nfa[s].end(); ++it) {
             Token t = it->first;
             std::string tok;
             if (t == TOK_EPSILON) {
-                tok = iter_color_pack(tokens[t]);
+                tok = pack_color(tokens[t]);
             } else {
                 tok = tokens[t];
             }

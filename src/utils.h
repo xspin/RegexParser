@@ -5,7 +5,7 @@
 #include <vector>
 #include <cstdio>
 
-#define APP_VERSION "0.4.1"
+#define APP_VERSION "0.4.2"
 
 extern bool g_debug;
 
@@ -50,7 +50,10 @@ enum class Align {
 };
 
 
-std::string concat(std::vector<std::string> vec, const std::string& s="");
+std::string concat(const std::vector<const std::string>::iterator& begin,
+    const std::vector<const std::string>::iterator& end, const std::string& s="");
+std::string concat(const std::vector<std::string>& vec, const std::string& s="");
+
 std::vector<std::pair<size_t,size_t>> split(const std::string& s, char c, size_t n=0);
 std::string str_repeat(const std::string& s, size_t n);
 /*

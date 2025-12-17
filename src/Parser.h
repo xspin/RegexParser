@@ -14,6 +14,7 @@
 
 #define INF INT_MAX
 
+#define ESC_PRE '\033'
 #define BLACK "\033[30m"
 #define RED "\033[31m"
 #define GREEN "\033[32m"
@@ -23,7 +24,30 @@
 #define CYAN "\033[36m"
 #define WHITE "\033[37m"
 #define UNDERLINE "\033[04m"
-#define NC "\033[0m"
+#define NC "\033[00m"
+
+
+static inline std::string esc_code_color(const std::string& code) {
+    std::string color;
+    if (code == RED) {
+        color = "red";
+    } else if (code == GREEN) {
+        color = "green";
+    } else if (code == YELLOW) {
+        color = "orange";
+    } else if (code == BLUE) {
+        color = "blue";
+    } else if (code == PURPLE) {
+        color = "purple";
+    } else if (code == CYAN) {
+        color = "cyan";
+    } else if (code == BLACK) {
+        color = "black";
+    } else if (code == WHITE) {
+        color = "white";
+    }
+    return color;
+}
 
 enum class ExprType {
     T_LITERAL,

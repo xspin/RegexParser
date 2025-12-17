@@ -1,240 +1,195 @@
-#ifndef GRAPH_SVG_H
-#define GRAPH_SVG_H
+#ifndef GRAPHSVG_H
+#define GRAPHSVG_H
 
-#include "GraphBox.h"
+#include "Parser.h"
 
-#define PIX_SIZE 14
-
-#define COLOR_TEXT "lightgrey"
-#define COLOR_ESCAPED "lightgreen"
-#define COLOR_ANCHOR "lightpink"
-#define COLOR_RANGE "lightblue"
-
-static inline std::string get_color(BoxType type) {
-    switch (type) {
-        case BoxType::ESCAPED:
-            return COLOR_ESCAPED;
-        case BoxType::ANCHOR:
-            return COLOR_ANCHOR;
-        case BoxType::RANGE:
-            return COLOR_RANGE;
-        default:
-            return COLOR_TEXT;
-    }
-}
+#define FONT_SIZE 14
+#define FONT_WIDTH 8
 
 template<typename T>
 static inline std::string strwraperr(const T& t) {
     return "\"" + std::to_string(t) + "\"";
 }
-
-class SvgElement {
-public:
-    SvgElement() {
-    }
-
-    virtual ~SvgElement() {
-    }
-
-    virtual std::string str() =0;
-
-protected:
-    size_t x;
-    size_t y;
-};
-
-class SvgText: public SvgElement {
-    std::string content;
-    std::string color;
-    size_t font_size = PIX_SIZE;
-
-public:
-    SvgText(size_t x, size_t y, const std::string& content, const std::string& color="")
-    : content(content), color(color) {
-        this->x = x;
-        this->y = y;
-    }
-
-    std::string str() override {
-        std::stringstream ss;
-
-        if (!color.empty()) {
-            ss << "<rect x=" << strwraperr(x)
-            << " y=" << strwraperr(y)
-            << " width=" << strwraperr(content.size() * font_size * 0.7)
-            << " height=" << strwraperr(font_size)
-            << " fill=\"" << color << "\""
-            << " rx=\"3\" ry=\"3\""
-            << "/>";
-        }
-        ss << "<text x=" << strwraperr(x)
-           << " y=" << strwraperr(y)
-           << " font-size=" << strwraperr(font_size)
-           << " font-family=\"Consolas, Monaco, 'Courier New', monospace\""
-           << " dominant-baseline=\"hanging\""
-           << " text-anchor=\"start\""
-           << " white-space=\"pre\""
-           << ">" << content << "</text>";
-        return ss.str();
-    }
-};
-
-class SvgLine: public SvgElement {
-    size_t x2;
-    size_t y2;
-
-public:
-    SvgLine(size_t x1, size_t y1, size_t x2, size_t y2): x2(x2), y2(y2) {
-        this->x = x1;
-        this->y = y1;
-    }
-
-    std::string str() override {
-        std::stringstream ss;
-        ss << "<line x1=" << strwraperr(x)
-           << " y1=" << strwraperr(y)
-           << " x2=" << strwraperr(x2)
-           << " y2=" << strwraperr(y2)
-           << " stroke-width=" << strwraperr(1)
-           << " stroke=\"black\""
-           << "/>";
-        return ss.str();
-    }
-};
-
-class SvgRect: public SvgElement {
-    size_t width;
-    size_t height;
-
-public:
-    SvgRect(size_t x, size_t y, size_t width, size_t height): width(width), height(height) {
-        this->x = x;
-        this->y = y;
-    }
-    std::string str() override {
-        std::stringstream ss;
-        ss << "<rect x=" << strwraperr(x)
-           << " y=" << strwraperr(y)
-           << " width=" << strwraperr(width)
-           << " height=" << strwraperr(height)
-           << " stroke-width=" << strwraperr(1)
-           << " stroke=\"black\""
-           << " fill=\"none\""
-           << " rx=\"5\" ry=\"5\""
-           << "/>";
-        return ss.str();
-    }
-};
-
-static inline std::string spaces_nbsp(const std::string& s) {
-    std::string res;
-    for (char c : s) {
-        if (c == ' ') {
-            res += "&nbsp;";
-        } else {
-            res += c;
-        }
-    }
-    return res;
+static inline std::string strwraperr(const std::string& t) {
+    return "\"" + t + "\"";
 }
 
-class SvgRoot: public SvgElement {
+static inline void parse_line(std::vector<std::string>&res, const std::string& line) {
+
+    auto vec = utf8_split(line);
+    for (size_t i = 0; i < vec.size(); i++) {
+        auto [j, k] = vec[i];
+        // \033[00m
+        if (k == 1 && line[j] == ESC_PRE && i + 4 < vec.size()) {
+            auto t = vec[i+4];
+            if (t.second == 1 && line[t.first] == 'm') {
+                res.push_back(line.substr(j, 5));
+                i += 4;
+                continue;
+            }
+        }
+        res.push_back(line.substr(j, k));
+    }
+};
+
+class GraphSvg {
     std::string expr;
-    size_t width;
-    size_t height;
-    std::vector<std::unique_ptr<SvgElement>> elements;
-    const size_t margin_y = 2;
+    std::vector<std::vector<std::string>> rows;
+    std::string svg;
+    size_t expr_y = FONT_SIZE;
+    size_t graph_y = FONT_SIZE*3;
 
 public:
-    SvgRoot(RootBox* root, const std::string& expr): expr(expr) {
-        std::string sexpr = "Regex: " + expr;
-        std::stringstream ss;
-        this->width = std::max(sexpr.size(), (root->get_width()+2)) * PIX_SIZE * 0.7;
-        this->height = (root->get_height()+2+margin_y) * PIX_SIZE;
-
-        bool first = true;
-        for (const auto& row : root->get_rows()) {
-            ss << "<tspan x=\"10\"";
-            if (!first) ss << " dy=" << strwraperr(PIX_SIZE);
-            ss << ">" << spaces_nbsp(row) << "</tspan>\n";
-            first = false;
+    GraphSvg(const std::string& expr, const std::vector<std::string>& graph): expr(expr) {
+        for (const std::string &row : graph) {
+            rows.push_back({});
+            parse_line(rows.back(), row);
         }
 
-        elements.emplace_back(std::make_unique<SvgText>(0, PIX_SIZE*2, ss.str()));
-        elements.emplace_back(std::make_unique<SvgText>(10, 5, sexpr));
-        return;
-        // todo
-
-//  NORMAL,
-//     RANGE,
-//     CLASS,
-//     GROUP,
-//     ASSERTION,
-//     BRANCH,
-//     EMPTY,
-//     LINK,
-//     ANCHOR,
-//     QUANTIFIER,
-//     ESCAPED,
-//     ROOT,
-        travel_box(root, [this](GraphBox* box) {
-            BoxType type = box->get_type();
-            auto [tx, ty] = box->get_position();
-            switch (type) {
-                case BoxType::NORMAL:
-                case BoxType::RANGE:
-                case BoxType::ESCAPED:
-                case BoxType::ANCHOR:
-                    add_text(tx, ty, box->get_raw(), get_color(type));
-                    break;
-                case BoxType::ASSERTION:
-                case BoxType::GROUP:
-                case BoxType::CLASS:
-                    add_rect(tx, ty, box->get_width(), box->get_height());
-                default:
-                    break;
-            }
-        });
-    }
-
-    void add_text(size_t tx, size_t ty, const std::string& content, const std::string& color="") {
-        ty += margin_y;
-        elements.emplace_back(std::make_unique<SvgText>(tx*PIX_SIZE, ty*PIX_SIZE, content, color));
-    }
-
-    void add_rect(size_t tx, size_t ty, size_t width, size_t height) {
-        ty += margin_y;
-        tx++;
-        width -= 2;
-        elements.emplace_back(std::make_unique<SvgRect>(tx*PIX_SIZE, ty*PIX_SIZE, width*PIX_SIZE, height*PIX_SIZE));
-        elements.emplace_back(std::make_unique<SvgLine>(
-            (tx-1)*PIX_SIZE, (ty + height/2)*PIX_SIZE,
-            tx*PIX_SIZE, (ty + height/2)*PIX_SIZE
-        ));
-        elements.emplace_back(std::make_unique<SvgLine>(
-            (tx + width)*PIX_SIZE, (ty + height/2)*PIX_SIZE,
-            (tx + width + 1)*PIX_SIZE, (ty + height/2)*PIX_SIZE
-        ));
-    }
-
-    void add_element(std::unique_ptr<SvgElement> elem) {
-        elements.emplace_back(std::move(elem));
-    }
-
-    std::string str() override {
-        std::stringstream ss;
-        ss << "<svg width=" << strwraperr(width)
-           << " height=" << strwraperr(height)
-           << " xmlns=" << "\"http://www.w3.org/2000/svg\"" << ">\n";
-        for (auto& elem: elements) {
-            ss << "  " << elem->str() << "\n";
-        }
-        ss << "</svg>\n";
-        return ss.str();
+        render();
     }
 
     void dump(std::ostream& os) {
-        os << str();
+        os << svg;
+    }
+
+private:
+    void render_expr(std::ostream& os) {
+        std::vector<std::string> line;
+        parse_line(line, "Regular Expression: " + expr);
+
+        os << "<text x=" << strwraperr(0)
+           << " y=" << strwraperr(expr_y)
+           << " font-size=" << strwraperr(FONT_SIZE)
+           << " font-family=\"Consolas, Monaco, 'Courier New', monospace\""
+           << ">\n";
+
+        render_line(os, line, expr_y);
+
+        os << "</text>";
+    }
+
+    void render() {
+        size_t height = FONT_SIZE * (rows.size() + 3);
+        size_t width = FONT_WIDTH * (std::max(rows[0].size(), visual_width(expr)+22));
+
+        std::stringstream ss;
+        ss << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+           << "<svg width=" << strwraperr(width)
+           << " height=" << strwraperr(height)
+           << " xmlns=" << "\"http://www.w3.org/2000/svg\"" << ">\n";
+
+        render_expr(ss);
+
+        ss << "\n<text x=" << strwraperr(0)
+           << " y=" << strwraperr(graph_y)
+           << " font-size=" << strwraperr(FONT_SIZE)
+           << " font-family=\"Consolas, Monaco, 'Courier New', monospace\""
+           << " letter-spacing=\"0\""
+           << " text-anchor=\"start\""
+           << " white-space=\"pre\">\n";
+
+        size_t y = graph_y;
+        for (auto& line : rows) {
+            render_line(ss, line, y);
+            y += FONT_SIZE;
+        }
+
+        ss << "</text>" << "</svg>\n";
+        svg = ss.str();
+    }
+
+    void render_line(std::ostream& os, const std::vector<std::string>& line, size_t y) {
+        auto escape = [](std::string s) {
+            std::string res;
+            for (char c : s) {
+                switch (c) {
+                case '<':
+                    res += "&lt;"; break;
+                case '>':
+                    res += "&gt;"; break;
+                case '&':
+                    res += "&amp;"; break;
+                default:
+                    res += c;
+                }
+            }
+            return res;
+        };
+
+        size_t n = line.size();
+        size_t x = 0;
+        size_t i = 0;
+        size_t x_space = FONT_WIDTH;
+        auto is_esc = [](const std::string& s) {
+            return s[0] == ESC_PRE;
+        };
+
+        while (i < n) {
+            size_t k = i;
+            while (k < n && line[k] == " ") {
+                k++;
+            }
+            if (k > i) {
+                x += (k-i) * x_space;
+                i = k;
+                if (i >= n) break;
+            }
+
+            std::vector<std::string> ws;
+
+            std::string color;
+            bool underline = false;
+            size_t j = i;
+            std::string text;
+
+            if (is_esc(line[j])) {
+                while (j < n && line[j] != NC) {
+                    if (is_esc(line[j])) {
+                        if (line[j] == UNDERLINE) {
+                            underline = true;
+                        } else {
+                            if (!color.empty()) {
+                                j--;
+                                break;
+                            }
+                            color = esc_code_color(line[j]);
+                        }
+                    } else {
+                        ws.push_back(std::to_string(x));
+                        x += visual_width(line[j]) * x_space;
+                        text += escape(line[j]);
+                    }
+                    j++;
+                }
+                j++; // NC
+            } else {
+                while (j < n && line[j] != " " && !is_esc(line[j])) {
+                    ws.push_back(std::to_string(x));
+                    x += visual_width(line[j]) * x_space;
+                    text += escape(line[j]);
+                    j++;
+                }
+            }
+
+            auto xs =  Utils::concat(ws, " ");
+            tspan(os, text, xs, y, color, underline);
+
+            i = j;
+        }
+    }
+
+    void tspan(std::ostream& os, const std::string& content
+        , const std::string& xs, size_t y, const std::string& fill="", bool underline=false) {
+        os << "<tspan " << " y=" << strwraperr(y);
+        os << " x=" << strwraperr(xs);
+        if (!fill.empty()) {
+           os << " fill=" << strwraperr(fill);
+        }
+        if (underline) {
+            os << " text-decoration=\"underline\"";
+        }
+        os << ">" << content << "</tspan>\n";
     }
 };
 
