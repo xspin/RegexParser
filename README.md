@@ -112,4 +112,4 @@ Accept States: 8
 
 ![svg](examples/example.svg)
 
-![html example](examples/example.html)
+[html example](examples/example.html)
