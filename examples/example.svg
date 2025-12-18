@@ -205,8 +205,9 @@
 <tspan y="266" x="376 384 392 400 408 416 424" fill="purple">None of</tspan>
 <tspan y="266" x="432">┓</tspan>
 <tspan y="266" x="456">┃</tspan>
-<tspan y="266" x="472 480 488" fill="cyan" text-decoration="underline">a→z</tspan>
-<tspan y="266" x=""></tspan>
+<tspan y="266" x="472" fill="cyan">a</tspan>
+<tspan y="266" x="480">→</tspan>
+<tspan y="266" x="488" fill="cyan">z</tspan>
 <tspan y="266" x="512">┃</tspan>
 <tspan y="266" x="536">┃</tspan>
 <tspan y="266" x="544 552 560 568 576" fill="blue" text-decoration="underline">Space</tspan>
@@ -216,8 +217,9 @@
 <tspan y="280" x="32 40 48 56 64 72 80 88 96 104 112 120 128 136 144 152 160 168 176 184 192 200 208 216 224 232 240 248 256 264 272 280 288 296 304 312 320 328 336 344 352 360 368">├────────────────────────────┫-a1.+*_\\┣──┫</tspan>
 <tspan y="280" x="384 392 400 408">abc-</tspan>
 <tspan y="280" x="432 440 448 456">┣──┫</tspan>
-<tspan y="280" x="472 480 488" fill="green" text-decoration="underline">0→9</tspan>
-<tspan y="280" x=""></tspan>
+<tspan y="280" x="472" fill="green">0</tspan>
+<tspan y="280" x="480">→</tspan>
+<tspan y="280" x="488" fill="green">9</tspan>
 <tspan y="280" x="512 520 528 536">┣──┫</tspan>
 <tspan y="280" x="544 552 560 568 576 584 592 600 608" fill="orange" text-decoration="underline">Non-Space</tspan>
 <tspan y="280" x=""></tspan>
@@ -226,8 +228,9 @@
 <tspan y="294" x="264 272 280 288 296 304 312 320 328 336 344">┗━━━━━━━━━┛</tspan>
 <tspan y="294" x="368 376 384 392 400 408 416 424 432">┗╸╸╸╸╸╸╸┛</tspan>
 <tspan y="294" x="456">┃</tspan>
-<tspan y="294" x="472 480 488" fill="blue" text-decoration="underline">A→Z</tspan>
-<tspan y="294" x=""></tspan>
+<tspan y="294" x="472" fill="blue">A</tspan>
+<tspan y="294" x="480">→</tspan>
+<tspan y="294" x="488" fill="blue">Z</tspan>
 <tspan y="294" x="512">┃</tspan>
 <tspan y="294" x="536">┃</tspan>
 <tspan y="294" x="544 552 560 568 576 584 592 600 608" fill="purple" text-decoration="underline">Form-Feed</tspan>
@@ -479,18 +482,21 @@
 <tspan y="602" x="32 40 48 56 64 72 80 88 96 104 112 120 128 136 144 152 160 168 176">├─────────────────╣</tspan>
 <tspan y="602" x="184 192 200 208 216 224" fill="cyan">ctrl-A</tspan>
 <tspan y="602" x="232 240 248 256">╠──┫</tspan>
-<tspan y="602" x="264 272 280 288 296 304 312 320 328 336 344 352 360" fill="blue" text-decoration="underline">ctrl-A→ctrl-Z</tspan>
-<tspan y="602" x=""></tspan>
+<tspan y="602" x="264 272 280 288 296 304" fill="blue">ctrl-A</tspan>
+<tspan y="602" x="312">→</tspan>
+<tspan y="602" x="320 328 336 344 352 360" fill="blue">ctrl-Z</tspan>
 <tspan y="602" x="368 376 384 392">┣──╣</tspan>
 <tspan y="602" x="400 408 416 424 432 440" fill="orange">U+9FA5</tspan>
 <tspan y="602" x="448 456 464 472">╠──┫</tspan>
-<tspan y="602" x="480 488 496 504 512 520 528 536 544 552 560 568 576" fill="red" text-decoration="underline">U+4E00→U+9FA5</tspan>
-<tspan y="602" x=""></tspan>
+<tspan y="602" x="480 488 496 504 512 520" fill="red">U+4E00</tspan>
+<tspan y="602" x="528">→</tspan>
+<tspan y="602" x="536 544 552 560 568 576" fill="red">U+9FA5</tspan>
 <tspan y="602" x="584 592 600 608">┣──╣</tspan>
 <tspan y="602" x="616 624 632 640" fill="cyan">0xAA</tspan>
 <tspan y="602" x="648 656 664 672">╠──┫</tspan>
-<tspan y="602" x="680 688 696 704 712 720 728 736 744" fill="blue" text-decoration="underline">0x00→0xFF</tspan>
-<tspan y="602" x=""></tspan>
+<tspan y="602" x="680 688 696 704" fill="blue">0x00</tspan>
+<tspan y="602" x="712">→</tspan>
+<tspan y="602" x="720 728 736 744" fill="blue">0xFF</tspan>
 <tspan y="602" x="752 760 768 776 784 792 800 808 816 824 832 840 848 856 864 872 880 888 896 904">┣──────────────────┤</tspan>
 <tspan y="616" x="32">│</tspan>
 <tspan y="616" x="176 184 192 200 208 216 224 232">╚══════╝</tspan>
@@ -523,8 +529,9 @@
 <tspan y="658" x="648">╷</tspan>
 <tspan y="658" x="904">│</tspan>
 <tspan y="672" x="32 40 48 56 64 72 80 88 96 104 112 120 128 136 144 152 160 168 176 184 192 200 208 216 224 232 240 248 256 264 272 280 288 296 304">├───────────────────────────────┼─┫</tspan>
-<tspan y="672" x="320 328 336" fill="red" text-decoration="underline">a→z</tspan>
-<tspan y="672" x=""></tspan>
+<tspan y="672" x="320" fill="red">a</tspan>
+<tspan y="672" x="328">→</tspan>
+<tspan y="672" x="336" fill="red">z</tspan>
 <tspan y="672" x="360 368 376 384">┣──╣</tspan>
 <tspan y="672" x="392 400 408 416 424" fill="cyan">Digit</tspan>
 <tspan y="672" x="432 440 448 456 464 472 480 488">╠─┼──┼─╣</tspan>

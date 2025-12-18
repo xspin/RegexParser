@@ -21,9 +21,7 @@ make test
 ```
 
 
-## Usages
-
-### Basic Usages
+## Basic Usages
 
 ```sh
 # Parse a specified regular expression
@@ -45,7 +43,7 @@ build/regexparser -g 20 -f tree
 build/regexparser -h
 ```
 
-### An Example of Text Graph Output
+## An Example of Text Graph Output
 
 ```
 Regular Expression: ^(\-|\+)?\d+(\.\d+)?$
@@ -63,7 +61,7 @@ Regular Expression: ^(\-|\+)?\d+(\.\d+)?$
 ```
 
 
-### DFA States and Graph
+## DFA States and Graph
 
 ```sh
 # DFA states table and graph output
@@ -108,7 +106,7 @@ Accept States: 8
   ╰─────╯    ╰─────╯             
 ```
 
-### Examples of SVG and HTML Format
+## Examples of SVG and HTML Format Output
 
 ![svg](examples/example.svg)
 

@@ -394,14 +394,19 @@ public:
 
 
 class RangeBox: public GraphBox {
+    std::string start;
+    std::string end;
+
 public:
     RangeBox(const std::string& start, const std::string& end): GraphBox(BoxType::RANGE) {
-        std::string delim = Line::ARROW_RIGHT;
-        this->raw = escaped_name(start) + delim + escaped_name(end);
+        this->start = escaped_name(start);
+        this->end = escaped_name(end);
     }
 
     void render() {
-        raw = pack_color(raw);
+        std::string to = Line::ARROW_RIGHT;
+        auto color = iter_color();
+        this->raw = color + start + end_color() + to + color + end + end_color();
         auto t = box_normal({raw}, quant.get());
         this->rows = t.first;
         // this->span = t.second;
@@ -431,7 +436,7 @@ public:
         auto append_line = [&lines](GraphBox* box) {
             std::string s = box->get_raw();
             if (s.empty()) return;
-            if (GraphBox::color && box->get_type() != BoxType::NORMAL) {
+            if (GraphBox::color && box->get_type() != BoxType::NORMAL && box->get_type() != BoxType::RANGE) {
                 s = UNDERLINE + s + NC;
             }
             lines.push_back(s);
