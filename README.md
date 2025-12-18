@@ -108,6 +108,8 @@ Accept States: 8
   ╰─────╯    ╰─────╯             
 ```
 
-### An svg output Example
+### Examples of SVG and HTML Format
 
 ![svg](examples/example.svg)
+
+![html example](examples/example.html)

@@ -7,8 +7,6 @@
 #include "utils.h"
 #include "GraphBox.h"
 
-// using VS = std::vector<std::string>;
-// using VVS = std::vector<VS>;
 using Pos = std::pair<size_t,size_t>;
 
 using MS = std::unordered_map<size_t,std::string>;

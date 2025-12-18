@@ -132,6 +132,8 @@ private:
            << " height=" << strwraperr(height)
            << " xmlns=" << "\"http://www.w3.org/2000/svg\"" << ">\n";
 
+        ss << R"(<rect x="0" y="0" width="100%" height="100%" fill="#fafafa" />)";
+
         ss << expr_ss.str();
 
         ss << "<text x=" << strwraperr(0)
