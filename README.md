@@ -1,11 +1,13 @@
 # RegexParser
 
-Regular Expression Parser
+A terminal tool to parse and visualize regular expression.
+
+Supported Syntax: [Regular Expression Syntax](RegularExpression.md)
 
 ## Build and Install
 
 ```sh
-# compile
+# build
 make
 
 # install
@@ -19,19 +21,22 @@ make test
 ```
 
 
-## Examples
+## Usages
 
+### Basic Usages
 
 ```sh
 # Parse a specified regular expression
 build/regexparser '^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$'
+
+# Read from stdin
+echo "a+b*[0-9]+" | build/regexparser
 
 # Print ansi-colored result
 build/regexparser -c '[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\.?'
 
 # Generate and parse a random regular expression
 build/regexparser -g 20
-
 
 # Output the syntax tree
 build/regexparser -g 20 -f tree
@@ -40,36 +45,25 @@ build/regexparser -g 20 -f tree
 build/regexparser -h
 ```
 
-A regex graph output example:
+### An Example of Text Graph Output
 
 ```
-Parsed Expr: ((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}
-
-                                                 ╭╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴Group #4╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╮     
-   ╭╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴Group #1╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╮    ┆       ╭╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴Group #5╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╮ ┆     
-   ┆   ╭╴╴╴╴╴╴╴╴╴╴╴╴Group #2╴╴╴╴╴╴╴╴╴╴╴╴╮   ┆    ┆       ┆   ╭╴╴╴╴╴╴╴╴╴╴╴╴Group #6╴╴╴╴╴╴╴╴╴╴╴╴╮   ┆ ┆     
-   ┆   ┆      ╭╴╴╴╴╴╴╴Group #3╴╴╴╴╴╴╴╴╮ ┆   ┆    ┆       ┆   ┆      ╭╴╴╴╴╴╴╴Group #7╴╴╴╴╴╴╴╴╮ ┆   ┆ ┆     
-   ┆   ┆      ┆     ┌─┐  ┏One of┓     ┆ ┆   ┆    ┆       ┆   ┆      ┆     ┌─┐  ┏One of┓     ┆ ┆   ┆ ┆     
-   ┆   ┆      ┆ ┌───┤5├──┫ 0-5  ┣───┐ ┆ ┆   ┆    ┆       ┆   ┆      ┆ ┌───┤5├──┫ 0-5  ┣───┐ ┆ ┆   ┆ ┆     
-   ┆   ┆ ┌─┐  ┆ │   └─┘  ┗━━━━━━┛   │ ┆ ┆   ┆    ┆       ┆   ┆ ┌─┐  ┆ │   └─┘  ┗━━━━━━┛   │ ┆ ┆   ┆ ┆     
-   ┆ ┌─┼─┤2├──┼─┤ ┏One of┓  ╔═\d══╗ ├─┼─┼─┐ ┆    ┆       ┆ ┌─┼─┤2├──┼─┤ ┏One of┓  ╔═\d══╗ ├─┼─┼─┐ ┆ ┆     
-   ┆ │ ┆ └─┘  ┆ └─┫ 0-4  ┣──╣Digit╠─┘ ┆ ┆ │ ┆    ┆       ┆ │ ┆ └─┘  ┆ └─┫ 0-4  ┣──╣Digit╠─┘ ┆ ┆ │ ┆ ┆     
-   ┆ │ ┆      ┆   ┗━━━━━━┛  ╚═════╝   ┆ ┆ │ ┆    ┆ ┌──┐  ┆ │ ┆      ┆   ┗━━━━━━┛  ╚═════╝   ┆ ┆ │ ┆ ┆     
-●──┼─┤ ┆      ┆                       ┆ ┆ ├─┼──┬─┼─┤\.├──┼─┤ ┆      ┆                       ┆ ┆ ├─┼─┼─┬──●
-   ┆ │ ┆      ╰╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╯ ┆ │ ┆  │ ┆ └──┘  ┆ │ ┆      ╰╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╯ ┆ │ ┆ ┆ │   
-   ┆ │ ╰╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╯ │ ┆  │ ┆       ┆ │ ╰╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╯ │ ┆ ┆ │   
-   ┆ │                                    │ ┆  │ ┆       ┆ │                                    │ ┆ ┆ │   
-   ┆ │       ┏One of┓      ╔═\d══╗        │ ┆  │ ┆       ┆ │       ┏One of┓      ╔═\d══╗        │ ┆ ┆ │   
-   ┆ └─────┬─┫ 0-1  ┣─┬──┬─╣Digit╠─┬──────┘ ┆  │ ┆       ┆ └─────┬─┫ 0-1  ┣─┬──┬─╣Digit╠─┬──────┘ ┆ ┆ │   
-   ┆       │ ┗━━━━━━┛ │  │ ╚═════╝ │        ┆  │ ┆       ┆       │ ┗━━━━━━┛ │  │ ╚═════╝ │        ┆ ┆ │   
-   ┆       └───↺0→1───┘  └──↻1→2───┘        ┆  │ ┆       ┆       └───↺0→1───┘  └──↻1→2───┘        ┆ ┆ │   
-   ┆                                        ┆  │ ┆       ┆                                        ┆ ┆ │   
-   ╰╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╯  │ ┆       ╰╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╯ ┆ │   
-                                               │ ╰╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╯ │   
-                                               └──────────────────────────↻3──────────────────────────┘   
+Regular Expression: ^(\-|\+)?\d+(\.\d+)?$
+                                                                            
+              ╭Group #1╴╮                                                   
+              ╷   ┌─┐   ╷                   ╭╴╴╴╴╴Group #2╴╴╴╴╴╮            
+              ╷ ┌─┤-├─┐ ╷                   ╷                  ╷            
+   ╔══^══╗    ╷ │ └─┘ │ ╷      ╔═\d══╗      ╷ ┌─┐    ╔═\d══╗   ╷    ╔═$═╗   
+●──╣Start╠──┬─┼─┤ ┌─┐ ├─┼─┬──┬─╣Digit╠─┬──┬─┼─┤.├──┬─╣Digit╠─┬─┼─┬──╣End╠──◎
+   ╚═════╝  │ ╷ └─┤+├─┘ ╷ │  │ ╚═════╝ │  │ ╷ └─┘  │ ╚═════╝ │ ╷ │  ╚═══╝   
+            │ ╷   └─┘   ╷ │  └──↻1→∞───┘  │ ╷      └──↻1→∞───┘ ╷ │          
+            │ ╷         ╷ │               │ ╰╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╯ │          
+            │ ╰╴╴╴╴╴╴╴╴╴╯ │               └─────────↺0→1─────────┘          
+            └────↺0→1─────┘  
 ```
 
 
+### DFA States and Graph
 
 ```sh
 # DFA states table and graph output
@@ -77,7 +71,7 @@ build/regexparser -fd '(a[ab]c|b[bc]c|c[ac]c)'
 ```
 
 ```
-Parsed Expr: (a[ab]c|b[bc]c|c[ac]c)
+Regular Expression: (a[ab]c|b[bc]c|c[ac]c)
 
 ========== DFA Start ==========
       Tokens: a b c
@@ -113,3 +107,7 @@ Accept States: 8
   │  2  │    │  1  │                        
   ╰─────╯    ╰─────╯             
 ```
+
+### An svg output Example
+
+![svg](examples/example.svg)

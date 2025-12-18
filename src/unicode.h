@@ -296,6 +296,7 @@ static inline bool uhhhh_is_chinese(const std::string& u) {
 static inline bool is_double_width_char(uint32_t unicode) {
     if (unicode < 0x1100) return false; // 基本拉丁字母及常用符号均为单宽度
     if (unicode >= 0x25C0 && unicode <= 0x25CF) return false; // 几何形状（部分双宽度）
+    if (unicode == 0x25AF || unicode == 0x02CD) return false; // ▯ ˍ
     // 1. 全宽 ASCII 兼容区（U+FF01 ~ U+FF5E）
     if (unicode >= 0xFF01 && unicode <= 0xFF5E) return true;
     // 2. CJK 核心汉字区（U+4E00 ~ U+9FFF）

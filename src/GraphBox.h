@@ -44,7 +44,7 @@ enum TableLine {
     TAB_MAX
 };
 
-#define SPACE "☐"
+#define SPACE "▯" //☐ ˍ ┈ ━
 
 namespace Line {
     const std::string HORIZON = "─";
@@ -110,6 +110,48 @@ static inline std::string get_quantifier(int min, int max, bool lazy) {
         ss << c << a;
     }
     return ss.str();
+}
+
+static inline std::string escaped_name(const std::string &symbol)
+{
+    std::string s;
+    if (symbol == "\\d") {
+        s = "Digit";
+    } else if (symbol == "\\D") {
+        s = "Non-Digit";
+    } else if (symbol == "\\w") {
+        s = "Word";
+    } else if (symbol == "\\W") {
+        s = "Non-Word";
+    } else if (symbol == "\\s") {
+        s = "Space";
+    } else if (symbol == "\\S") {
+        s = "Non-Space";
+    } else if (symbol == "\\0") {
+        s = "Null";
+    } else if (symbol == "\\n") {
+        s = "Line-Feed";
+    } else if (symbol == "\\f") {
+        s = "Form-Feed";
+    } else if (symbol == "\\r") {
+        s = "Carriage-Return";
+    } else if (symbol == "\\t") {
+        s = "Tab";
+    } else if (symbol == "\\v") {
+        s = "Vertical-Tab";
+    } else if (symbol.size() == 4 && symbol.substr(0,2) == "\\x") {
+        s = "0x" + symbol.substr(2);
+        std::transform(s.begin()+2, s.end(), s.begin()+2, ::toupper);
+    } else if (symbol.size() == 6 && symbol.substr(0,2) == "\\u") {
+        s = "U+" + symbol.substr(2);
+        std::transform(s.begin(), s.end(), s.begin(), ::toupper);
+    } else if (symbol.size() == 3 && symbol.substr(0,2) == "\\c") {
+        s = "ctrl-";
+        s += (char)toupper(symbol[2]);
+    } else {
+        s = symbol;
+    }
+    return s;
 }
 
 struct Quant {
@@ -353,8 +395,9 @@ public:
 
 class RangeBox: public GraphBox {
 public:
-    RangeBox(const std::string& s): GraphBox(BoxType::RANGE) {
-        this->raw = s;
+    RangeBox(const std::string& start, const std::string& end): GraphBox(BoxType::RANGE) {
+        std::string delim = Line::ARROW_RIGHT;
+        this->raw = escaped_name(start) + delim + escaped_name(end);
     }
 
     void render() {
@@ -713,36 +756,19 @@ class EscapedBox: public GraphBox {
         \0  空字符（Null）
         \xHH
         \uHHHH
+        \cx control-x
 */
 public:
     EscapedBox(const std::string symbol): GraphBox(BoxType::ESCAPED), symbol(symbol) {
         std::string s;
-
-        if (symbol == "\\d") {
-            s = "Digit";
-        } else if (symbol == "\\D") {
-            s = "Non-Digit";
-        } else if (symbol == "\\w") {
-            s = "Word";
-        } else if (symbol == "\\W") {
-            s = "Non-Word";
-        } else if (symbol == "\\s") {
-            s = "Space";
-        } else if (symbol == "\\S") {
-            s = "Non-Space";
-        } else if (symbol.size() == 4 && symbol.substr(0,2) == "\\x") {
-            s = "0x" + symbol.substr(2);
-            std::transform(s.begin()+2, s.end(), s.begin()+2, ::toupper);
-        } else if (symbol.size() == 6 && symbol.substr(0,2) == "\\u") {
+        if (symbol.size() == 6 && symbol.substr(0,2) == "\\u") {
             if (utf8_encoding) {
                 s = uhhhh_to_utf8(symbol);
             } else {
-                s = "U+" + symbol.substr(2);
-                std::transform(s.begin(), s.end(), s.begin(), ::toupper);
+                s = escaped_name(symbol);
             }
         } else {
-            // todo ...
-            s = symbol;
+            s = escaped_name(symbol);
         }
         raw = s;
     }

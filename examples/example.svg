@@ -1,0 +1,656 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="944" height="910" xmlns="http://www.w3.org/2000/svg">
+<text x="0" y="28" font-size="14" font-family="Consolas, Monaco, 'Courier New', monospace">
+<tspan y="28" x="8 16 24 32 40 48 56">Regular</tspan>
+<tspan y="28" x="72 80 88 96 104 112 120 128 136 144 152">Expression:</tspan>
+<tspan y="28" x=""></tspan>
+<tspan y="28" x="168 176 184 192 200 208 216 224 232 240 248 256 264 272 280 288 296 304 312 320 328 336 344 352 360 368 376 384 392 400 408 416">a1\|\(\)\[\]\{\}\.\?\+\*\\\\\^\$</tspan>
+<tspan y="28" x="424" fill="blue">[</tspan>
+<tspan y="28" x="432 440 448 456 464 472 480 488 496 504 512 520 528 536 544 552 560 568 576 584 592 600 608 616 624 632 640 648 656">a1\(\)\[\]\{\}\.\?\+\*\\\\|^$</tspan>
+<tspan y="28" x="664" fill="blue">]</tspan>
+<tspan y="28" x="672" fill="green">|</tspan>
+<tspan y="28" x="680" fill="orange">[</tspan>
+<tspan y="42" x=""></tspan>
+<tspan y="42" x="168 176 184 192 200 208 216 224 232 240 248">-a1.+*_\\\\</tspan>
+<tspan y="42" x="256" fill="orange">]</tspan>
+<tspan y="42" x="264 272" fill="purple">[^</tspan>
+<tspan y="42" x="280 288 296 304">abc-</tspan>
+<tspan y="42" x="312" fill="purple">]</tspan>
+<tspan y="42" x="320" fill="red">[</tspan>
+<tspan y="42" x="328 336 344" fill="cyan">a-z</tspan>
+<tspan y="42" x="352 360 368" fill="green">0-9</tspan>
+<tspan y="42" x="376 384 392" fill="blue">A-Z</tspan>
+<tspan y="42" x="400" fill="red">]</tspan>
+<tspan y="42" x="408" fill="orange">[</tspan>
+<tspan y="42" x="416">.</tspan>
+<tspan y="42" x="424 432" fill="purple">\d</tspan>
+<tspan y="42" x="440 448" fill="red">\D</tspan>
+<tspan y="42" x="456 464" fill="cyan">\w</tspan>
+<tspan y="42" x="472 480" fill="green">\W</tspan>
+<tspan y="42" x="488 496" fill="blue">\s</tspan>
+<tspan y="42" x="504 512" fill="orange">\S</tspan>
+<tspan y="42" x="520 528" fill="purple">\f</tspan>
+<tspan y="42" x="536 544" fill="red">\n</tspan>
+<tspan y="42" x="552 560" fill="cyan">\t</tspan>
+<tspan y="42" x="568 576" fill="green">\v</tspan>
+<tspan y="42" x="584 592" fill="blue">\0</tspan>
+<tspan y="42" x="600 608" fill="orange">\r</tspan>
+<tspan y="42" x="616" fill="orange">]</tspan>
+<tspan y="42" x="624" fill="green">|</tspan>
+<tspan y="42" x="632" fill="purple">.</tspan>
+<tspan y="42" x="640 648" fill="red">\d</tspan>
+<tspan y="42" x="656 664" fill="cyan">\D</tspan>
+<tspan y="42" x="672 680" fill="green">\w</tspan>
+<tspan y="42" x="688 696" fill="blue">\W</tspan>
+<tspan y="56" x="168 176" fill="orange">\s</tspan>
+<tspan y="56" x="184 192" fill="purple">\S</tspan>
+<tspan y="56" x="200 208" fill="red">\n</tspan>
+<tspan y="56" x="216 224" fill="cyan">\t</tspan>
+<tspan y="56" x="232" fill="green">|</tspan>
+<tspan y="56" x="240">a</tspan>
+<tspan y="56" x="248" fill="green">*</tspan>
+<tspan y="56" x="256">b</tspan>
+<tspan y="56" x="264" fill="blue">+</tspan>
+<tspan y="56" x="272">c</tspan>
+<tspan y="56" x="280" fill="orange">?</tspan>
+<tspan y="56" x="288">d</tspan>
+<tspan y="56" x="296 304 312" fill="purple">{2}</tspan>
+<tspan y="56" x="320">e</tspan>
+<tspan y="56" x="328 336 344 352" fill="red">{1,}</tspan>
+<tspan y="56" x="360">f</tspan>
+<tspan y="56" x="368 376 384 392 400" fill="cyan">{3,4}</tspan>
+<tspan y="56" x="408">a</tspan>
+<tspan y="56" x="416 424" fill="green">*?</tspan>
+<tspan y="56" x="432">b</tspan>
+<tspan y="56" x="440 448" fill="blue">+?</tspan>
+<tspan y="56" x="456">c</tspan>
+<tspan y="56" x="464 472" fill="orange">??</tspan>
+<tspan y="56" x="480">d</tspan>
+<tspan y="56" x="488 496 504 512" fill="purple">{2}?</tspan>
+<tspan y="56" x="520">e</tspan>
+<tspan y="56" x="528 536 544 552 560" fill="red">{1,}?</tspan>
+<tspan y="56" x="568">f</tspan>
+<tspan y="56" x="576 584 592 600 608 616" fill="cyan">{3,4}?</tspan>
+<tspan y="56" x="624" fill="green">|</tspan>
+<tspan y="56" x="632" fill="green">^</tspan>
+<tspan y="56" x="640 648" fill="blue">\B</tspan>
+<tspan y="56" x="656 664 672 680 688 696">anchor</tspan>
+<tspan y="70" x="168 176" fill="orange">\b</tspan>
+<tspan y="70" x="184" fill="purple">$</tspan>
+<tspan y="70" x="192" fill="red">[</tspan>
+<tspan y="70" x="200 208 216 224 232 240">\B\b^$</tspan>
+<tspan y="70" x="248" fill="red">]</tspan>
+<tspan y="70" x="256" fill="green">|</tspan>
+<tspan y="70" x="264 272 280 288 296 304 312">\a\c1\e</tspan>
+<tspan y="70" x="320 328" fill="cyan">\f</tspan>
+<tspan y="70" x="336 344" fill="green">\n</tspan>
+<tspan y="70" x="352 360" fill="blue">\r</tspan>
+<tspan y="70" x="368 376" fill="orange">\t</tspan>
+<tspan y="70" x="384 392" fill="purple">\v</tspan>
+<tspan y="70" x="400 408" fill="red">\0</tspan>
+<tspan y="70" x="416" fill="green">|</tspan>
+<tspan y="70" x="424 432 440" fill="cyan">\cA</tspan>
+<tspan y="70" x="448" fill="green">[</tspan>
+<tspan y="70" x="456 464 472 480 488 496 504" fill="blue">\ca-\cZ</tspan>
+<tspan y="70" x="512" fill="green">]</tspan>
+<tspan y="70" x="520 528 536 544 552 560" fill="orange">\u9fa5</tspan>
+<tspan y="70" x="568" fill="purple">[</tspan>
+<tspan y="70" x="576 584 592 600 608 616 624 632 640 648 656 664 672" fill="red">\u4e00-\u9fa5</tspan>
+<tspan y="70" x="680" fill="purple">]</tspan>
+<tspan y="70" x="688 696 704 712" fill="cyan">\xAa</tspan>
+<tspan y="70" x="720" fill="green">[</tspan>
+<tspan y="84" x="168 176 184 192 200 208 216 224 232" fill="blue">\x00-\xff</tspan>
+<tspan y="84" x="240" fill="green">]</tspan>
+<tspan y="84" x="248" fill="green">|</tspan>
+<tspan y="84" x="256" fill="orange">(</tspan>
+<tspan y="84" x="264" fill="purple">[</tspan>
+<tspan y="84" x="272 280 288" fill="red">a-z</tspan>
+<tspan y="84" x="296" fill="purple">]</tspan>
+<tspan y="84" x="304 312" fill="cyan">\d</tspan>
+<tspan y="84" x="320" fill="orange">)</tspan>
+<tspan y="84" x="328 336 344" fill="green">(?:</tspan>
+<tspan y="84" x="352 360" fill="blue">\w</tspan>
+<tspan y="84" x="368 376" fill="purple">\s</tspan>
+<tspan y="84" x="384" fill="orange">+</tspan>
+<tspan y="84" x="392" fill="green">)</tspan>
+<tspan y="84" x="400" fill="green">|</tspan>
+<tspan y="84" x="408">a</tspan>
+<tspan y="84" x="416 424 432" fill="red">(?=</tspan>
+<tspan y="84" x="440 448 456 464 472 480 488 496 504 512 520 528 536 544 552 560">followed_by_this</tspan>
+<tspan y="84" x="568" fill="red">)</tspan>
+<tspan y="84" x="576">b</tspan>
+<tspan y="84" x="584 592 600" fill="cyan">(?!</tspan>
+<tspan y="84" x="608 616 624 632 640 648 656 664 672 680 688 696 704 712 720 728 736 744 752 760">not_followed_by_this</tspan>
+<tspan y="84" x="768" fill="cyan">)</tspan>
+<tspan y="98" x=""></tspan>
+<tspan y="98" x="168">c</tspan>
+<tspan y="98" x="176" fill="green">|</tspan>
+<tspan y="98" x="184">d</tspan>
+<tspan y="98" x="192 200 208 216" fill="green">(?&lt;=</tspan>
+<tspan y="98" x="224 232 240 248 256 264 272 280 288 296 304 312 320 328 336 344">preceded_by_this</tspan>
+<tspan y="98" x="352" fill="green">)</tspan>
+<tspan y="98" x="360">e</tspan>
+<tspan y="98" x="368 376 384 392" fill="blue">(?&lt;!</tspan>
+<tspan y="98" x="400 408 416 424 432 440 448 456 464 472 480 488 496 504 512 520">preceded_by_this</tspan>
+<tspan y="98" x="528" fill="blue">)</tspan>
+<tspan y="98" x="536">f</tspan>
+<tspan y="98" x="544" fill="green">|</tspan>
+<tspan y="98" x="552" fill="orange">^</tspan>
+<tspan y="98" x="560" fill="purple">[</tspan>
+<tspan y="98" x="576">a</tspan>
+<tspan y="98" x="600">b</tspan>
+<tspan y="98" x="632" fill="purple">]</tspan>
+<tspan y="98" x="656">e</tspan>
+<tspan y="98" x="672">m</tspan>
+<tspan y="98" x="688 696 704">pty</tspan>
+<tspan y="98" x="720 728 736 744 752 760">spaces</tspan>
+<tspan y="98" x="776" fill="red">[</tspan>
+<tspan y="112" x="168 176 184 192 200 208" fill="cyan">\u4E2D</tspan>
+<tspan y="112" x="216" fill="red">]</tspan>
+<tspan y="112" x="224 232 240 248 256 264" fill="green">\u6587</tspan>
+<tspan y="112" x="272" fill="blue">$</tspan>
+</text>
+<rect x="166" y="14" width="620" height="102" fill="none" stroke-width="1" stroke="gray"/>
+<text x="0" y="140" font-size="14" font-family="Consolas, Monaco, 'Courier New', monospace" letter-spacing="0" text-anchor="start" white-space="pre">
+<tspan y="140" x="312 320 328 336 344 352 360 368 376 384 392 400 408 416 424 432 440 448 456">┌─────────────────┐</tspan>
+<tspan y="140" x="480 488 496 504 512 520">┏━━━━━</tspan>
+<tspan y="140" x="528 536 544 552 560 568" fill="blue">One of</tspan>
+<tspan y="140" x="576 584 592 600 608 616 624">━━━━━━┓</tspan>
+<tspan y="154" x="32 40 48 56 64 72 80 88 96 104 112 120 128 136 144 152 160 168 176 184 192 200 208 216 224 232 240 248 256 264 272 280 288 296 304 312 320 328 336 344 352 360 368 376 384 392 400 408 416 424 432 440 448 456 464 472 480 488 496 504 512 520 528 536 544 552 560 568 576 584 592 600 608 616 624 632 640 648 656 664 672 680 688 696 704 712 720 728 736 744 752 760 768 776 784 792 800 808 816 824 832 840 848 856 864 872 880 888 896 904">┌──────────────────────────────────┤a1|()[]{}.?+*\\^$├──┫a1()[]{}.?+*\\|^$┣──────────────────────────────────┐</tspan>
+<tspan y="168" x="32">│</tspan>
+<tspan y="168" x="312 320 328 336 344 352 360 368 376 384 392 400 408 416 424 432 440 448 456">└─────────────────┘</tspan>
+<tspan y="168" x="480 488 496 504 512 520 528 536 544 552 560 568 576 584 592 600 608 616 624">┗━━━━━━━━━━━━━━━━━┛</tspan>
+<tspan y="168" x="904">│</tspan>
+<tspan y="182" x="32">│</tspan>
+<tspan y="182" x="536 544 552 560 568">┏━━━━</tspan>
+<tspan y="182" x="576 584 592 600 608 616" fill="orange">One of</tspan>
+<tspan y="182" x="624 632 640 648 656 664">━━━━━┓</tspan>
+<tspan y="182" x="904">│</tspan>
+<tspan y="196" x="32">│</tspan>
+<tspan y="196" x="536 544">┃.</tspan>
+<tspan y="196" x="664">┃</tspan>
+<tspan y="196" x="904">│</tspan>
+<tspan y="210" x="32">│</tspan>
+<tspan y="210" x="536">┃</tspan>
+<tspan y="210" x="544 552 560 568 576" fill="purple" text-decoration="underline">Digit</tspan>
+<tspan y="210" x=""></tspan>
+<tspan y="210" x="664">┃</tspan>
+<tspan y="210" x="904">│</tspan>
+<tspan y="224" x="32">│</tspan>
+<tspan y="224" x="536">┃</tspan>
+<tspan y="224" x="544 552 560 568 576 584 592 600 608" fill="red" text-decoration="underline">Non-Digit</tspan>
+<tspan y="224" x=""></tspan>
+<tspan y="224" x="664">┃</tspan>
+<tspan y="224" x="904">│</tspan>
+<tspan y="238" x="32">│</tspan>
+<tspan y="238" x="536">┃</tspan>
+<tspan y="238" x="544 552 560 568" fill="cyan" text-decoration="underline">Word</tspan>
+<tspan y="238" x=""></tspan>
+<tspan y="238" x="664">┃</tspan>
+<tspan y="238" x="904">│</tspan>
+<tspan y="252" x="32">│</tspan>
+<tspan y="252" x="456">┏</tspan>
+<tspan y="252" x="464 472 480 488 496 504" fill="red">One of</tspan>
+<tspan y="252" x="512">┓</tspan>
+<tspan y="252" x="536">┃</tspan>
+<tspan y="252" x="544 552 560 568 576 584 592 600" fill="green" text-decoration="underline">Non-Word</tspan>
+<tspan y="252" x=""></tspan>
+<tspan y="252" x="664">┃</tspan>
+<tspan y="252" x="904">│</tspan>
+<tspan y="266" x="32">│</tspan>
+<tspan y="266" x="264 272">┏━</tspan>
+<tspan y="266" x="280 288 296 304 312 320" fill="orange">One of</tspan>
+<tspan y="266" x="328 336 344">━━┓</tspan>
+<tspan y="266" x="368">┏</tspan>
+<tspan y="266" x="376 384 392 400 408 416 424" fill="purple">None of</tspan>
+<tspan y="266" x="432">┓</tspan>
+<tspan y="266" x="456">┃</tspan>
+<tspan y="266" x="472 480 488" fill="cyan" text-decoration="underline">a→z</tspan>
+<tspan y="266" x=""></tspan>
+<tspan y="266" x="512">┃</tspan>
+<tspan y="266" x="536">┃</tspan>
+<tspan y="266" x="544 552 560 568 576" fill="blue" text-decoration="underline">Space</tspan>
+<tspan y="266" x=""></tspan>
+<tspan y="266" x="664">┃</tspan>
+<tspan y="266" x="904">│</tspan>
+<tspan y="280" x="32 40 48 56 64 72 80 88 96 104 112 120 128 136 144 152 160 168 176 184 192 200 208 216 224 232 240 248 256 264 272 280 288 296 304 312 320 328 336 344 352 360 368">├────────────────────────────┫-a1.+*_\\┣──┫</tspan>
+<tspan y="280" x="384 392 400 408">abc-</tspan>
+<tspan y="280" x="432 440 448 456">┣──┫</tspan>
+<tspan y="280" x="472 480 488" fill="green" text-decoration="underline">0→9</tspan>
+<tspan y="280" x=""></tspan>
+<tspan y="280" x="512 520 528 536">┣──┫</tspan>
+<tspan y="280" x="544 552 560 568 576 584 592 600 608" fill="orange" text-decoration="underline">Non-Space</tspan>
+<tspan y="280" x=""></tspan>
+<tspan y="280" x="664 672 680 688 696 704 712 720 728 736 744 752 760 768 776 784 792 800 808 816 824 832 840 848 856 864 872 880 888 896 904">┣─────────────────────────────┤</tspan>
+<tspan y="294" x="32">│</tspan>
+<tspan y="294" x="264 272 280 288 296 304 312 320 328 336 344">┗━━━━━━━━━┛</tspan>
+<tspan y="294" x="368 376 384 392 400 408 416 424 432">┗╸╸╸╸╸╸╸┛</tspan>
+<tspan y="294" x="456">┃</tspan>
+<tspan y="294" x="472 480 488" fill="blue" text-decoration="underline">A→Z</tspan>
+<tspan y="294" x=""></tspan>
+<tspan y="294" x="512">┃</tspan>
+<tspan y="294" x="536">┃</tspan>
+<tspan y="294" x="544 552 560 568 576 584 592 600 608" fill="purple" text-decoration="underline">Form-Feed</tspan>
+<tspan y="294" x=""></tspan>
+<tspan y="294" x="664">┃</tspan>
+<tspan y="294" x="904">│</tspan>
+<tspan y="308" x="32">│</tspan>
+<tspan y="308" x="456 464 472 480 488 496 504 512">┗━━━━━━┛</tspan>
+<tspan y="308" x="536">┃</tspan>
+<tspan y="308" x="544 552 560 568 576 584 592 600 608" fill="red" text-decoration="underline">Line-Feed</tspan>
+<tspan y="308" x=""></tspan>
+<tspan y="308" x="664">┃</tspan>
+<tspan y="308" x="904">│</tspan>
+<tspan y="322" x="32">│</tspan>
+<tspan y="322" x="536">┃</tspan>
+<tspan y="322" x="544 552 560" fill="cyan" text-decoration="underline">Tab</tspan>
+<tspan y="322" x=""></tspan>
+<tspan y="322" x="664">┃</tspan>
+<tspan y="322" x="904">│</tspan>
+<tspan y="336" x="32">│</tspan>
+<tspan y="336" x="536">┃</tspan>
+<tspan y="336" x="544 552 560 568 576 584 592 600 608 616 624 632" fill="green" text-decoration="underline">Vertical-Tab</tspan>
+<tspan y="336" x=""></tspan>
+<tspan y="336" x="664">┃</tspan>
+<tspan y="336" x="904">│</tspan>
+<tspan y="350" x="32">│</tspan>
+<tspan y="350" x="536">┃</tspan>
+<tspan y="350" x="544 552 560 568" fill="blue" text-decoration="underline">Null</tspan>
+<tspan y="350" x=""></tspan>
+<tspan y="350" x="664">┃</tspan>
+<tspan y="350" x="904">│</tspan>
+<tspan y="364" x="32">│</tspan>
+<tspan y="364" x="536">┃</tspan>
+<tspan y="364" x="544 552 560 568 576 584 592 600 608 616 624 632 640 648 656" fill="orange" text-decoration="underline">Carriage-Return</tspan>
+<tspan y="364" x=""></tspan>
+<tspan y="364" x="664">┃</tspan>
+<tspan y="364" x="904">│</tspan>
+<tspan y="378" x="32">│</tspan>
+<tspan y="378" x="536 544 552 560 568 576 584 592 600 608 616 624 632 640 648 656 664">┗━━━━━━━━━━━━━━━┛</tspan>
+<tspan y="378" x="904">│</tspan>
+<tspan y="392" x="32">│</tspan>
+<tspan y="392" x="112 120 128 136 144">╔═.═╗</tspan>
+<tspan y="392" x="168 176 184 192 200 208 216">╔═\d══╗</tspan>
+<tspan y="392" x="240 248 256 264 272 280 288 296 304 312 320">╔═══\D════╗</tspan>
+<tspan y="392" x="344 352 360 368 376 384">╔═\w═╗</tspan>
+<tspan y="392" x="408 416 424 432 440 448 456 464 472 480">╔═══\W═══╗</tspan>
+<tspan y="392" x="504 512 520 528 536 544 552">╔═\s══╗</tspan>
+<tspan y="392" x="576 584 592 600 608 616 624 632 640 648 656">╔═══\S════╗</tspan>
+<tspan y="392" x="680 688 696 704 712 720 728 736 744 752 760">╔═══\n════╗</tspan>
+<tspan y="392" x="784 792 800 808 816">╔\t═╗</tspan>
+<tspan y="392" x="904">│</tspan>
+<tspan y="406" x="32 40 48 56 64 72 80 88 96 104 112">├─────────╣</tspan>
+<tspan y="406" x="120 128 136" fill="purple">Any</tspan>
+<tspan y="406" x="144 152 160 168">╠──╣</tspan>
+<tspan y="406" x="176 184 192 200 208" fill="red">Digit</tspan>
+<tspan y="406" x="216 224 232 240">╠──╣</tspan>
+<tspan y="406" x="248 256 264 272 280 288 296 304 312" fill="cyan">Non-Digit</tspan>
+<tspan y="406" x="320 328 336 344">╠──╣</tspan>
+<tspan y="406" x="352 360 368 376" fill="green">Word</tspan>
+<tspan y="406" x="384 392 400 408">╠──╣</tspan>
+<tspan y="406" x="416 424 432 440 448 456 464 472" fill="blue">Non-Word</tspan>
+<tspan y="406" x="480 488 496 504">╠──╣</tspan>
+<tspan y="406" x="512 520 528 536 544" fill="orange">Space</tspan>
+<tspan y="406" x="552 560 568 576">╠──╣</tspan>
+<tspan y="406" x="584 592 600 608 616 624 632 640 648" fill="purple">Non-Space</tspan>
+<tspan y="406" x="656 664 672 680">╠──╣</tspan>
+<tspan y="406" x="688 696 704 712 720 728 736 744 752" fill="red">Line-Feed</tspan>
+<tspan y="406" x="760 768 776 784">╠──╣</tspan>
+<tspan y="406" x="792 800 808" fill="cyan">Tab</tspan>
+<tspan y="406" x="816 824 832 840 848 856 864 872 880 888 896 904">╠──────────┤</tspan>
+<tspan y="420" x="32">│</tspan>
+<tspan y="420" x="112 120 128 136 144">╚═══╝</tspan>
+<tspan y="420" x="168 176 184 192 200 208 216">╚═════╝</tspan>
+<tspan y="420" x="240 248 256 264 272 280 288 296 304 312 320">╚═════════╝</tspan>
+<tspan y="420" x="344 352 360 368 376 384">╚════╝</tspan>
+<tspan y="420" x="408 416 424 432 440 448 456 464 472 480">╚════════╝</tspan>
+<tspan y="420" x="504 512 520 528 536 544 552">╚═════╝</tspan>
+<tspan y="420" x="576 584 592 600 608 616 624 632 640 648 656">╚═════════╝</tspan>
+<tspan y="420" x="680 688 696 704 712 720 728 736 744 752 760">╚═════════╝</tspan>
+<tspan y="420" x="784 792 800 808 816">╚═══╝</tspan>
+<tspan y="420" x="904">│</tspan>
+<tspan y="434" x="32">│</tspan>
+<tspan y="434" x="904">│</tspan>
+<tspan y="448" x="32">│</tspan>
+<tspan y="448" x="64 72 80">┌─┐</tspan>
+<tspan y="448" x="136 144 152">┌─┐</tspan>
+<tspan y="448" x="208 216 224">┌─┐</tspan>
+<tspan y="448" x="280 288 296">┌─┐</tspan>
+<tspan y="448" x="352 360 368">┌─┐</tspan>
+<tspan y="448" x="424 432 440">┌─┐</tspan>
+<tspan y="448" x="496 504 512">┌─┐</tspan>
+<tspan y="448" x="568 576 584">┌─┐</tspan>
+<tspan y="448" x="640 648 656">┌─┐</tspan>
+<tspan y="448" x="712 720 728">┌─┐</tspan>
+<tspan y="448" x="784 792 800">┌─┐</tspan>
+<tspan y="448" x="856 864 872">┌─┐</tspan>
+<tspan y="448" x="904">│</tspan>
+<tspan y="462" x="32 40 48 56 64 72 80 88 96 104 112 120 128 136 144 152 160 168 176 184 192 200 208 216 224 232 240 248 256 264 272 280 288 296 304 312 320 328 336 344 352 360 368 376 384 392 400 408 416 424 432 440 448 456 464 472 480 488 496 504 512 520 528 536 544 552 560 568 576 584 592 600 608 616 624 632 640 648 656 664 672 680 688 696 704 712 720 728 736 744 752 760 768 776 784 792 800 808 816 824 832 840 848 856 864 872 880 888 896 904">├─┬─┤a├─┬──┬─┤b├─┬──┬─┤c├─┬──┬─┤d├─┬──┬─┤e├─┬──┬─┤f├─┬──┬─┤a├─┬──┬─┤b├─┬──┬─┤c├─┬──┬─┤d├─┬──┬─┤e├─┬──┬─┤f├─┬─┤</tspan>
+<tspan y="476" x="32">│</tspan>
+<tspan y="476" x="48">│</tspan>
+<tspan y="476" x="64 72 80">└─┘</tspan>
+<tspan y="476" x="96">│</tspan>
+<tspan y="476" x="120">│</tspan>
+<tspan y="476" x="136 144 152">└─┘</tspan>
+<tspan y="476" x="168">│</tspan>
+<tspan y="476" x="192">│</tspan>
+<tspan y="476" x="208 216 224">└─┘</tspan>
+<tspan y="476" x="240">│</tspan>
+<tspan y="476" x="264">│</tspan>
+<tspan y="476" x="280 288 296">└─┘</tspan>
+<tspan y="476" x="312">│</tspan>
+<tspan y="476" x="336">│</tspan>
+<tspan y="476" x="352 360 368">└─┘</tspan>
+<tspan y="476" x="384">│</tspan>
+<tspan y="476" x="408">│</tspan>
+<tspan y="476" x="424 432 440">└─┘</tspan>
+<tspan y="476" x="456">│</tspan>
+<tspan y="476" x="480">╷</tspan>
+<tspan y="476" x="496 504 512">└─┘</tspan>
+<tspan y="476" x="528">╷</tspan>
+<tspan y="476" x="552">╷</tspan>
+<tspan y="476" x="568 576 584">└─┘</tspan>
+<tspan y="476" x="600">╷</tspan>
+<tspan y="476" x="624">╷</tspan>
+<tspan y="476" x="640 648 656">└─┘</tspan>
+<tspan y="476" x="672">╷</tspan>
+<tspan y="476" x="696">╷</tspan>
+<tspan y="476" x="712 720 728">└─┘</tspan>
+<tspan y="476" x="744">╷</tspan>
+<tspan y="476" x="768">╷</tspan>
+<tspan y="476" x="784 792 800">└─┘</tspan>
+<tspan y="476" x="816">╷</tspan>
+<tspan y="476" x="840">╷</tspan>
+<tspan y="476" x="856 864 872">└─┘</tspan>
+<tspan y="476" x="888">╷</tspan>
+<tspan y="476" x="904">│</tspan>
+<tspan y="490" x="32">│</tspan>
+<tspan y="490" x="48">└</tspan>
+<tspan y="490" x="56 64 72 80" fill="green">↺0→∞</tspan>
+<tspan y="490" x="88 96">─┘</tspan>
+<tspan y="490" x="120">└</tspan>
+<tspan y="490" x="128 136 144 152" fill="blue">↻1→∞</tspan>
+<tspan y="490" x="160 168">─┘</tspan>
+<tspan y="490" x="192">└</tspan>
+<tspan y="490" x="200 208 216 224" fill="orange">↺0→1</tspan>
+<tspan y="490" x="232 240">─┘</tspan>
+<tspan y="490" x="264 272">└─</tspan>
+<tspan y="490" x="280 288" fill="purple">↻2</tspan>
+<tspan y="490" x="296 304 312">──┘</tspan>
+<tspan y="490" x="336">└</tspan>
+<tspan y="490" x="344 352 360 368" fill="red">↻1→∞</tspan>
+<tspan y="490" x="376 384">─┘</tspan>
+<tspan y="490" x="408">└</tspan>
+<tspan y="490" x="416 424 432 440" fill="cyan">↻3→4</tspan>
+<tspan y="490" x="448 456">─┘</tspan>
+<tspan y="490" x="480">└</tspan>
+<tspan y="490" x="488 496 504 512" fill="green">↺0⇢∞</tspan>
+<tspan y="490" x="520 528">─┘</tspan>
+<tspan y="490" x="552">└</tspan>
+<tspan y="490" x="560 568 576 584" fill="blue">↻1⇢∞</tspan>
+<tspan y="490" x="592 600">─┘</tspan>
+<tspan y="490" x="624">└</tspan>
+<tspan y="490" x="632 640 648 656" fill="orange">↺0⇢1</tspan>
+<tspan y="490" x="664 672">─┘</tspan>
+<tspan y="490" x="696 704">└─</tspan>
+<tspan y="490" x="712 720" fill="purple">↻2</tspan>
+<tspan y="490" x="728 736 744">──┘</tspan>
+<tspan y="490" x="768">└</tspan>
+<tspan y="490" x="776 784 792 800" fill="red">↻1⇢∞</tspan>
+<tspan y="490" x="808 816">─┘</tspan>
+<tspan y="490" x="840">└</tspan>
+<tspan y="490" x="848 856 864 872" fill="cyan">↻3⇢4</tspan>
+<tspan y="490" x="880 888">─┘</tspan>
+<tspan y="490" x="904">│</tspan>
+<tspan y="504" x="32">│</tspan>
+<tspan y="504" x="184 192 200 208 216 224 232">╔══^══╗</tspan>
+<tspan y="504" x="256 264 272 280 288 296 304 312 320 328 336 344 352 360 368 376 384 392 400">╔═══════\B════════╗</tspan>
+<tspan y="504" x="424 432 440 448 456 464 472 480">┌──────┐</tspan>
+<tspan y="504" x="504 512 520 528 536 544 552 560 568 576 584 592 600 608 616">╔═════\b══════╗</tspan>
+<tspan y="504" x="640 648 656 664 672">╔═$═╗</tspan>
+<tspan y="504" x="696">┏</tspan>
+<tspan y="504" x="704 712 720 728 736 744" fill="red">One of</tspan>
+<tspan y="504" x="752">┓</tspan>
+<tspan y="504" x="904">│</tspan>
+<tspan y="518" x="8 16 24 32 40 48 56 64 72 80 88 96 104 112 120 128 136 144 152 160 168 176 184">●──┼──────────────────╣</tspan>
+<tspan y="518" x="192 200 208 216 224" fill="green">Start</tspan>
+<tspan y="518" x="232 240 248 256">╠──╣</tspan>
+<tspan y="518" x="264 272 280 288 296 304 312 320 328 336 344 352 360 368 376 384 392" fill="blue">Non-Word Boundary</tspan>
+<tspan y="518" x="400 408 416 424 432 440 448 456 464 472 480 488 496 504">╠──┤anchor├──╣</tspan>
+<tspan y="518" x="512 520 528 536 544 552 560 568 576 584 592 600 608" fill="orange">Word Boundary</tspan>
+<tspan y="518" x="616 624 632 640">╠──╣</tspan>
+<tspan y="518" x="648 656 664" fill="purple">End</tspan>
+<tspan y="518" x="672 680 688 696">╠──┫</tspan>
+<tspan y="518" x="712 720 728 736">Bb^$</tspan>
+<tspan y="518" x="752 760 768 776 784 792 800 808 816 824 832 840 848 856 864 872 880 888 896 904 912 920 928">┣──────────────────┼──◎</tspan>
+<tspan y="532" x="32">│</tspan>
+<tspan y="532" x="184 192 200 208 216 224 232">╚═════╝</tspan>
+<tspan y="532" x="256 264 272 280 288 296 304 312 320 328 336 344 352 360 368 376 384 392 400">╚═════════════════╝</tspan>
+<tspan y="532" x="424 432 440 448 456 464 472 480">└──────┘</tspan>
+<tspan y="532" x="504 512 520 528 536 544 552 560 568 576 584 592 600 608 616">╚═════════════╝</tspan>
+<tspan y="532" x="640 648 656 664 672">╚═══╝</tspan>
+<tspan y="532" x="696 704 712 720 728 736 744 752">┗━━━━━━┛</tspan>
+<tspan y="532" x="904">│</tspan>
+<tspan y="546" x="32">│</tspan>
+<tspan y="546" x="144 152 160 168 176 184">┌────┐</tspan>
+<tspan y="546" x="208 216 224 232 240 248 256 264 272 280 288">╔═══\f════╗</tspan>
+<tspan y="546" x="312 320 328 336 344 352 360 368 376 384 392">╔═══\n════╗</tspan>
+<tspan y="546" x="416 424 432 440 448 456 464 472 480 488 496 504 512 520 528 536 544">╔══════\r═══════╗</tspan>
+<tspan y="546" x="568 576 584 592 600">╔\t═╗</tspan>
+<tspan y="546" x="624 632 640 648 656 664 672 680 688 696 704 712 720 728">╔═════\v═════╗</tspan>
+<tspan y="546" x="752 760 768 776 784 792">╔═\0═╗</tspan>
+<tspan y="546" x="904">│</tspan>
+<tspan y="560" x="32 40 48 56 64 72 80 88 96 104 112 120 128 136 144 152 160 168 176 184 192 200 208">├─────────────┤ac1e├──╣</tspan>
+<tspan y="560" x="216 224 232 240 248 256 264 272 280" fill="cyan">Form-Feed</tspan>
+<tspan y="560" x="288 296 304 312">╠──╣</tspan>
+<tspan y="560" x="320 328 336 344 352 360 368 376 384" fill="green">Line-Feed</tspan>
+<tspan y="560" x="392 400 408 416">╠──╣</tspan>
+<tspan y="560" x="424 432 440 448 456 464 472 480 488 496 504 512 520 528 536" fill="blue">Carriage-Return</tspan>
+<tspan y="560" x="544 552 560 568">╠──╣</tspan>
+<tspan y="560" x="576 584 592" fill="orange">Tab</tspan>
+<tspan y="560" x="600 608 616 624">╠──╣</tspan>
+<tspan y="560" x="632 640 648 656 664 672 680 688 696 704 712 720" fill="purple">Vertical-Tab</tspan>
+<tspan y="560" x="728 736 744 752">╠──╣</tspan>
+<tspan y="560" x="760 768 776 784" fill="red">Null</tspan>
+<tspan y="560" x="792 800 808 816 824 832 840 848 856 864 872 880 888 896 904">╠─────────────┤</tspan>
+<tspan y="574" x="32">│</tspan>
+<tspan y="574" x="144 152 160 168 176 184">└────┘</tspan>
+<tspan y="574" x="208 216 224 232 240 248 256 264 272 280 288">╚═════════╝</tspan>
+<tspan y="574" x="312 320 328 336 344 352 360 368 376 384 392">╚═════════╝</tspan>
+<tspan y="574" x="416 424 432 440 448 456 464 472 480 488 496 504 512 520 528 536 544">╚═══════════════╝</tspan>
+<tspan y="574" x="568 576 584 592 600">╚═══╝</tspan>
+<tspan y="574" x="624 632 640 648 656 664 672 680 688 696 704 712 720 728">╚════════════╝</tspan>
+<tspan y="574" x="752 760 768 776 784 792">╚════╝</tspan>
+<tspan y="574" x="904">│</tspan>
+<tspan y="588" x="32">│</tspan>
+<tspan y="588" x="176 184 192 200 208 216 224 232">╔═\cA══╗</tspan>
+<tspan y="588" x="256 264 272 280">┏━━━</tspan>
+<tspan y="588" x="288 296 304 312 320 328" fill="green">One of</tspan>
+<tspan y="588" x="336 344 352 360 368">━━━━┓</tspan>
+<tspan y="588" x="392 400 408 416 424 432 440 448">╔\u9fa5╗</tspan>
+<tspan y="588" x="472 480 488 496">┏━━━</tspan>
+<tspan y="588" x="504 512 520 528 536 544" fill="purple">One of</tspan>
+<tspan y="588" x="552 560 568 576 584">━━━━┓</tspan>
+<tspan y="588" x="608 616 624 632 640 648">╔\xAa╗</tspan>
+<tspan y="588" x="672 680">┏━</tspan>
+<tspan y="588" x="688 696 704 712 720 728" fill="green">One of</tspan>
+<tspan y="588" x="736 744 752">━━┓</tspan>
+<tspan y="588" x="904">│</tspan>
+<tspan y="602" x="32 40 48 56 64 72 80 88 96 104 112 120 128 136 144 152 160 168 176">├─────────────────╣</tspan>
+<tspan y="602" x="184 192 200 208 216 224" fill="cyan">ctrl-A</tspan>
+<tspan y="602" x="232 240 248 256">╠──┫</tspan>
+<tspan y="602" x="264 272 280 288 296 304 312 320 328 336 344 352 360" fill="blue" text-decoration="underline">ctrl-A→ctrl-Z</tspan>
+<tspan y="602" x=""></tspan>
+<tspan y="602" x="368 376 384 392">┣──╣</tspan>
+<tspan y="602" x="400 408 416 424 432 440" fill="orange">U+9FA5</tspan>
+<tspan y="602" x="448 456 464 472">╠──┫</tspan>
+<tspan y="602" x="480 488 496 504 512 520 528 536 544 552 560 568 576" fill="red" text-decoration="underline">U+4E00→U+9FA5</tspan>
+<tspan y="602" x=""></tspan>
+<tspan y="602" x="584 592 600 608">┣──╣</tspan>
+<tspan y="602" x="616 624 632 640" fill="cyan">0xAA</tspan>
+<tspan y="602" x="648 656 664 672">╠──┫</tspan>
+<tspan y="602" x="680 688 696 704 712 720 728 736 744" fill="blue" text-decoration="underline">0x00→0xFF</tspan>
+<tspan y="602" x=""></tspan>
+<tspan y="602" x="752 760 768 776 784 792 800 808 816 824 832 840 848 856 864 872 880 888 896 904">┣──────────────────┤</tspan>
+<tspan y="616" x="32">│</tspan>
+<tspan y="616" x="176 184 192 200 208 216 224 232">╚══════╝</tspan>
+<tspan y="616" x="256 264 272 280 288 296 304 312 320 328 336 344 352 360 368">┗━━━━━━━━━━━━━┛</tspan>
+<tspan y="616" x="392 400 408 416 424 432 440 448">╚══════╝</tspan>
+<tspan y="616" x="472 480 488 496 504 512 520 528 536 544 552 560 568 576 584">┗━━━━━━━━━━━━━┛</tspan>
+<tspan y="616" x="608 616 624 632 640 648">╚════╝</tspan>
+<tspan y="616" x="672 680 688 696 704 712 720 728 736 744 752">┗━━━━━━━━━┛</tspan>
+<tspan y="616" x="904">│</tspan>
+<tspan y="630" x="32">│</tspan>
+<tspan y="630" x="472 480 488 496 504 512 520 528 536 544 552 560 568 576 584 592 600 608 616 624 632 640 648">╭╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╮</tspan>
+<tspan y="630" x="904">│</tspan>
+<tspan y="644" x="32">│</tspan>
+<tspan y="644" x="288 296 304 312 320 328">╭╴╴╴╴╴</tspan>
+<tspan y="644" x="336 344 352 360 368 376 384 392" fill="orange">Group #1</tspan>
+<tspan y="644" x="400 408 416 424 432 440 448">╴╴╴╴╴╴╮</tspan>
+<tspan y="644" x="472">╷</tspan>
+<tspan y="644" x="648">╷</tspan>
+<tspan y="644" x="904">│</tspan>
+<tspan y="658" x="32">│</tspan>
+<tspan y="658" x="288">╷</tspan>
+<tspan y="658" x="304">┏</tspan>
+<tspan y="658" x="312 320 328 336 344 352" fill="purple">One of</tspan>
+<tspan y="658" x="360">┓</tspan>
+<tspan y="658" x="384 392 400 408 416 424 432">╔═\d══╗</tspan>
+<tspan y="658" x="448">╷</tspan>
+<tspan y="658" x="472">╷</tspan>
+<tspan y="658" x="488 496 504 512 520 528">╔═\w═╗</tspan>
+<tspan y="658" x="568 576 584 592 600 608 616">╔═\s══╗</tspan>
+<tspan y="658" x="648">╷</tspan>
+<tspan y="658" x="904">│</tspan>
+<tspan y="672" x="32 40 48 56 64 72 80 88 96 104 112 120 128 136 144 152 160 168 176 184 192 200 208 216 224 232 240 248 256 264 272 280 288 296 304">├───────────────────────────────┼─┫</tspan>
+<tspan y="672" x="320 328 336" fill="red" text-decoration="underline">a→z</tspan>
+<tspan y="672" x=""></tspan>
+<tspan y="672" x="360 368 376 384">┣──╣</tspan>
+<tspan y="672" x="392 400 408 416 424" fill="cyan">Digit</tspan>
+<tspan y="672" x="432 440 448 456 464 472 480 488">╠─┼──┼─╣</tspan>
+<tspan y="672" x="496 504 512 520" fill="blue">Word</tspan>
+<tspan y="672" x="528 536 544 552 560 568">╠──┬─╣</tspan>
+<tspan y="672" x="576 584 592 600 608" fill="purple">Space</tspan>
+<tspan y="672" x="616 624 632 640 648 656 664 672 680 688 696 704 712 720 728 736 744 752 760 768 776 784 792 800 808 816 824 832 840 848 856 864 872 880 888 896 904">╠─┬─┼───────────────────────────────┤</tspan>
+<tspan y="686" x="32">│</tspan>
+<tspan y="686" x="288">╷</tspan>
+<tspan y="686" x="304 312 320 328 336 344 352 360">┗━━━━━━┛</tspan>
+<tspan y="686" x="384 392 400 408 416 424 432">╚═════╝</tspan>
+<tspan y="686" x="448">╷</tspan>
+<tspan y="686" x="472">╷</tspan>
+<tspan y="686" x="488 496 504 512 520 528">╚════╝</tspan>
+<tspan y="686" x="552">│</tspan>
+<tspan y="686" x="568 576 584 592 600 608 616">╚═════╝</tspan>
+<tspan y="686" x="632">│</tspan>
+<tspan y="686" x="648">╷</tspan>
+<tspan y="686" x="904">│</tspan>
+<tspan y="700" x="32">│</tspan>
+<tspan y="700" x="288 296 304 312 320 328 336 344 352 360 368 376 384 392 400 408 416 424 432 440 448">╰╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╯</tspan>
+<tspan y="700" x="472">╷</tspan>
+<tspan y="700" x="552 560 568">└──</tspan>
+<tspan y="700" x="576 584 592 600" fill="orange">↻1→∞</tspan>
+<tspan y="700" x="608 616 624 632">───┘</tspan>
+<tspan y="700" x="648">╷</tspan>
+<tspan y="700" x="904">│</tspan>
+<tspan y="714" x="32">│</tspan>
+<tspan y="714" x="472 480 488 496 504 512 520 528 536 544 552 560 568 576 584 592 600 608 616 624 632 640 648">╰╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╯</tspan>
+<tspan y="714" x="904">│</tspan>
+<tspan y="728" x="32">│</tspan>
+<tspan y="728" x="248 256 264 272 280 288">╭╴╴╴╴╴</tspan>
+<tspan y="728" x="296 304 312 320 328 336 344 352 360" fill="red">Lookahead</tspan>
+<tspan y="728" x="368 376 384 392 400 408 416">╴╴╴╴╴╴╮</tspan>
+<tspan y="728" x="480 488 496 504 512 520 528 536">╭╴╴╴╴╴╴╴</tspan>
+<tspan y="728" x="544 552 560 568 576 584 592 600 608 616" fill="cyan">!Lookahead</tspan>
+<tspan y="728" x="624 632 640 648 656 664 672 680">╴╴╴╴╴╴╴╮</tspan>
+<tspan y="728" x="904">│</tspan>
+<tspan y="742" x="32">│</tspan>
+<tspan y="742" x="208 216 224">┌─┐</tspan>
+<tspan y="742" x="248">╷</tspan>
+<tspan y="742" x="264 272 280 288 296 304 312 320 328 336 344 352 360 368 376 384 392 400">┌────────────────┐</tspan>
+<tspan y="742" x="416">╷</tspan>
+<tspan y="742" x="440 448 456">┌─┐</tspan>
+<tspan y="742" x="480">╷</tspan>
+<tspan y="742" x="496 504 512 520 528 536 544 552 560 568 576 584 592 600 608 616 624 632 640 648 656 664">┌────────────────────┐</tspan>
+<tspan y="742" x="680">╷</tspan>
+<tspan y="742" x="704 712 720">┌─┐</tspan>
+<tspan y="742" x="904">│</tspan>
+<tspan y="756" x="32 40 48 56 64 72 80 88 96 104 112 120 128 136 144 152 160 168 176 184 192 200 208 216 224 232 240 248 256 264 272 280 288 296 304 312 320 328 336 344 352 360 368 376 384 392 400 408 416 424 432 440 448 456 464 472 480 488 496 504 512 520 528 536 544 552 560 568 576 584 592 600 608 616 624 632 640 648 656 664 672 680 688 696 704 712 720 728 736 744 752 760 768 776 784 792 800 808 816 824 832 840 848 856 864 872 880 888 896 904">├─────────────────────┤a├──┼─┤followed_by_this├─┼──┤b├──┼─┤not_followed_by_this├─┼──┤c├──────────────────────┤</tspan>
+<tspan y="770" x="32">│</tspan>
+<tspan y="770" x="208 216 224">└─┘</tspan>
+<tspan y="770" x="248">╷</tspan>
+<tspan y="770" x="264 272 280 288 296 304 312 320 328 336 344 352 360 368 376 384 392 400">└────────────────┘</tspan>
+<tspan y="770" x="416">╷</tspan>
+<tspan y="770" x="440 448 456">└─┘</tspan>
+<tspan y="770" x="480">╷</tspan>
+<tspan y="770" x="496 504 512 520 528 536 544 552 560 568 576 584 592 600 608 616 624 632 640 648 656 664">└────────────────────┘</tspan>
+<tspan y="770" x="680">╷</tspan>
+<tspan y="770" x="704 712 720">└─┘</tspan>
+<tspan y="770" x="904">│</tspan>
+<tspan y="784" x="32">│</tspan>
+<tspan y="784" x="248 256 264 272 280 288 296 304 312 320 328 336 344 352 360 368 376 384 392 400 408 416">╰╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╯</tspan>
+<tspan y="784" x="480 488 496 504 512 520 528 536 544 552 560 568 576 584 592 600 608 616 624 632 640 648 656 664 672 680">╰╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╯</tspan>
+<tspan y="784" x="904">│</tspan>
+<tspan y="798" x="32">│</tspan>
+<tspan y="798" x="264 272 280 288 296 304">╭╴╴╴╴╴</tspan>
+<tspan y="798" x="312 320 328 336 344 352 360 368 376 384" fill="green">Lookbehind</tspan>
+<tspan y="798" x="392 400 408 416 424 432">╴╴╴╴╴╮</tspan>
+<tspan y="798" x="496 504 512 520 528">╭╴╴╴╴</tspan>
+<tspan y="798" x="536 544 552 560 568 576 584 592 600 608 616" fill="blue">!Lookbehind</tspan>
+<tspan y="798" x="624 632 640 648 656 664">╴╴╴╴╴╮</tspan>
+<tspan y="798" x="904">│</tspan>
+<tspan y="812" x="32">│</tspan>
+<tspan y="812" x="224 232 240">┌─┐</tspan>
+<tspan y="812" x="264">╷</tspan>
+<tspan y="812" x="280 288 296 304 312 320 328 336 344 352 360 368 376 384 392 400 408 416">┌────────────────┐</tspan>
+<tspan y="812" x="432">╷</tspan>
+<tspan y="812" x="456 464 472">┌─┐</tspan>
+<tspan y="812" x="496">╷</tspan>
+<tspan y="812" x="512 520 528 536 544 552 560 568 576 584 592 600 608 616 624 632 640 648">┌────────────────┐</tspan>
+<tspan y="812" x="664">╷</tspan>
+<tspan y="812" x="688 696 704">┌─┐</tspan>
+<tspan y="812" x="904">│</tspan>
+<tspan y="826" x="32 40 48 56 64 72 80 88 96 104 112 120 128 136 144 152 160 168 176 184 192 200 208 216 224 232 240 248 256 264 272 280 288 296 304 312 320 328 336 344 352 360 368 376 384 392 400 408 416 424 432 440 448 456 464 472 480 488 496 504 512 520 528 536 544 552 560 568 576 584 592 600 608 616 624 632 640 648 656 664 672 680 688 696 704 712 720 728 736 744 752 760 768 776 784 792 800 808 816 824 832 840 848 856 864 872 880 888 896 904">├───────────────────────┤d├──┼─┤preceded_by_this├─┼──┤e├──┼─┤preceded_by_this├─┼──┤f├────────────────────────┤</tspan>
+<tspan y="840" x="32">│</tspan>
+<tspan y="840" x="224 232 240">└─┘</tspan>
+<tspan y="840" x="264">╷</tspan>
+<tspan y="840" x="280 288 296 304 312 320 328 336 344 352 360 368 376 384 392 400 408 416">└────────────────┘</tspan>
+<tspan y="840" x="432">╷</tspan>
+<tspan y="840" x="456 464 472">└─┘</tspan>
+<tspan y="840" x="496">╷</tspan>
+<tspan y="840" x="512 520 528 536 544 552 560 568 576 584 592 600 608 616 624 632 640 648">└────────────────┘</tspan>
+<tspan y="840" x="664">╷</tspan>
+<tspan y="840" x="688 696 704">└─┘</tspan>
+<tspan y="840" x="904">│</tspan>
+<tspan y="854" x="32">│</tspan>
+<tspan y="854" x="264 272 280 288 296 304 312 320 328 336 344 352 360 368 376 384 392 400 408 416 424 432">╰╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╯</tspan>
+<tspan y="854" x="496 504 512 520 528 536 544 552 560 568 576 584 592 600 608 616 624 632 640 648 656 664">╰╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╯</tspan>
+<tspan y="854" x="904">│</tspan>
+<tspan y="868" x="32">│</tspan>
+<tspan y="868" x="200 208 216 224 232 240 248">╔══^══╗</tspan>
+<tspan y="868" x="272 280">┏━</tspan>
+<tspan y="868" x="288 296 304 312 320 328" fill="purple">One of</tspan>
+<tspan y="868" x="336 344">━┓</tspan>
+<tspan y="868" x="368 376 384 392 400 408 416 424 432 440 448 456 464 472 480 488 496 504 512">┌─────────────────┐</tspan>
+<tspan y="868" x="536">┏</tspan>
+<tspan y="868" x="544 552 560 568 576 584" fill="red">One of</tspan>
+<tspan y="868" x="592">┓</tspan>
+<tspan y="868" x="616 624 632 640 648 656 664 672">╔\u6587╗</tspan>
+<tspan y="868" x="696 704 712 720 728">╔═$═╗</tspan>
+<tspan y="868" x="904">│</tspan>
+<tspan y="882" x="32 40 48 56 64 72 80 88 96 104 112 120 128 136 144 152 160 168 176 184 192 200">└────────────────────╣</tspan>
+<tspan y="882" x="208 216 224 232 240" fill="orange">Start</tspan>
+<tspan y="882" x="248 256 264 272 280 288 296 304 312 320 328 336 344 352 360 368 376 384 392 400 408 416 424 432 440 448 456 464 472 480 488 496 504 512 520 528 536">╠──┫▯a▯▯b▯▯▯┣──┤▯▯e▯m▯pty▯spaces▯├──┫</tspan>
+<tspan y="882" x="544 552 560 568 576 584" fill="cyan" text-decoration="underline">U+4E2D</tspan>
+<tspan y="882" x=""></tspan>
+<tspan y="882" x="592 600 608 616">┣──╣</tspan>
+<tspan y="882" x="624 632 640 648 656 664" fill="green">U+6587</tspan>
+<tspan y="882" x="672 680 688 696">╠──╣</tspan>
+<tspan y="882" x="704 712 720" fill="blue">End</tspan>
+<tspan y="882" x="728 736 744 752 760 768 776 784 792 800 808 816 824 832 840 848 856 864 872 880 888 896 904">╠─────────────────────┘</tspan>
+<tspan y="896" x="200 208 216 224 232 240 248">╚═════╝</tspan>
+<tspan y="896" x="272 280 288 296 304 312 320 328 336 344">┗━━━━━━━━┛</tspan>
+<tspan y="896" x="368 376 384 392 400 408 416 424 432 440 448 456 464 472 480 488 496 504 512">└─────────────────┘</tspan>
+<tspan y="896" x="536 544 552 560 568 576 584 592">┗━━━━━━┛</tspan>
+<tspan y="896" x="616 624 632 640 648 656 664 672">╚══════╝</tspan>
+<tspan y="896" x="696 704 712 720 728">╚═══╝</tspan>
+</text></svg>

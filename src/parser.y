@@ -156,8 +156,8 @@ term: LITERAL optional_q { $$ = attach($1, $2); }
 %%
 
 std::unique_ptr<ExprNode> regex_parse(const std::string& expr, bool debug) {
-    g_text = expr;
-    reset_flex(expr);
+    g_text = escape(expr);
+    reset_flex(g_text);
     int ret = yyparse();
     if (ret) {
         if (debug) lex_parse(g_text);

@@ -375,7 +375,8 @@ std::unique_ptr<RootBox> expr_to_box(ExprNode* expr) {
         } else if (node->isType(ExprType::T_ESCAPED)) {
             p = new EscapedBox(node->str());
         } else if (node->isType(ExprType::T_RANGE)) {
-            p = new RangeBox(node->str());
+            auto range = static_cast<Range*>(node);
+            p = new RangeBox(range->start, range->end);
         } else {
             // T_LITERAL,
             p = new NormalBox(node->str());

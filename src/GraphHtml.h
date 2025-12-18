@@ -19,12 +19,25 @@ static const char* html_tpl = R"(
             font-size: 15px;
             font-family: monospace, Consolas, Monaco, Menlo;
             letter-spacing: 0; white-space: pre;}
-        .diagram p { margin: 0 10px; }
+        .diagram #label {
+            padding: 4px 4px;
+            float: left;
+        }
         .diagram #expr { 
+            float: left;
             text-decoration: none;
             padding: 4px 4px;
             border: gray 1px solid;
             border-radius: 3px;
+            overflow-y: hidden;
+            overflow-x: auto; 
+            white-space: nowrap;
+            width: max-content;
+            max-width: 800px;
+        }
+        .diagram #graph {
+            float: left;
+            margin-top: 1em;
         }
         .diagram .double-width {
             display: inline-block;
@@ -130,14 +143,15 @@ public:
 private:
     void render() {
         auto graph = color_replace(text_graph);
-        auto regex = "<p>Regular Expression: <a id=\"expr\">" 
-            + color_replace(expr) + "</a></p>";
+        auto regex = "<div id=\"label\">Regular Expression:</div><div id=\"expr\">" 
+            + color_replace(expr) + "</div>";
+        auto content = regex + "\n<div id=\"graph\">" + graph + "</div>";
 
         html = html_tpl;
         std::string key = "{{DIAGRAM}}";
         size_t pos = html.find(key);
         if (pos != std::string::npos) {
-            html.replace(pos, key.size(), regex + "\n" + graph);
+            html.replace(pos, key.size(), content);
         }
     }
 };

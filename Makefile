@@ -31,7 +31,7 @@ TEST_DIR := test
 YACC := flex
 BISON := bison
 
-CFLAGS += -Wall -std=c++17 -I./src -I./$(BUILD_DIR) $(INC)
+CFLAGS += -O2 -Wall -std=c++17 -I./src -I./$(BUILD_DIR) $(INC)
 
 GTEST_FLAGS := -lgtest -lgtest_main 
 

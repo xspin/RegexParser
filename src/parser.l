@@ -37,10 +37,22 @@ int yylex() {
 %x CLASS
 
 escaped_literal \\[\\.*+?()\[\]{}|^$]
-special_escaped \\[dDwWsStnrfv0]|\\x[0-9a-fA-F]{2}|\\u[0-9a-fA-F]{4}
-range_expr \\x[0-9a-fA-F]{2}-\\x[0-9a-fA-F]{2}|\\u[0-9a-fA-F]{4}-\\u[0-9a-fA-F]{4}|([^\\\[]|\\.)-([^\\\]]|\\.)
+special_escaped \\[dDwWsStnrfv0]|\\x[0-9a-fA-F]{2}|\\u[0-9a-fA-F]{4}|\\c[a-zA-Z]
+range_expr \\x[0-9a-fA-F]{2}-\\x[0-9a-fA-F]{2}|\\u[0-9a-fA-F]{4}-\\u[0-9a-fA-F]{4}|([^\\\[]|\\.)-([^\\\]]|\\.)|(\\c[a-zA-Z])-(\\c[a-zA-Z])
 
 %%
+
+{escaped_literal} {
+    COMMON();
+    yylval.expr = new Literal(yytext);
+    return LITERAL;
+}
+
+{special_escaped} {
+    COMMON();
+    yylval.expr = new Escaped(yytext);
+    return ESCAPED;
+}
 
 \(\?[=!] {
     COMMON();
@@ -127,18 +139,6 @@ range_expr \\x[0-9a-fA-F]{2}-\\x[0-9a-fA-F]{2}|\\u[0-9a-fA-F]{4}-\\u[0-9a-fA-F]{
     COMMON();
     yylval.expr = new Anchor(yytext);
     return ANCHOR;
-}
-
-{escaped_literal} {
-    COMMON();
-    yylval.expr = new Literal(yytext);
-    return LITERAL;
-}
-
-{special_escaped} {
-    COMMON();
-    yylval.expr = new Escaped(yytext);
-    return ESCAPED;
 }
 
 \\. {

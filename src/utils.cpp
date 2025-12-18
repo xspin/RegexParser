@@ -12,8 +12,8 @@
 bool g_debug = false;
 namespace Utils {
 
-std::string concat(const std::vector<const std::string>::iterator& begin,
-    const std::vector<const std::string>::iterator& end,
+std::string concat(const std::vector<std::string>::iterator& begin,
+    const std::vector<std::string>::iterator& end,
     const std::string& s) {
     std::stringstream ss;
     for (auto it = begin; it != end; ++it) {
@@ -25,7 +25,7 @@ std::string concat(const std::vector<const std::string>::iterator& begin,
     return ss.str();
 }
 
-std::string concat(const std::vector<std::string>& vec, const std::string& s) {
+std::string concat(std::vector<std::string>& vec, const std::string& s) {
     return concat(vec.begin(), vec.end(), s);
 }
 
@@ -190,7 +190,10 @@ int parse_args(Args& args, int argc, char* argv[]) {
             RegexGenerator g;
             args.expr = g.generate(args.rand);
         } else {
-            std::getline(std::cin, args.expr); 
+            std::string line;
+            while (getline(std::cin, line)) {
+                args.expr += line;
+            }
         }
     }
 

@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regular Expression Visualization</title>
+    <style>
+        body {  margin: 20px;}
+        pre { background: #f4f4f4; padding: 10px; border-radius: 5px; }
+        .diagram {
+            line-height: 1.3;
+            vertical-align: middle;
+            font-size: 15px;
+            font-family: monospace, Consolas, Monaco, Menlo;
+            letter-spacing: 0; white-space: pre;}
+        .diagram #label {
+            padding: 4px 4px;
+            float: left;
+        }
+        .diagram #expr { 
+            float: left;
+            text-decoration: none;
+            padding: 4px 4px;
+            border: gray 1px solid;
+            border-radius: 3px;
+            overflow-y: hidden;
+            overflow-x: auto; 
+            white-space: nowrap;
+            width: max-content;
+            max-width: 800px;
+        }
+        .diagram #graph {
+            float: left;
+            margin-top: 1em;
+        }
+        .diagram .double-width {
+            display: inline-block;
+            width: 2ch;
+            text-align: center;
+        }
+        .diagram .triple-width {
+            display: inline-block;
+            width: 3ch;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="diagram"><div id="label">Regular Expression:</div><div id="expr"></span>a1\|\(\)\[\]\{\}\.\?\+\*\\\\\^\$<span style="color:blue;">[</span>a1\(\)\[\]\{\}\.\?\+\*\\\\|^$<span style="color:blue;">]</span><span style="color:green;">|</span><span style="color:orange;">[</span>-a1.+*_\\\\<span style="color:orange;">]</span><span style="color:purple;">[^</span>abc-<span style="color:purple;">]</span><span style="color:red;">[</span><span style="color:cyan;">a-z</span><span style="color:green;">0-9</span><span style="color:blue;">A-Z</span><span style="color:red;">]</span><span style="color:orange;">[</span>.<span style="color:purple;">\d</span><span style="color:red;">\D</span><span style="color:cyan;">\w</span><span style="color:green;">\W</span><span style="color:blue;">\s</span><span style="color:orange;">\S</span><span style="color:purple;">\f</span><span style="color:red;">\n</span><span style="color:cyan;">\t</span><span style="color:green;">\v</span><span style="color:blue;">\0</span><span style="color:orange;">\r</span><span style="color:orange;">]</span><span style="color:green;">|</span><span style="color:purple;">.</span><span style="color:red;">\d</span><span style="color:cyan;">\D</span><span style="color:green;">\w</span><span style="color:blue;">\W</span><span style="color:orange;">\s</span><span style="color:purple;">\S</span><span style="color:red;">\n</span><span style="color:cyan;">\t</span><span style="color:green;">|</span>a<span style="color:green;">*</span>b<span style="color:blue;">+</span>c<span style="color:orange;">?</span>d<span style="color:purple;">{2}</span>e<span style="color:red;">{1,}</span>f<span style="color:cyan;">{3,4}</span>a<span style="color:green;">*?</span>b<span style="color:blue;">+?</span>c<span style="color:orange;">??</span>d<span style="color:purple;">{2}?</span>e<span style="color:red;">{1,}?</span>f<span style="color:cyan;">{3,4}?</span><span style="color:green;">|</span><span style="color:green;">^</span><span style="color:blue;">\B</span>anchor<span style="color:orange;">\b</span><span style="color:purple;">$</span><span style="color:red;">[</span>\B\b^$<span style="color:red;">]</span><span style="color:green;">|</span>\a\c1\e<span style="color:cyan;">\f</span><span style="color:green;">\n</span><span style="color:blue;">\r</span><span style="color:orange;">\t</span><span style="color:purple;">\v</span><span style="color:red;">\0</span><span style="color:green;">|</span><span style="color:cyan;">\cA</span><span style="color:green;">[</span><span style="color:blue;">\ca-\cZ</span><span style="color:green;">]</span><span style="color:orange;">\u9fa5</span><span style="color:purple;">[</span><span style="color:red;">\u4e00-\u9fa5</span><span style="color:purple;">]</span><span style="color:cyan;">\xAa</span><span style="color:green;">[</span><span style="color:blue;">\x00-\xff</span><span style="color:green;">]</span><span style="color:green;">|</span><span style="color:orange;">(</span><span style="color:purple;">[</span><span style="color:red;">a-z</span><span style="color:purple;">]</span><span style="color:cyan;">\d</span><span style="color:orange;">)</span><span style="color:green;">(?:</span><span style="color:blue;">\w</span><span style="color:purple;">\s</span><span style="color:orange;">+</span><span style="color:green;">)</span><span style="color:green;">|</span>a<span style="color:red;">(?=</span>followed_by_this<span style="color:red;">)</span>b<span style="color:cyan;">(?!</span>not_followed_by_this<span style="color:cyan;">)</span>c<span style="color:green;">|</span>d<span style="color:green;">(?&lt;=</span>preceded_by_this<span style="color:green;">)</span>e<span style="color:blue;">(?&lt;!</span>preceded_by_this<span style="color:blue;">)</span>f<span style="color:green;">|</span><span style="color:orange;">^</span><span style="color:purple;">[</span> a  b   <span style="color:purple;">]</span>  e m pty spaces <span style="color:red;">[</span><span style="color:cyan;">\u4E2D</span><span style="color:red;">]</span><span style="color:green;">\u6587</span><span style="color:blue;">$</span></div>
+<div id="graph">                                      ┌─────────────────┐  ┏━━━━━<span style="color:blue;">One of</span>━━━━━━┓                                      
+   ┌──────────────────────────────────┤a1|()[]{}.?+*\\^$├──┫a1()[]{}.?+*\\|^$┣──────────────────────────────────┐   
+   │                                  └─────────────────┘  ┗━━━━━━━━━━━━━━━━━┛                                  │   
+   │                                                              ┏━━━━<span style="color:orange;">One of</span>━━━━━┓                             │   
+   │                                                              ┃.              ┃                             │   
+   │                                                              ┃<span style="color:purple; text-decoration:underline;">Digit</span></span>          ┃                             │   
+   │                                                              ┃<span style="color:red; text-decoration:underline;">Non-Digit</span></span>      ┃                             │   
+   │                                                              ┃<span style="color:cyan; text-decoration:underline;">Word</span></span>           ┃                             │   
+   │                                                    ┏<span style="color:red;">One of</span>┓  ┃<span style="color:green; text-decoration:underline;">Non-Word</span></span>       ┃                             │   
+   │                            ┏━<span style="color:orange;">One of</span>━━┓  ┏<span style="color:purple;">None of</span>┓  ┃ <span style="color:cyan; text-decoration:underline;">a→z</span></span>  ┃  ┃<span style="color:blue; text-decoration:underline;">Space</span></span>          ┃                             │   
+   ├────────────────────────────┫-a1.+*_\\┣──┫ abc-  ┣──┫ <span style="color:green; text-decoration:underline;">0→9</span></span>  ┣──┫<span style="color:orange; text-decoration:underline;">Non-Space</span></span>      ┣─────────────────────────────┤   
+   │                            ┗━━━━━━━━━┛  ┗╸╸╸╸╸╸╸┛  ┃ <span style="color:blue; text-decoration:underline;">A→Z</span></span>  ┃  ┃<span style="color:purple; text-decoration:underline;">Form-Feed</span></span>      ┃                             │   
+   │                                                    ┗━━━━━━┛  ┃<span style="color:red; text-decoration:underline;">Line-Feed</span></span>      ┃                             │   
+   │                                                              ┃<span style="color:cyan; text-decoration:underline;">Tab</span></span>            ┃                             │   
+   │                                                              ┃<span style="color:green; text-decoration:underline;">Vertical-Tab</span></span>   ┃                             │   
+   │                                                              ┃<span style="color:blue; text-decoration:underline;">Null</span></span>           ┃                             │   
+   │                                                              ┃<span style="color:orange; text-decoration:underline;">Carriage-Return</span></span>┃                             │   
+   │                                                              ┗━━━━━━━━━━━━━━━┛                             │   
+   │         ╔═.═╗  ╔═\d══╗  ╔═══\D════╗  ╔═\w═╗  ╔═══\W═══╗  ╔═\s══╗  ╔═══\S════╗  ╔═══\n════╗  ╔\t═╗          │   
+   ├─────────╣<span style="color:purple;">Any</span>╠──╣<span style="color:red;">Digit</span>╠──╣<span style="color:cyan;">Non-Digit</span>╠──╣<span style="color:green;">Word</span>╠──╣<span style="color:blue;">Non-Word</span>╠──╣<span style="color:orange;">Space</span>╠──╣<span style="color:purple;">Non-Space</span>╠──╣<span style="color:red;">Line-Feed</span>╠──╣<span style="color:cyan;">Tab</span>╠──────────┤   
+   │         ╚═══╝  ╚═════╝  ╚═════════╝  ╚════╝  ╚════════╝  ╚═════╝  ╚═════════╝  ╚═════════╝  ╚═══╝          │   
+   │                                                                                                            │   
+   │   ┌─┐      ┌─┐      ┌─┐      ┌─┐      ┌─┐      ┌─┐      ┌─┐      ┌─┐      ┌─┐      ┌─┐      ┌─┐      ┌─┐   │   
+   ├─┬─┤a├─┬──┬─┤b├─┬──┬─┤c├─┬──┬─┤d├─┬──┬─┤e├─┬──┬─┤f├─┬──┬─┤a├─┬──┬─┤b├─┬──┬─┤c├─┬──┬─┤d├─┬──┬─┤e├─┬──┬─┤f├─┬─┤   
+   │ │ └─┘ │  │ └─┘ │  │ └─┘ │  │ └─┘ │  │ └─┘ │  │ └─┘ │  ╷ └─┘ ╷  ╷ └─┘ ╷  ╷ └─┘ ╷  ╷ └─┘ ╷  ╷ └─┘ ╷  ╷ └─┘ ╷ │   
+   │ └<span style="color:green;">↺0→∞</span>─┘  └<span style="color:blue;">↻1→∞</span>─┘  └<span style="color:orange;">↺0→1</span>─┘  └─<span style="color:purple;">↻2</span>──┘  └<span style="color:red;">↻1→∞</span>─┘  └<span style="color:cyan;">↻3→4</span>─┘  └<span style="color:green;">↺0⇢∞</span>─┘  └<span style="color:blue;">↻1⇢∞</span>─┘  └<span style="color:orange;">↺0⇢1</span>─┘  └─<span style="color:purple;">↻2</span>──┘  └<span style="color:red;">↻1⇢∞</span>─┘  └<span style="color:cyan;">↻3⇢4</span>─┘ │   
+   │                  ╔══^══╗  ╔═══════\B════════╗  ┌──────┐  ╔═════\b══════╗  ╔═$═╗  ┏<span style="color:red;">One of</span>┓                  │   
+●──┼──────────────────╣<span style="color:green;">Start</span>╠──╣<span style="color:blue;">Non-Word Boundary</span>╠──┤anchor├──╣<span style="color:orange;">Word Boundary</span>╠──╣<span style="color:purple;">End</span>╠──┫ Bb^$ ┣──────────────────┼──◎
+   │                  ╚═════╝  ╚═════════════════╝  └──────┘  ╚═════════════╝  ╚═══╝  ┗━━━━━━┛                  │   
+   │             ┌────┐  ╔═══\f════╗  ╔═══\n════╗  ╔══════\r═══════╗  ╔\t═╗  ╔═════\v═════╗  ╔═\0═╗             │   
+   ├─────────────┤ac1e├──╣<span style="color:cyan;">Form-Feed</span>╠──╣<span style="color:green;">Line-Feed</span>╠──╣<span style="color:blue;">Carriage-Return</span>╠──╣<span style="color:orange;">Tab</span>╠──╣<span style="color:purple;">Vertical-Tab</span>╠──╣<span style="color:red;">Null</span>╠─────────────┤   
+   │             └────┘  ╚═════════╝  ╚═════════╝  ╚═══════════════╝  ╚═══╝  ╚════════════╝  ╚════╝             │   
+   │                 ╔═\cA══╗  ┏━━━<span style="color:green;">One of</span>━━━━┓  ╔\u9fa5╗  ┏━━━<span style="color:purple;">One of</span>━━━━┓  ╔\xAa╗  ┏━<span style="color:green;">One of</span>━━┓                  │   
+   ├─────────────────╣<span style="color:cyan;">ctrl-A</span>╠──┫<span style="color:blue; text-decoration:underline;">ctrl-A→ctrl-Z</span></span>┣──╣<span style="color:orange;">U+9FA5</span>╠──┫<span style="color:red; text-decoration:underline;">U+4E00→U+9FA5</span></span>┣──╣<span style="color:cyan;">0xAA</span>╠──┫<span style="color:blue; text-decoration:underline;">0x00→0xFF</span></span>┣──────────────────┤   
+   │                 ╚══════╝  ┗━━━━━━━━━━━━━┛  ╚══════╝  ┗━━━━━━━━━━━━━┛  ╚════╝  ┗━━━━━━━━━┛                  │   
+   │                                                      ╭╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╮                               │   
+   │                               ╭╴╴╴╴╴<span style="color:orange;">Group #1</span>╴╴╴╴╴╴╮  ╷                     ╷                               │   
+   │                               ╷ ┏<span style="color:purple;">One of</span>┓  ╔═\d══╗ ╷  ╷ ╔═\w═╗    ╔═\s══╗   ╷                               │   
+   ├───────────────────────────────┼─┫ <span style="color:red; text-decoration:underline;">a→z</span></span>  ┣──╣<span style="color:cyan;">Digit</span>╠─┼──┼─╣<span style="color:blue;">Word</span>╠──┬─╣<span style="color:purple;">Space</span>╠─┬─┼───────────────────────────────┤   
+   │                               ╷ ┗━━━━━━┛  ╚═════╝ ╷  ╷ ╚════╝  │ ╚═════╝ │ ╷                               │   
+   │                               ╰╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╯  ╷         └──<span style="color:orange;">↻1→∞</span>───┘ ╷                               │   
+   │                                                      ╰╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╯                               │   
+   │                          ╭╴╴╴╴╴<span style="color:red;">Lookahead</span>╴╴╴╴╴╴╮       ╭╴╴╴╴╴╴╴<span style="color:cyan;">!Lookahead</span>╴╴╴╴╴╴╴╮                           │   
+   │                     ┌─┐  ╷ ┌────────────────┐ ╷  ┌─┐  ╷ ┌────────────────────┐ ╷  ┌─┐                      │   
+   ├─────────────────────┤a├──┼─┤followed_by_this├─┼──┤b├──┼─┤not_followed_by_this├─┼──┤c├──────────────────────┤   
+   │                     └─┘  ╷ └────────────────┘ ╷  └─┘  ╷ └────────────────────┘ ╷  └─┘                      │   
+   │                          ╰╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╯       ╰╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╯                           │   
+   │                            ╭╴╴╴╴╴<span style="color:green;">Lookbehind</span>╴╴╴╴╴╮       ╭╴╴╴╴<span style="color:blue;">!Lookbehind</span>╴╴╴╴╴╮                             │   
+   │                       ┌─┐  ╷ ┌────────────────┐ ╷  ┌─┐  ╷ ┌────────────────┐ ╷  ┌─┐                        │   
+   ├───────────────────────┤d├──┼─┤preceded_by_this├─┼──┤e├──┼─┤preceded_by_this├─┼──┤f├────────────────────────┤   
+   │                       └─┘  ╷ └────────────────┘ ╷  └─┘  ╷ └────────────────┘ ╷  └─┘                        │   
+   │                            ╰╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╯       ╰╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╯                             │   
+   │                    ╔══^══╗  ┏━<span style="color:purple;">One of</span>━┓  ┌─────────────────┐  ┏<span style="color:red;">One of</span>┓  ╔\u6587╗  ╔═$═╗                     │   
+   └────────────────────╣<span style="color:orange;">Start</span>╠──┫▯a▯▯b▯▯▯┣──┤▯▯e▯m▯pty▯spaces▯├──┫<span style="color:cyan; text-decoration:underline;">U+4E2D</span></span>┣──╣<span style="color:green;">U+6587</span>╠──╣<span style="color:blue;">End</span>╠─────────────────────┘   
+                        ╚═════╝  ┗━━━━━━━━┛  └─────────────────┘  ┗━━━━━━┛  ╚══════╝  ╚═══╝                         
+</div></div>
+</body>
+</html>

@@ -10,6 +10,7 @@
 #include <iostream>
 #include <vector>
 #include <functional>
+#include <climits>  
 #include "utils.h"
 
 #define INF INT_MAX
@@ -357,6 +358,24 @@ static inline ExprNode* combine(ExprNode* a, ExprNode* b) {
         seq->append(b);
     }
     return seq;
+}
+
+
+static inline std::string escape(const std::string& str) {
+    std::string s;
+    for (char c : str) {
+        switch (c) {
+            case '\n': s += "\\n"; break;
+            case '\r': s += "\\r"; break;
+            case '\t': s += "\\t"; break;
+            case '\f': s += "\\f"; break;
+            case '\v': s += "\\v"; break;
+            case '\a': s += "\\a"; break;
+            case '\e': s += "\\e"; break;
+            default: s += c;
+        }
+    }
+    return s;
 }
 
 extern std::unique_ptr<ExprNode> regex_parse(const std::string& expr, bool debug=false);

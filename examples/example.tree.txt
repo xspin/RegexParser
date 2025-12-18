@@ -1,0 +1,131 @@
+Regular Expression: a1\|\(\)\[\]\{\}\.\?\+\*\\\\\^\$[a1\(\)\[\]\{\}\.\?\+\*\\\\|^$]|[-a1.+*_\\\\][^abc-][a-z0-9A-Z][.\d\D\w\W\s\S\f\n\t\v\0\r]|.\d\D\w\W\s\S\n\t|a*b+c?d{2}e{1,}f{3,4}a*?b+?c??d{2}?e{1,}?f{3,4}?|^\Banchor\b$[\B\b^$]|\a\c1\e\f\n\r\t\v\0|\cA[\ca-\cZ]\u9fa5[\u4e00-\u9fa5]\xAa[\x00-\xff]|([a-z]\d)(?:\w\s+)|a(?=followed_by_this)b(?!not_followed_by_this)c|d(?<=preceded_by_this)e(?<!preceded_by_this)f|^[ a  b   ]  e m pty spaces [\u4E2D]\u6587$
+
+(
+    <Literal a1|()[]{}.?+*\\^$>
+    [Class
+        <Literal a1()[]{}.?+*\\|^$>
+    ]
+) OR (
+    [Class
+        <Literal -a1.+*_\\>
+    ]
+    [Neg-Class
+        <Literal abc->
+    ]
+    [Class
+        <Range a-z>
+        <Range 0-9>
+        <Range A-Z>
+    ]
+    [Class
+        <Literal .>
+        <Escaped \d>
+        <Escaped \D>
+        <Escaped \w>
+        <Escaped \W>
+        <Escaped \s>
+        <Escaped \S>
+        <Escaped \f>
+        <Escaped \n>
+        <Escaped \t>
+        <Escaped \v>
+        <Escaped \0>
+        <Escaped \r>
+    ]
+) OR (
+    <Any .>
+    <Escaped \d>
+    <Escaped \D>
+    <Escaped \w>
+    <Escaped \W>
+    <Escaped \s>
+    <Escaped \S>
+    <Escaped \n>
+    <Escaped \t>
+) OR (
+    <Literal a><Quantifier {0,}>
+    <Literal b><Quantifier {1,}>
+    <Literal c><Quantifier {0,1}>
+    <Literal d><Quantifier {2,2}>
+    <Literal e><Quantifier {1,}>
+    <Literal f><Quantifier {3,4}>
+    <Literal a><Quantifier {0,}?>
+    <Literal b><Quantifier {1,}?>
+    <Literal c><Quantifier {0,1}?>
+    <Literal d><Quantifier {2,2}?>
+    <Literal e><Quantifier {1,}?>
+    <Literal f><Quantifier {3,4}?>
+) OR (
+    <Anchor ^>
+    <Anchor \B>
+    <Literal anchor>
+    <Anchor \b>
+    <Anchor $>
+    [Class
+        <Literal Bb^$>
+    ]
+) OR (
+    <Literal ac1e>
+    <Escaped \f>
+    <Escaped \n>
+    <Escaped \r>
+    <Escaped \t>
+    <Escaped \v>
+    <Escaped \0>
+) OR (
+    <Escaped \cA>
+    [Class
+        <Range \ca-\cZ>
+    ]
+    <Escaped \u9fa5>
+    [Class
+        <Range \u4e00-\u9fa5>
+    ]
+    <Escaped \xAa>
+    [Class
+        <Range \x00-\xff>
+    ]
+) OR (
+    (Group#1
+        [Class
+            <Range a-z>
+        ]
+        <Escaped \d>
+    #1)
+    (Group
+        <Escaped \w>
+        <Escaped \s><Quantifier {1,}>
+    )
+) OR (
+    <Literal a>
+    <Lookahead
+        <Literal followed_by_this>
+    >
+    <Literal b>
+    <Neg-Lookahead
+        <Literal not_followed_by_this>
+    >
+    <Literal c>
+) OR (
+    <Literal d>
+    <Lookbehind
+        <Literal preceded_by_this>
+    >
+    <Literal e>
+    <Neg-Lookbehind
+        <Literal preceded_by_this>
+    >
+    <Literal f>
+) OR (
+    <Anchor ^>
+    [Class
+        <Literal  a  b   >
+    ]
+    <Literal   e m pty spaces >
+    [Class
+        <Escaped \u4E2D>
+    ]
+    <Escaped \u6587>
+    <Anchor $>
+)
+
