@@ -108,6 +108,10 @@ Accept States: 8
 
 ## Examples of SVG and HTML Format Output
 
+[svg example](examples/example.svg)
+
 ![svg](examples/example.svg)
 
 [html example](examples/example.html)
+
+<iframe height="100%" width="100%" src="examples/example.html"></iframe>

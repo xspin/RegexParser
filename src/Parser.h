@@ -16,14 +16,14 @@
 #define INF INT_MAX
 
 #define ESC_PRE '\033'
-#define BLACK "\033[30m"
-#define RED "\033[31m"
-#define GREEN "\033[32m"
-#define YELLOW "\033[33m"
+#define BLACK "\033[90m"
+#define RED "\033[91m"
+#define GREEN "\033[92m"
+#define YELLOW "\033[93m"
 #define BLUE "\033[94m"
-#define PURPLE "\033[35m"
-#define CYAN "\033[36m"
-#define WHITE "\033[37m"
+#define PURPLE "\033[95m"
+#define CYAN "\033[96m"
+#define WHITE "\033[97m"
 #define UNDERLINE "\033[04m"
 #define NC "\033[00m"
 
