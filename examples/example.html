@@ -5,20 +5,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Regular Expression Visualization</title>
     <style>
-        body {  margin: 20px;}
-        pre { background: #f4f4f4; padding: 10px; border-radius: 5px; }
-        .diagram {
-            line-height: 1.3;
-            vertical-align: middle;
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --btn-bg: #f0f0f0;
+            --btn-text: #333333;
+            --border-color: #e0e0e0;
+            transition: all 0.3s ease;
+        }
+        :root.dark-mode {
+            --bg-color: #1a1a1a;
+            --text-color: #bbbbbb;
+            --btn-bg: #333333;
+            --btn-text: #f5f5f5;
+            --border-color: #444444;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
             font-size: 15px;
             font-family: monospace, Consolas, Monaco, Menlo;
-            letter-spacing: 0; white-space: pre;}
-        .diagram #label {
-            padding: 4px 4px;
-            float: left;
         }
-        .diagram #expr { 
-            float: left;
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 999; 
+            padding: 5px 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: var(--btn-bg);
+            color: var(--btn-text);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+        }
+        .theme-toggle:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+        }
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 20px 0;
+            background-color: var(--bg-color);
+            display: flex;
+            flex-wrap: nowrap;
+            z-index: 99;
+            width: 100%;
+        }
+        .header #label {
+            flex: 0;
+            padding: 4px 0px;
+            margin-right: 5px;
+            margin-left: 10px;
+            width: fit-content;
+            white-space: nowrap;
+        }
+        .header #expr { 
             text-decoration: none;
             padding: 4px 4px;
             border: gray 1px solid;
@@ -26,12 +71,27 @@
             overflow-y: hidden;
             overflow-x: auto; 
             white-space: nowrap;
-            width: max-content;
-            max-width: 800px;
+            min-width: 200px;
+            flex: 1;
+            margin-right: 20px;
+            max-width: fit-content;
         }
-        .diagram #graph {
-            float: left;
-            margin-top: 1em;
+        #expr::-webkit-scrollbar {
+            height: 8px; 
+            background-color: var(--btn-bg);
+            border-radius: 4px;
+        }
+        #expr::-webkit-scrollbar-thumb {
+            background-color: #aaaaaa;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+        .diagram {
+            line-height: 1.3;
+            vertical-align: middle;
+            letter-spacing: 0;
+            white-space: pre;
+            margin-top: 80px;
         }
         .diagram .double-width {
             display: inline-block;
@@ -46,62 +106,79 @@
     </style>
 </head>
 <body>
-    <div class="diagram"><div id="label">Regular Expression:</div><div id="expr"></span>a1\|\(\)\[\]\{\}\.\?\+\*\\\\\^\$<span style="color:blue;">[</span>a1\(\)\[\]\{\}\.\?\+\*\\\\|^$<span style="color:blue;">]</span><span style="color:green;">|</span><span style="color:orange;">[</span>-a1.+*_\\\\<span style="color:orange;">]</span><span style="color:purple;">[^</span>abc-<span style="color:purple;">]</span><span style="color:red;">[</span><span style="color:cyan;">a-z</span><span style="color:green;">0-9</span><span style="color:blue;">A-Z</span><span style="color:red;">]</span><span style="color:orange;">[</span>.<span style="color:purple;">\d</span><span style="color:red;">\D</span><span style="color:cyan;">\w</span><span style="color:green;">\W</span><span style="color:blue;">\s</span><span style="color:orange;">\S</span><span style="color:purple;">\f</span><span style="color:red;">\n</span><span style="color:cyan;">\t</span><span style="color:green;">\v</span><span style="color:blue;">\0</span><span style="color:orange;">\r</span><span style="color:orange;">]</span><span style="color:green;">|</span><span style="color:purple;">.</span><span style="color:red;">\d</span><span style="color:cyan;">\D</span><span style="color:green;">\w</span><span style="color:blue;">\W</span><span style="color:orange;">\s</span><span style="color:purple;">\S</span><span style="color:red;">\n</span><span style="color:cyan;">\t</span><span style="color:green;">|</span>a<span style="color:green;">*</span>b<span style="color:blue;">+</span>c<span style="color:orange;">?</span>d<span style="color:purple;">{2}</span>e<span style="color:red;">{1,}</span>f<span style="color:cyan;">{3,4}</span>a<span style="color:green;">*?</span>b<span style="color:blue;">+?</span>c<span style="color:orange;">??</span>d<span style="color:purple;">{2}?</span>e<span style="color:red;">{1,}?</span>f<span style="color:cyan;">{3,4}?</span><span style="color:green;">|</span><span style="color:green;">^</span><span style="color:blue;">\B</span>anchor<span style="color:orange;">\b</span><span style="color:purple;">$</span><span style="color:red;">[</span>\B\b^$<span style="color:red;">]</span><span style="color:green;">|</span>\a\c1\e<span style="color:cyan;">\f</span><span style="color:green;">\n</span><span style="color:blue;">\r</span><span style="color:orange;">\t</span><span style="color:purple;">\v</span><span style="color:red;">\0</span><span style="color:green;">|</span><span style="color:cyan;">\cA</span><span style="color:green;">[</span><span style="color:blue;">\ca-\cZ</span><span style="color:green;">]</span><span style="color:orange;">\u9fa5</span><span style="color:purple;">[</span><span style="color:red;">\u4e00-\u9fa5</span><span style="color:purple;">]</span><span style="color:cyan;">\xAa</span><span style="color:green;">[</span><span style="color:blue;">\x00-\xff</span><span style="color:green;">]</span><span style="color:green;">|</span><span style="color:orange;">(</span><span style="color:purple;">[</span><span style="color:red;">a-z</span><span style="color:purple;">]</span><span style="color:cyan;">\d</span><span style="color:orange;">)</span><span style="color:green;">(?:</span><span style="color:blue;">\w</span><span style="color:purple;">\s</span><span style="color:orange;">+</span><span style="color:green;">)</span><span style="color:green;">|</span>a<span style="color:red;">(?=</span>followed_by_this<span style="color:red;">)</span>b<span style="color:cyan;">(?!</span>not_followed_by_this<span style="color:cyan;">)</span>c<span style="color:green;">|</span>d<span style="color:green;">(?&lt;=</span>preceded_by_this<span style="color:green;">)</span>e<span style="color:blue;">(?&lt;!</span>preceded_by_this<span style="color:blue;">)</span>f<span style="color:green;">|</span><span style="color:orange;">^</span><span style="color:purple;">[</span> a  b   <span style="color:purple;">]</span>  e m pty spaces <span style="color:red;">[</span><span style="color:cyan;">\u4E2D</span><span style="color:red;">]</span><span style="color:green;">\u6587</span><span style="color:blue;">$</span></div>
-<div id="graph">                                      ┌─────────────────┐  ┏━━━━━<span style="color:blue;">One of</span>━━━━━━┓                                      
+    <button class="theme-toggle" id="themeToggleBtn"></button>
+    <div class="header"><div id="label">Regular Expression:</div><div id="expr">a1\|\(\)\[\]\{\}\.\?\+\*\\\\\^\$<span style="color:#3B82F6;">[</span>a1\(\)\[\]\{\}\.\?\+\*\\\\|^$<span style="color:#3B82F6;">]</span><span style="color:#22C55E;">|</span><span style="color:#F59E0B;">[</span>-a1.+*_\\\\<span style="color:#F59E0B;">]</span><span style="color:#8B5CF6;">[^</span>abc-<span style="color:#8B5CF6;">]</span><span style="color:#EF4444;">[</span><span style="color:#06B6D4;">a-z</span><span style="color:#22C55E;">0-9</span><span style="color:#3B82F6;">A-Z</span><span style="color:#EF4444;">]</span><span style="color:#F59E0B;">[</span>.<span style="color:#8B5CF6;">\d</span><span style="color:#EF4444;">\D</span><span style="color:#06B6D4;">\w</span><span style="color:#22C55E;">\W</span><span style="color:#3B82F6;">\s</span><span style="color:#F59E0B;">\S</span><span style="color:#8B5CF6;">\f</span><span style="color:#EF4444;">\n</span><span style="color:#06B6D4;">\t</span><span style="color:#22C55E;">\v</span><span style="color:#3B82F6;">\0</span><span style="color:#F59E0B;">\r</span><span style="color:#F59E0B;">]</span><span style="color:#22C55E;">|</span><span style="color:#8B5CF6;">.</span><span style="color:#EF4444;">\d</span><span style="color:#06B6D4;">\D</span><span style="color:#22C55E;">\w</span><span style="color:#3B82F6;">\W</span><span style="color:#F59E0B;">\s</span><span style="color:#8B5CF6;">\S</span><span style="color:#EF4444;">\n</span><span style="color:#06B6D4;">\t</span><span style="color:#22C55E;">|</span>a<span style="color:#22C55E;">*</span>b<span style="color:#3B82F6;">+</span>c<span style="color:#F59E0B;">?</span>d<span style="color:#8B5CF6;">{2}</span>e<span style="color:#EF4444;">{1,}</span>f<span style="color:#06B6D4;">{3,4}</span>a<span style="color:#22C55E;">*?</span>b<span style="color:#3B82F6;">+?</span>c<span style="color:#F59E0B;">??</span>d<span style="color:#8B5CF6;">{2}?</span>e<span style="color:#EF4444;">{1,}?</span>f<span style="color:#06B6D4;">{3,4}?</span><span style="color:#22C55E;">|</span><span style="color:#22C55E;">^</span><span style="color:#3B82F6;">\B</span>anchor<span style="color:#F59E0B;">\b</span><span style="color:#8B5CF6;">$</span><span style="color:#EF4444;">[</span>\B\b^$<span style="color:#EF4444;">]</span><span style="color:#22C55E;">|</span>\a\c1\e<span style="color:#06B6D4;">\f</span><span style="color:#22C55E;">\n</span><span style="color:#3B82F6;">\r</span><span style="color:#F59E0B;">\t</span><span style="color:#8B5CF6;">\v</span><span style="color:#EF4444;">\0</span><span style="color:#22C55E;">|</span><span style="color:#06B6D4;">\cA</span><span style="color:#22C55E;">[</span><span style="color:#3B82F6;">\ca-\cZ</span><span style="color:#22C55E;">]</span><span style="color:#F59E0B;">\u9fa5</span><span style="color:#8B5CF6;">[</span><span style="color:#EF4444;">\u4e00-\u9fa5</span><span style="color:#8B5CF6;">]</span><span style="color:#06B6D4;">\xAa</span><span style="color:#22C55E;">[</span><span style="color:#3B82F6;">\x00-\xff</span><span style="color:#22C55E;">]</span><span style="color:#22C55E;">|</span><span style="color:#F59E0B;">(</span><span style="color:#8B5CF6;">[</span><span style="color:#EF4444;">a-z</span><span style="color:#8B5CF6;">]</span><span style="color:#06B6D4;">\d</span><span style="color:#F59E0B;">)</span><span style="color:#22C55E;">(?:</span><span style="color:#3B82F6;">\w</span><span style="color:#8B5CF6;">\s</span><span style="color:#F59E0B;">+</span><span style="color:#22C55E;">)</span><span style="color:#22C55E;">|</span>a<span style="color:#EF4444;">(?=</span>followed_by_this<span style="color:#EF4444;">)</span>b<span style="color:#06B6D4;">(?!</span>not_followed_by_this<span style="color:#06B6D4;">)</span>c<span style="color:#22C55E;">|</span>d<span style="color:#22C55E;">(?&lt;=</span>preceded_by_this<span style="color:#22C55E;">)</span>e<span style="color:#3B82F6;">(?&lt;!</span>preceded_by_this<span style="color:#3B82F6;">)</span>f<span style="color:#22C55E;">|</span><span style="color:#F59E0B;">^</span><span style="color:#8B5CF6;">[</span> a  b   <span style="color:#8B5CF6;">]</span>  e m pty spaces <span style="color:#EF4444;">[</span><span style="color:#06B6D4;">\u4E2D</span><span style="color:#EF4444;">]</span><span style="color:#22C55E;">\u6587</span><span style="color:#3B82F6;">$</span></div></div>
+    <div class="diagram">                                      ┌─────────────────┐  ┏━━━━━<span style="color:#3B82F6;">One of</span>━━━━━━┓                                      
    ┌──────────────────────────────────┤a1|()[]{}.?+*\\^$├──┫a1()[]{}.?+*\\|^$┣──────────────────────────────────┐   
    │                                  └─────────────────┘  ┗━━━━━━━━━━━━━━━━━┛                                  │   
-   │                                                              ┏━━━━<span style="color:orange;">One of</span>━━━━━┓                             │   
+   │                                                              ┏━━━━<span style="color:#F59E0B;">One of</span>━━━━━┓                             │   
    │                                                              ┃.              ┃                             │   
-   │                                                              ┃<span style="color:purple; text-decoration:underline;">Digit</span></span>          ┃                             │   
-   │                                                              ┃<span style="color:red; text-decoration:underline;">Non-Digit</span></span>      ┃                             │   
-   │                                                              ┃<span style="color:cyan; text-decoration:underline;">Word</span></span>           ┃                             │   
-   │                                                    ┏<span style="color:red;">One of</span>┓  ┃<span style="color:green; text-decoration:underline;">Non-Word</span></span>       ┃                             │   
-   │                            ┏━<span style="color:orange;">One of</span>━━┓  ┏<span style="color:purple;">None of</span>┓  ┃ <span style="color:cyan;">a</span>→<span style="color:cyan;">z</span>  ┃  ┃<span style="color:blue; text-decoration:underline;">Space</span></span>          ┃                             │   
-   ├────────────────────────────┫-a1.+*_\\┣──┫ abc-  ┣──┫ <span style="color:green;">0</span>→<span style="color:green;">9</span>  ┣──┫<span style="color:orange; text-decoration:underline;">Non-Space</span></span>      ┣─────────────────────────────┤   
-   │                            ┗━━━━━━━━━┛  ┗╸╸╸╸╸╸╸┛  ┃ <span style="color:blue;">A</span>→<span style="color:blue;">Z</span>  ┃  ┃<span style="color:purple; text-decoration:underline;">Form-Feed</span></span>      ┃                             │   
-   │                                                    ┗━━━━━━┛  ┃<span style="color:red; text-decoration:underline;">Line-Feed</span></span>      ┃                             │   
-   │                                                              ┃<span style="color:cyan; text-decoration:underline;">Tab</span></span>            ┃                             │   
-   │                                                              ┃<span style="color:green; text-decoration:underline;">Vertical-Tab</span></span>   ┃                             │   
-   │                                                              ┃<span style="color:blue; text-decoration:underline;">Null</span></span>           ┃                             │   
-   │                                                              ┃<span style="color:orange; text-decoration:underline;">Carriage-Return</span></span>┃                             │   
+   │                                                              ┃<span style="color:#8B5CF6; text-decoration:underline;">Digit</span>          ┃                             │   
+   │                                                              ┃<span style="color:#EF4444; text-decoration:underline;">Non-Digit</span>      ┃                             │   
+   │                                                              ┃<span style="color:#06B6D4; text-decoration:underline;">Word</span>           ┃                             │   
+   │                                                    ┏<span style="color:#EF4444;">One of</span>┓  ┃<span style="color:#22C55E; text-decoration:underline;">Non-Word</span>       ┃                             │   
+   │                            ┏━<span style="color:#F59E0B;">One of</span>━━┓  ┏<span style="color:#8B5CF6;">None of</span>┓  ┃ <span style="color:#06B6D4;">a</span>→<span style="color:#06B6D4;">z</span>  ┃  ┃<span style="color:#3B82F6; text-decoration:underline;">Space</span>          ┃                             │   
+   ├────────────────────────────┫-a1.+*_\\┣──┫ abc-  ┣──┫ <span style="color:#22C55E;">0</span>→<span style="color:#22C55E;">9</span>  ┣──┫<span style="color:#F59E0B; text-decoration:underline;">Non-Space</span>      ┣─────────────────────────────┤   
+   │                            ┗━━━━━━━━━┛  ┗╸╸╸╸╸╸╸┛  ┃ <span style="color:#3B82F6;">A</span>→<span style="color:#3B82F6;">Z</span>  ┃  ┃<span style="color:#8B5CF6; text-decoration:underline;">Form-Feed</span>      ┃                             │   
+   │                                                    ┗━━━━━━┛  ┃<span style="color:#EF4444; text-decoration:underline;">Line-Feed</span>      ┃                             │   
+   │                                                              ┃<span style="color:#06B6D4; text-decoration:underline;">Tab</span>            ┃                             │   
+   │                                                              ┃<span style="color:#22C55E; text-decoration:underline;">Vertical-Tab</span>   ┃                             │   
+   │                                                              ┃<span style="color:#3B82F6; text-decoration:underline;">Null</span>           ┃                             │   
+   │                                                              ┃<span style="color:#F59E0B; text-decoration:underline;">Carriage-Return</span>┃                             │   
    │                                                              ┗━━━━━━━━━━━━━━━┛                             │   
    │         ╔═.═╗  ╔═\d══╗  ╔═══\D════╗  ╔═\w═╗  ╔═══\W═══╗  ╔═\s══╗  ╔═══\S════╗  ╔═══\n════╗  ╔\t═╗          │   
-   ├─────────╣<span style="color:purple;">Any</span>╠──╣<span style="color:red;">Digit</span>╠──╣<span style="color:cyan;">Non-Digit</span>╠──╣<span style="color:green;">Word</span>╠──╣<span style="color:blue;">Non-Word</span>╠──╣<span style="color:orange;">Space</span>╠──╣<span style="color:purple;">Non-Space</span>╠──╣<span style="color:red;">Line-Feed</span>╠──╣<span style="color:cyan;">Tab</span>╠──────────┤   
+   ├─────────╣<span style="color:#8B5CF6;">Any</span>╠──╣<span style="color:#EF4444;">Digit</span>╠──╣<span style="color:#06B6D4;">Non-Digit</span>╠──╣<span style="color:#22C55E;">Word</span>╠──╣<span style="color:#3B82F6;">Non-Word</span>╠──╣<span style="color:#F59E0B;">Space</span>╠──╣<span style="color:#8B5CF6;">Non-Space</span>╠──╣<span style="color:#EF4444;">Line-Feed</span>╠──╣<span style="color:#06B6D4;">Tab</span>╠──────────┤   
    │         ╚═══╝  ╚═════╝  ╚═════════╝  ╚════╝  ╚════════╝  ╚═════╝  ╚═════════╝  ╚═════════╝  ╚═══╝          │   
    │                                                                                                            │   
    │   ┌─┐      ┌─┐      ┌─┐      ┌─┐      ┌─┐      ┌─┐      ┌─┐      ┌─┐      ┌─┐      ┌─┐      ┌─┐      ┌─┐   │   
    ├─┬─┤a├─┬──┬─┤b├─┬──┬─┤c├─┬──┬─┤d├─┬──┬─┤e├─┬──┬─┤f├─┬──┬─┤a├─┬──┬─┤b├─┬──┬─┤c├─┬──┬─┤d├─┬──┬─┤e├─┬──┬─┤f├─┬─┤   
    │ │ └─┘ │  │ └─┘ │  │ └─┘ │  │ └─┘ │  │ └─┘ │  │ └─┘ │  ╷ └─┘ ╷  ╷ └─┘ ╷  ╷ └─┘ ╷  ╷ └─┘ ╷  ╷ └─┘ ╷  ╷ └─┘ ╷ │   
-   │ └<span style="color:green;">↺0→∞</span>─┘  └<span style="color:blue;">↻1→∞</span>─┘  └<span style="color:orange;">↺0→1</span>─┘  └─<span style="color:purple;">↻2</span>──┘  └<span style="color:red;">↻1→∞</span>─┘  └<span style="color:cyan;">↻3→4</span>─┘  └<span style="color:green;">↺0⇢∞</span>─┘  └<span style="color:blue;">↻1⇢∞</span>─┘  └<span style="color:orange;">↺0⇢1</span>─┘  └─<span style="color:purple;">↻2</span>──┘  └<span style="color:red;">↻1⇢∞</span>─┘  └<span style="color:cyan;">↻3⇢4</span>─┘ │   
-   │                  ╔══^══╗  ╔═══════\B════════╗  ┌──────┐  ╔═════\b══════╗  ╔═$═╗  ┏<span style="color:red;">One of</span>┓                  │   
-●──┼──────────────────╣<span style="color:green;">Start</span>╠──╣<span style="color:blue;">Non-Word Boundary</span>╠──┤anchor├──╣<span style="color:orange;">Word Boundary</span>╠──╣<span style="color:purple;">End</span>╠──┫ Bb^$ ┣──────────────────┼──◎
+   │ └<span style="color:#22C55E;">↺0→∞</span>─┘  └<span style="color:#3B82F6;">↻1→∞</span>─┘  └<span style="color:#F59E0B;">↺0→1</span>─┘  └─<span style="color:#8B5CF6;">↻2</span>──┘  └<span style="color:#EF4444;">↻1→∞</span>─┘  └<span style="color:#06B6D4;">↻3→4</span>─┘  └<span style="color:#22C55E;">↺0⇢∞</span>─┘  └<span style="color:#3B82F6;">↻1⇢∞</span>─┘  └<span style="color:#F59E0B;">↺0⇢1</span>─┘  └─<span style="color:#8B5CF6;">↻2</span>──┘  └<span style="color:#EF4444;">↻1⇢∞</span>─┘  └<span style="color:#06B6D4;">↻3⇢4</span>─┘ │   
+   │                  ╔══^══╗  ╔═══════\B════════╗  ┌──────┐  ╔═════\b══════╗  ╔═$═╗  ┏<span style="color:#EF4444;">One of</span>┓                  │   
+●──┼──────────────────╣<span style="color:#22C55E;">Start</span>╠──╣<span style="color:#3B82F6;">Non-Word Boundary</span>╠──┤anchor├──╣<span style="color:#F59E0B;">Word Boundary</span>╠──╣<span style="color:#8B5CF6;">End</span>╠──┫ Bb^$ ┣──────────────────┼──◎
    │                  ╚═════╝  ╚═════════════════╝  └──────┘  ╚═════════════╝  ╚═══╝  ┗━━━━━━┛                  │   
    │             ┌────┐  ╔═══\f════╗  ╔═══\n════╗  ╔══════\r═══════╗  ╔\t═╗  ╔═════\v═════╗  ╔═\0═╗             │   
-   ├─────────────┤ac1e├──╣<span style="color:cyan;">Form-Feed</span>╠──╣<span style="color:green;">Line-Feed</span>╠──╣<span style="color:blue;">Carriage-Return</span>╠──╣<span style="color:orange;">Tab</span>╠──╣<span style="color:purple;">Vertical-Tab</span>╠──╣<span style="color:red;">Null</span>╠─────────────┤   
+   ├─────────────┤ac1e├──╣<span style="color:#06B6D4;">Form-Feed</span>╠──╣<span style="color:#22C55E;">Line-Feed</span>╠──╣<span style="color:#3B82F6;">Carriage-Return</span>╠──╣<span style="color:#F59E0B;">Tab</span>╠──╣<span style="color:#8B5CF6;">Vertical-Tab</span>╠──╣<span style="color:#EF4444;">Null</span>╠─────────────┤   
    │             └────┘  ╚═════════╝  ╚═════════╝  ╚═══════════════╝  ╚═══╝  ╚════════════╝  ╚════╝             │   
-   │                 ╔═\cA══╗  ┏━━━<span style="color:green;">One of</span>━━━━┓  ╔\u9fa5╗  ┏━━━<span style="color:purple;">One of</span>━━━━┓  ╔\xAa╗  ┏━<span style="color:green;">One of</span>━━┓                  │   
-   ├─────────────────╣<span style="color:cyan;">ctrl-A</span>╠──┫<span style="color:blue;">ctrl-A</span>→<span style="color:blue;">ctrl-Z</span>┣──╣<span style="color:orange;">U+9FA5</span>╠──┫<span style="color:red;">U+4E00</span>→<span style="color:red;">U+9FA5</span>┣──╣<span style="color:cyan;">0xAA</span>╠──┫<span style="color:blue;">0x00</span>→<span style="color:blue;">0xFF</span>┣──────────────────┤   
+   │                 ╔═\cA══╗  ┏━━━<span style="color:#22C55E;">One of</span>━━━━┓  ╔\u9fa5╗  ┏━━━<span style="color:#8B5CF6;">One of</span>━━━━┓  ╔\xAa╗  ┏━<span style="color:#22C55E;">One of</span>━━┓                  │   
+   ├─────────────────╣<span style="color:#06B6D4;">Ctrl-A</span>╠──┫<span style="color:#3B82F6;">Ctrl-A</span>→<span style="color:#3B82F6;">Ctrl-Z</span>┣──╣<span style="color:#F59E0B;">U+9FA5</span>╠──┫<span style="color:#EF4444;">U+4E00</span>→<span style="color:#EF4444;">U+9FA5</span>┣──╣<span style="color:#06B6D4;">0xAA</span>╠──┫<span style="color:#3B82F6;">0x00</span>→<span style="color:#3B82F6;">0xFF</span>┣──────────────────┤   
    │                 ╚══════╝  ┗━━━━━━━━━━━━━┛  ╚══════╝  ┗━━━━━━━━━━━━━┛  ╚════╝  ┗━━━━━━━━━┛                  │   
    │                                                      ╭╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╮                               │   
-   │                               ╭╴╴╴╴╴<span style="color:orange;">Group #1</span>╴╴╴╴╴╴╮  ╷                     ╷                               │   
-   │                               ╷ ┏<span style="color:purple;">One of</span>┓  ╔═\d══╗ ╷  ╷ ╔═\w═╗    ╔═\s══╗   ╷                               │   
-   ├───────────────────────────────┼─┫ <span style="color:red;">a</span>→<span style="color:red;">z</span>  ┣──╣<span style="color:cyan;">Digit</span>╠─┼──┼─╣<span style="color:blue;">Word</span>╠──┬─╣<span style="color:purple;">Space</span>╠─┬─┼───────────────────────────────┤   
+   │                               ╭╴╴╴╴╴<span style="color:#F59E0B;">Group #1</span>╴╴╴╴╴╴╮  ╷                     ╷                               │   
+   │                               ╷ ┏<span style="color:#8B5CF6;">One of</span>┓  ╔═\d══╗ ╷  ╷ ╔═\w═╗    ╔═\s══╗   ╷                               │   
+   ├───────────────────────────────┼─┫ <span style="color:#EF4444;">a</span>→<span style="color:#EF4444;">z</span>  ┣──╣<span style="color:#06B6D4;">Digit</span>╠─┼──┼─╣<span style="color:#3B82F6;">Word</span>╠──┬─╣<span style="color:#8B5CF6;">Space</span>╠─┬─┼───────────────────────────────┤   
    │                               ╷ ┗━━━━━━┛  ╚═════╝ ╷  ╷ ╚════╝  │ ╚═════╝ │ ╷                               │   
-   │                               ╰╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╯  ╷         └──<span style="color:orange;">↻1→∞</span>───┘ ╷                               │   
+   │                               ╰╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╯  ╷         └──<span style="color:#F59E0B;">↻1→∞</span>───┘ ╷                               │   
    │                                                      ╰╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╯                               │   
-   │                          ╭╴╴╴╴╴<span style="color:red;">Lookahead</span>╴╴╴╴╴╴╮       ╭╴╴╴╴╴╴╴<span style="color:cyan;">!Lookahead</span>╴╴╴╴╴╴╴╮                           │   
+   │                          ╭╴╴╴╴╴<span style="color:#EF4444;">Lookahead</span>╴╴╴╴╴╴╮       ╭╴╴╴╴╴╴╴<span style="color:#06B6D4;">!Lookahead</span>╴╴╴╴╴╴╴╮                           │   
    │                     ┌─┐  ╷ ┌────────────────┐ ╷  ┌─┐  ╷ ┌────────────────────┐ ╷  ┌─┐                      │   
    ├─────────────────────┤a├──┼─┤followed_by_this├─┼──┤b├──┼─┤not_followed_by_this├─┼──┤c├──────────────────────┤   
    │                     └─┘  ╷ └────────────────┘ ╷  └─┘  ╷ └────────────────────┘ ╷  └─┘                      │   
    │                          ╰╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╯       ╰╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╯                           │   
-   │                            ╭╴╴╴╴╴<span style="color:green;">Lookbehind</span>╴╴╴╴╴╮       ╭╴╴╴╴<span style="color:blue;">!Lookbehind</span>╴╴╴╴╴╮                             │   
+   │                            ╭╴╴╴╴╴<span style="color:#22C55E;">Lookbehind</span>╴╴╴╴╴╮       ╭╴╴╴╴<span style="color:#3B82F6;">!Lookbehind</span>╴╴╴╴╴╮                             │   
    │                       ┌─┐  ╷ ┌────────────────┐ ╷  ┌─┐  ╷ ┌────────────────┐ ╷  ┌─┐                        │   
    ├───────────────────────┤d├──┼─┤preceded_by_this├─┼──┤e├──┼─┤preceded_by_this├─┼──┤f├────────────────────────┤   
    │                       └─┘  ╷ └────────────────┘ ╷  └─┘  ╷ └────────────────┘ ╷  └─┘                        │   
    │                            ╰╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╯       ╰╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╯                             │   
-   │                    ╔══^══╗  ┏━<span style="color:purple;">One of</span>━┓  ┌─────────────────┐  ┏<span style="color:red;">One of</span>┓  ╔\u6587╗  ╔═$═╗                     │   
-   └────────────────────╣<span style="color:orange;">Start</span>╠──┫▯a▯▯b▯▯▯┣──┤▯▯e▯m▯pty▯spaces▯├──┫<span style="color:cyan; text-decoration:underline;">U+4E2D</span></span>┣──╣<span style="color:green;">U+6587</span>╠──╣<span style="color:blue;">End</span>╠─────────────────────┘   
+   │                    ╔══^══╗  ┏━<span style="color:#8B5CF6;">One of</span>━┓  ┌─────────────────┐  ┏<span style="color:#EF4444;">One of</span>┓  ╔\u6587╗  ╔═$═╗                     │   
+   └────────────────────╣<span style="color:#F59E0B;">Start</span>╠──┫▯a▯▯b▯▯▯┣──┤▯▯e▯m▯pty▯spaces▯├──┫<span style="color:#06B6D4; text-decoration:underline;">U+4E2D</span>┣──╣<span style="color:#22C55E;">U+6587</span>╠──╣<span style="color:#3B82F6;">End</span>╠─────────────────────┘   
                         ╚═════╝  ┗━━━━━━━━┛  └─────────────────┘  ┗━━━━━━┛  ╚══════╝  ╚═══╝                         
-</div></div>
+</div>
+<script>
+    const toggleBtn = document.getElementById('themeToggleBtn');
+    const root = document.documentElement;
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        root.classList.add('dark-mode');
+        toggleBtn.textContent = '☪';
+    } else {
+        toggleBtn.textContent = '☼';
+    }
+    toggleBtn.addEventListener('click', () => {
+        const isDark = root.classList.toggle('dark-mode');
+        toggleBtn.textContent = isDark ? '☪' : '☼';
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+</script>
 </body>
 </html>

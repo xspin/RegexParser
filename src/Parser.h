@@ -31,17 +31,17 @@
 static inline std::string esc_code_color(const std::string& code) {
     std::string color;
     if (code == RED) {
-        color = "red";
+        color = "#EF4444";
     } else if (code == GREEN) {
-        color = "green";
+        color = "#22C55E";
     } else if (code == YELLOW) {
-        color = "orange";
+        color = "#F59E0B";
     } else if (code == BLUE) {
-        color = "blue";
+        color = "#3B82F6";
     } else if (code == PURPLE) {
-        color = "purple";
+        color = "#8B5CF6";
     } else if (code == CYAN) {
-        color = "cyan";
+        color = "#06B6D4";
     } else if (code == BLACK) {
         color = "black";
     } else if (code == WHITE) {

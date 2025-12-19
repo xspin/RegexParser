@@ -5,156 +5,156 @@
 <tspan y="28" x="72 80 88 96 104 112 120 128 136 144 152">Expression:</tspan>
 <tspan y="28" x=""></tspan>
 <tspan y="28" x="168 176 184 192 200 208 216 224 232 240 248 256 264 272 280 288 296 304 312 320 328 336 344 352 360 368 376 384 392 400 408 416">a1\|\(\)\[\]\{\}\.\?\+\*\\\\\^\$</tspan>
-<tspan y="28" x="424" fill="blue">[</tspan>
+<tspan y="28" x="424" fill="#3B82F6">[</tspan>
 <tspan y="28" x="432 440 448 456 464 472 480 488 496 504 512 520 528 536 544 552 560 568 576 584 592 600 608 616 624 632 640 648 656">a1\(\)\[\]\{\}\.\?\+\*\\\\|^$</tspan>
-<tspan y="28" x="664" fill="blue">]</tspan>
-<tspan y="28" x="672" fill="green">|</tspan>
-<tspan y="28" x="680" fill="orange">[</tspan>
+<tspan y="28" x="664" fill="#3B82F6">]</tspan>
+<tspan y="28" x="672" fill="#22C55E">|</tspan>
+<tspan y="28" x="680" fill="#F59E0B">[</tspan>
 <tspan y="42" x=""></tspan>
 <tspan y="42" x="168 176 184 192 200 208 216 224 232 240 248">-a1.+*_\\\\</tspan>
-<tspan y="42" x="256" fill="orange">]</tspan>
-<tspan y="42" x="264 272" fill="purple">[^</tspan>
+<tspan y="42" x="256" fill="#F59E0B">]</tspan>
+<tspan y="42" x="264 272" fill="#8B5CF6">[^</tspan>
 <tspan y="42" x="280 288 296 304">abc-</tspan>
-<tspan y="42" x="312" fill="purple">]</tspan>
-<tspan y="42" x="320" fill="red">[</tspan>
-<tspan y="42" x="328 336 344" fill="cyan">a-z</tspan>
-<tspan y="42" x="352 360 368" fill="green">0-9</tspan>
-<tspan y="42" x="376 384 392" fill="blue">A-Z</tspan>
-<tspan y="42" x="400" fill="red">]</tspan>
-<tspan y="42" x="408" fill="orange">[</tspan>
+<tspan y="42" x="312" fill="#8B5CF6">]</tspan>
+<tspan y="42" x="320" fill="#EF4444">[</tspan>
+<tspan y="42" x="328 336 344" fill="#06B6D4">a-z</tspan>
+<tspan y="42" x="352 360 368" fill="#22C55E">0-9</tspan>
+<tspan y="42" x="376 384 392" fill="#3B82F6">A-Z</tspan>
+<tspan y="42" x="400" fill="#EF4444">]</tspan>
+<tspan y="42" x="408" fill="#F59E0B">[</tspan>
 <tspan y="42" x="416">.</tspan>
-<tspan y="42" x="424 432" fill="purple">\d</tspan>
-<tspan y="42" x="440 448" fill="red">\D</tspan>
-<tspan y="42" x="456 464" fill="cyan">\w</tspan>
-<tspan y="42" x="472 480" fill="green">\W</tspan>
-<tspan y="42" x="488 496" fill="blue">\s</tspan>
-<tspan y="42" x="504 512" fill="orange">\S</tspan>
-<tspan y="42" x="520 528" fill="purple">\f</tspan>
-<tspan y="42" x="536 544" fill="red">\n</tspan>
-<tspan y="42" x="552 560" fill="cyan">\t</tspan>
-<tspan y="42" x="568 576" fill="green">\v</tspan>
-<tspan y="42" x="584 592" fill="blue">\0</tspan>
-<tspan y="42" x="600 608" fill="orange">\r</tspan>
-<tspan y="42" x="616" fill="orange">]</tspan>
-<tspan y="42" x="624" fill="green">|</tspan>
-<tspan y="42" x="632" fill="purple">.</tspan>
-<tspan y="42" x="640 648" fill="red">\d</tspan>
-<tspan y="42" x="656 664" fill="cyan">\D</tspan>
-<tspan y="42" x="672 680" fill="green">\w</tspan>
-<tspan y="42" x="688 696" fill="blue">\W</tspan>
-<tspan y="56" x="168 176" fill="orange">\s</tspan>
-<tspan y="56" x="184 192" fill="purple">\S</tspan>
-<tspan y="56" x="200 208" fill="red">\n</tspan>
-<tspan y="56" x="216 224" fill="cyan">\t</tspan>
-<tspan y="56" x="232" fill="green">|</tspan>
+<tspan y="42" x="424 432" fill="#8B5CF6">\d</tspan>
+<tspan y="42" x="440 448" fill="#EF4444">\D</tspan>
+<tspan y="42" x="456 464" fill="#06B6D4">\w</tspan>
+<tspan y="42" x="472 480" fill="#22C55E">\W</tspan>
+<tspan y="42" x="488 496" fill="#3B82F6">\s</tspan>
+<tspan y="42" x="504 512" fill="#F59E0B">\S</tspan>
+<tspan y="42" x="520 528" fill="#8B5CF6">\f</tspan>
+<tspan y="42" x="536 544" fill="#EF4444">\n</tspan>
+<tspan y="42" x="552 560" fill="#06B6D4">\t</tspan>
+<tspan y="42" x="568 576" fill="#22C55E">\v</tspan>
+<tspan y="42" x="584 592" fill="#3B82F6">\0</tspan>
+<tspan y="42" x="600 608" fill="#F59E0B">\r</tspan>
+<tspan y="42" x="616" fill="#F59E0B">]</tspan>
+<tspan y="42" x="624" fill="#22C55E">|</tspan>
+<tspan y="42" x="632" fill="#8B5CF6">.</tspan>
+<tspan y="42" x="640 648" fill="#EF4444">\d</tspan>
+<tspan y="42" x="656 664" fill="#06B6D4">\D</tspan>
+<tspan y="42" x="672 680" fill="#22C55E">\w</tspan>
+<tspan y="42" x="688 696" fill="#3B82F6">\W</tspan>
+<tspan y="56" x="168 176" fill="#F59E0B">\s</tspan>
+<tspan y="56" x="184 192" fill="#8B5CF6">\S</tspan>
+<tspan y="56" x="200 208" fill="#EF4444">\n</tspan>
+<tspan y="56" x="216 224" fill="#06B6D4">\t</tspan>
+<tspan y="56" x="232" fill="#22C55E">|</tspan>
 <tspan y="56" x="240">a</tspan>
-<tspan y="56" x="248" fill="green">*</tspan>
+<tspan y="56" x="248" fill="#22C55E">*</tspan>
 <tspan y="56" x="256">b</tspan>
-<tspan y="56" x="264" fill="blue">+</tspan>
+<tspan y="56" x="264" fill="#3B82F6">+</tspan>
 <tspan y="56" x="272">c</tspan>
-<tspan y="56" x="280" fill="orange">?</tspan>
+<tspan y="56" x="280" fill="#F59E0B">?</tspan>
 <tspan y="56" x="288">d</tspan>
-<tspan y="56" x="296 304 312" fill="purple">{2}</tspan>
+<tspan y="56" x="296 304 312" fill="#8B5CF6">{2}</tspan>
 <tspan y="56" x="320">e</tspan>
-<tspan y="56" x="328 336 344 352" fill="red">{1,}</tspan>
+<tspan y="56" x="328 336 344 352" fill="#EF4444">{1,}</tspan>
 <tspan y="56" x="360">f</tspan>
-<tspan y="56" x="368 376 384 392 400" fill="cyan">{3,4}</tspan>
+<tspan y="56" x="368 376 384 392 400" fill="#06B6D4">{3,4}</tspan>
 <tspan y="56" x="408">a</tspan>
-<tspan y="56" x="416 424" fill="green">*?</tspan>
+<tspan y="56" x="416 424" fill="#22C55E">*?</tspan>
 <tspan y="56" x="432">b</tspan>
-<tspan y="56" x="440 448" fill="blue">+?</tspan>
+<tspan y="56" x="440 448" fill="#3B82F6">+?</tspan>
 <tspan y="56" x="456">c</tspan>
-<tspan y="56" x="464 472" fill="orange">??</tspan>
+<tspan y="56" x="464 472" fill="#F59E0B">??</tspan>
 <tspan y="56" x="480">d</tspan>
-<tspan y="56" x="488 496 504 512" fill="purple">{2}?</tspan>
+<tspan y="56" x="488 496 504 512" fill="#8B5CF6">{2}?</tspan>
 <tspan y="56" x="520">e</tspan>
-<tspan y="56" x="528 536 544 552 560" fill="red">{1,}?</tspan>
+<tspan y="56" x="528 536 544 552 560" fill="#EF4444">{1,}?</tspan>
 <tspan y="56" x="568">f</tspan>
-<tspan y="56" x="576 584 592 600 608 616" fill="cyan">{3,4}?</tspan>
-<tspan y="56" x="624" fill="green">|</tspan>
-<tspan y="56" x="632" fill="green">^</tspan>
-<tspan y="56" x="640 648" fill="blue">\B</tspan>
+<tspan y="56" x="576 584 592 600 608 616" fill="#06B6D4">{3,4}?</tspan>
+<tspan y="56" x="624" fill="#22C55E">|</tspan>
+<tspan y="56" x="632" fill="#22C55E">^</tspan>
+<tspan y="56" x="640 648" fill="#3B82F6">\B</tspan>
 <tspan y="56" x="656 664 672 680 688 696">anchor</tspan>
-<tspan y="70" x="168 176" fill="orange">\b</tspan>
-<tspan y="70" x="184" fill="purple">$</tspan>
-<tspan y="70" x="192" fill="red">[</tspan>
+<tspan y="70" x="168 176" fill="#F59E0B">\b</tspan>
+<tspan y="70" x="184" fill="#8B5CF6">$</tspan>
+<tspan y="70" x="192" fill="#EF4444">[</tspan>
 <tspan y="70" x="200 208 216 224 232 240">\B\b^$</tspan>
-<tspan y="70" x="248" fill="red">]</tspan>
-<tspan y="70" x="256" fill="green">|</tspan>
+<tspan y="70" x="248" fill="#EF4444">]</tspan>
+<tspan y="70" x="256" fill="#22C55E">|</tspan>
 <tspan y="70" x="264 272 280 288 296 304 312">\a\c1\e</tspan>
-<tspan y="70" x="320 328" fill="cyan">\f</tspan>
-<tspan y="70" x="336 344" fill="green">\n</tspan>
-<tspan y="70" x="352 360" fill="blue">\r</tspan>
-<tspan y="70" x="368 376" fill="orange">\t</tspan>
-<tspan y="70" x="384 392" fill="purple">\v</tspan>
-<tspan y="70" x="400 408" fill="red">\0</tspan>
-<tspan y="70" x="416" fill="green">|</tspan>
-<tspan y="70" x="424 432 440" fill="cyan">\cA</tspan>
-<tspan y="70" x="448" fill="green">[</tspan>
-<tspan y="70" x="456 464 472 480 488 496 504" fill="blue">\ca-\cZ</tspan>
-<tspan y="70" x="512" fill="green">]</tspan>
-<tspan y="70" x="520 528 536 544 552 560" fill="orange">\u9fa5</tspan>
-<tspan y="70" x="568" fill="purple">[</tspan>
-<tspan y="70" x="576 584 592 600 608 616 624 632 640 648 656 664 672" fill="red">\u4e00-\u9fa5</tspan>
-<tspan y="70" x="680" fill="purple">]</tspan>
-<tspan y="70" x="688 696 704 712" fill="cyan">\xAa</tspan>
-<tspan y="70" x="720" fill="green">[</tspan>
-<tspan y="84" x="168 176 184 192 200 208 216 224 232" fill="blue">\x00-\xff</tspan>
-<tspan y="84" x="240" fill="green">]</tspan>
-<tspan y="84" x="248" fill="green">|</tspan>
-<tspan y="84" x="256" fill="orange">(</tspan>
-<tspan y="84" x="264" fill="purple">[</tspan>
-<tspan y="84" x="272 280 288" fill="red">a-z</tspan>
-<tspan y="84" x="296" fill="purple">]</tspan>
-<tspan y="84" x="304 312" fill="cyan">\d</tspan>
-<tspan y="84" x="320" fill="orange">)</tspan>
-<tspan y="84" x="328 336 344" fill="green">(?:</tspan>
-<tspan y="84" x="352 360" fill="blue">\w</tspan>
-<tspan y="84" x="368 376" fill="purple">\s</tspan>
-<tspan y="84" x="384" fill="orange">+</tspan>
-<tspan y="84" x="392" fill="green">)</tspan>
-<tspan y="84" x="400" fill="green">|</tspan>
+<tspan y="70" x="320 328" fill="#06B6D4">\f</tspan>
+<tspan y="70" x="336 344" fill="#22C55E">\n</tspan>
+<tspan y="70" x="352 360" fill="#3B82F6">\r</tspan>
+<tspan y="70" x="368 376" fill="#F59E0B">\t</tspan>
+<tspan y="70" x="384 392" fill="#8B5CF6">\v</tspan>
+<tspan y="70" x="400 408" fill="#EF4444">\0</tspan>
+<tspan y="70" x="416" fill="#22C55E">|</tspan>
+<tspan y="70" x="424 432 440" fill="#06B6D4">\cA</tspan>
+<tspan y="70" x="448" fill="#22C55E">[</tspan>
+<tspan y="70" x="456 464 472 480 488 496 504" fill="#3B82F6">\ca-\cZ</tspan>
+<tspan y="70" x="512" fill="#22C55E">]</tspan>
+<tspan y="70" x="520 528 536 544 552 560" fill="#F59E0B">\u9fa5</tspan>
+<tspan y="70" x="568" fill="#8B5CF6">[</tspan>
+<tspan y="70" x="576 584 592 600 608 616 624 632 640 648 656 664 672" fill="#EF4444">\u4e00-\u9fa5</tspan>
+<tspan y="70" x="680" fill="#8B5CF6">]</tspan>
+<tspan y="70" x="688 696 704 712" fill="#06B6D4">\xAa</tspan>
+<tspan y="70" x="720" fill="#22C55E">[</tspan>
+<tspan y="84" x="168 176 184 192 200 208 216 224 232" fill="#3B82F6">\x00-\xff</tspan>
+<tspan y="84" x="240" fill="#22C55E">]</tspan>
+<tspan y="84" x="248" fill="#22C55E">|</tspan>
+<tspan y="84" x="256" fill="#F59E0B">(</tspan>
+<tspan y="84" x="264" fill="#8B5CF6">[</tspan>
+<tspan y="84" x="272 280 288" fill="#EF4444">a-z</tspan>
+<tspan y="84" x="296" fill="#8B5CF6">]</tspan>
+<tspan y="84" x="304 312" fill="#06B6D4">\d</tspan>
+<tspan y="84" x="320" fill="#F59E0B">)</tspan>
+<tspan y="84" x="328 336 344" fill="#22C55E">(?:</tspan>
+<tspan y="84" x="352 360" fill="#3B82F6">\w</tspan>
+<tspan y="84" x="368 376" fill="#8B5CF6">\s</tspan>
+<tspan y="84" x="384" fill="#F59E0B">+</tspan>
+<tspan y="84" x="392" fill="#22C55E">)</tspan>
+<tspan y="84" x="400" fill="#22C55E">|</tspan>
 <tspan y="84" x="408">a</tspan>
-<tspan y="84" x="416 424 432" fill="red">(?=</tspan>
+<tspan y="84" x="416 424 432" fill="#EF4444">(?=</tspan>
 <tspan y="84" x="440 448 456 464 472 480 488 496 504 512 520 528 536 544 552 560">followed_by_this</tspan>
-<tspan y="84" x="568" fill="red">)</tspan>
+<tspan y="84" x="568" fill="#EF4444">)</tspan>
 <tspan y="84" x="576">b</tspan>
-<tspan y="84" x="584 592 600" fill="cyan">(?!</tspan>
+<tspan y="84" x="584 592 600" fill="#06B6D4">(?!</tspan>
 <tspan y="84" x="608 616 624 632 640 648 656 664 672 680 688 696 704 712 720 728 736 744 752 760">not_followed_by_this</tspan>
-<tspan y="84" x="768" fill="cyan">)</tspan>
+<tspan y="84" x="768" fill="#06B6D4">)</tspan>
 <tspan y="98" x=""></tspan>
 <tspan y="98" x="168">c</tspan>
-<tspan y="98" x="176" fill="green">|</tspan>
+<tspan y="98" x="176" fill="#22C55E">|</tspan>
 <tspan y="98" x="184">d</tspan>
-<tspan y="98" x="192 200 208 216" fill="green">(?&lt;=</tspan>
+<tspan y="98" x="192 200 208 216" fill="#22C55E">(?&lt;=</tspan>
 <tspan y="98" x="224 232 240 248 256 264 272 280 288 296 304 312 320 328 336 344">preceded_by_this</tspan>
-<tspan y="98" x="352" fill="green">)</tspan>
+<tspan y="98" x="352" fill="#22C55E">)</tspan>
 <tspan y="98" x="360">e</tspan>
-<tspan y="98" x="368 376 384 392" fill="blue">(?&lt;!</tspan>
+<tspan y="98" x="368 376 384 392" fill="#3B82F6">(?&lt;!</tspan>
 <tspan y="98" x="400 408 416 424 432 440 448 456 464 472 480 488 496 504 512 520">preceded_by_this</tspan>
-<tspan y="98" x="528" fill="blue">)</tspan>
+<tspan y="98" x="528" fill="#3B82F6">)</tspan>
 <tspan y="98" x="536">f</tspan>
-<tspan y="98" x="544" fill="green">|</tspan>
-<tspan y="98" x="552" fill="orange">^</tspan>
-<tspan y="98" x="560" fill="purple">[</tspan>
+<tspan y="98" x="544" fill="#22C55E">|</tspan>
+<tspan y="98" x="552" fill="#F59E0B">^</tspan>
+<tspan y="98" x="560" fill="#8B5CF6">[</tspan>
 <tspan y="98" x="576">a</tspan>
 <tspan y="98" x="600">b</tspan>
-<tspan y="98" x="632" fill="purple">]</tspan>
+<tspan y="98" x="632" fill="#8B5CF6">]</tspan>
 <tspan y="98" x="656">e</tspan>
 <tspan y="98" x="672">m</tspan>
 <tspan y="98" x="688 696 704">pty</tspan>
 <tspan y="98" x="720 728 736 744 752 760">spaces</tspan>
-<tspan y="98" x="776" fill="red">[</tspan>
-<tspan y="112" x="168 176 184 192 200 208" fill="cyan">\u4E2D</tspan>
-<tspan y="112" x="216" fill="red">]</tspan>
-<tspan y="112" x="224 232 240 248 256 264" fill="green">\u6587</tspan>
-<tspan y="112" x="272" fill="blue">$</tspan>
+<tspan y="98" x="776" fill="#EF4444">[</tspan>
+<tspan y="112" x="168 176 184 192 200 208" fill="#06B6D4">\u4E2D</tspan>
+<tspan y="112" x="216" fill="#EF4444">]</tspan>
+<tspan y="112" x="224 232 240 248 256 264" fill="#22C55E">\u6587</tspan>
+<tspan y="112" x="272" fill="#3B82F6">$</tspan>
 </text>
 <rect x="166" y="14" width="620" height="102" fill="none" stroke-width="1" stroke="gray"/>
 <text x="0" y="140" font-size="14" font-family="Consolas, Monaco, 'Courier New', monospace" letter-spacing="0" text-anchor="start" white-space="pre">
 <tspan y="140" x="312 320 328 336 344 352 360 368 376 384 392 400 408 416 424 432 440 448 456">┌─────────────────┐</tspan>
 <tspan y="140" x="480 488 496 504 512 520">┏━━━━━</tspan>
-<tspan y="140" x="528 536 544 552 560 568" fill="blue">One of</tspan>
+<tspan y="140" x="528 536 544 552 560 568" fill="#3B82F6">One of</tspan>
 <tspan y="140" x="576 584 592 600 608 616 624">━━━━━━┓</tspan>
 <tspan y="154" x="32 40 48 56 64 72 80 88 96 104 112 120 128 136 144 152 160 168 176 184 192 200 208 216 224 232 240 248 256 264 272 280 288 296 304 312 320 328 336 344 352 360 368 376 384 392 400 408 416 424 432 440 448 456 464 472 480 488 496 504 512 520 528 536 544 552 560 568 576 584 592 600 608 616 624 632 640 648 656 664 672 680 688 696 704 712 720 728 736 744 752 760 768 776 784 792 800 808 816 824 832 840 848 856 864 872 880 888 896 904">┌──────────────────────────────────┤a1|()[]{}.?+*\\^$├──┫a1()[]{}.?+*\\|^$┣──────────────────────────────────┐</tspan>
 <tspan y="168" x="32">│</tspan>
@@ -163,7 +163,7 @@
 <tspan y="168" x="904">│</tspan>
 <tspan y="182" x="32">│</tspan>
 <tspan y="182" x="536 544 552 560 568">┏━━━━</tspan>
-<tspan y="182" x="576 584 592 600 608 616" fill="orange">One of</tspan>
+<tspan y="182" x="576 584 592 600 608 616" fill="#F59E0B">One of</tspan>
 <tspan y="182" x="624 632 640 648 656 664">━━━━━┓</tspan>
 <tspan y="182" x="904">│</tspan>
 <tspan y="196" x="32">│</tspan>
@@ -172,99 +172,99 @@
 <tspan y="196" x="904">│</tspan>
 <tspan y="210" x="32">│</tspan>
 <tspan y="210" x="536">┃</tspan>
-<tspan y="210" x="544 552 560 568 576" fill="purple" text-decoration="underline">Digit</tspan>
+<tspan y="210" x="544 552 560 568 576" fill="#8B5CF6" text-decoration="underline">Digit</tspan>
 <tspan y="210" x=""></tspan>
 <tspan y="210" x="664">┃</tspan>
 <tspan y="210" x="904">│</tspan>
 <tspan y="224" x="32">│</tspan>
 <tspan y="224" x="536">┃</tspan>
-<tspan y="224" x="544 552 560 568 576 584 592 600 608" fill="red" text-decoration="underline">Non-Digit</tspan>
+<tspan y="224" x="544 552 560 568 576 584 592 600 608" fill="#EF4444" text-decoration="underline">Non-Digit</tspan>
 <tspan y="224" x=""></tspan>
 <tspan y="224" x="664">┃</tspan>
 <tspan y="224" x="904">│</tspan>
 <tspan y="238" x="32">│</tspan>
 <tspan y="238" x="536">┃</tspan>
-<tspan y="238" x="544 552 560 568" fill="cyan" text-decoration="underline">Word</tspan>
+<tspan y="238" x="544 552 560 568" fill="#06B6D4" text-decoration="underline">Word</tspan>
 <tspan y="238" x=""></tspan>
 <tspan y="238" x="664">┃</tspan>
 <tspan y="238" x="904">│</tspan>
 <tspan y="252" x="32">│</tspan>
 <tspan y="252" x="456">┏</tspan>
-<tspan y="252" x="464 472 480 488 496 504" fill="red">One of</tspan>
+<tspan y="252" x="464 472 480 488 496 504" fill="#EF4444">One of</tspan>
 <tspan y="252" x="512">┓</tspan>
 <tspan y="252" x="536">┃</tspan>
-<tspan y="252" x="544 552 560 568 576 584 592 600" fill="green" text-decoration="underline">Non-Word</tspan>
+<tspan y="252" x="544 552 560 568 576 584 592 600" fill="#22C55E" text-decoration="underline">Non-Word</tspan>
 <tspan y="252" x=""></tspan>
 <tspan y="252" x="664">┃</tspan>
 <tspan y="252" x="904">│</tspan>
 <tspan y="266" x="32">│</tspan>
 <tspan y="266" x="264 272">┏━</tspan>
-<tspan y="266" x="280 288 296 304 312 320" fill="orange">One of</tspan>
+<tspan y="266" x="280 288 296 304 312 320" fill="#F59E0B">One of</tspan>
 <tspan y="266" x="328 336 344">━━┓</tspan>
 <tspan y="266" x="368">┏</tspan>
-<tspan y="266" x="376 384 392 400 408 416 424" fill="purple">None of</tspan>
+<tspan y="266" x="376 384 392 400 408 416 424" fill="#8B5CF6">None of</tspan>
 <tspan y="266" x="432">┓</tspan>
 <tspan y="266" x="456">┃</tspan>
-<tspan y="266" x="472" fill="cyan">a</tspan>
+<tspan y="266" x="472" fill="#06B6D4">a</tspan>
 <tspan y="266" x="480">→</tspan>
-<tspan y="266" x="488" fill="cyan">z</tspan>
+<tspan y="266" x="488" fill="#06B6D4">z</tspan>
 <tspan y="266" x="512">┃</tspan>
 <tspan y="266" x="536">┃</tspan>
-<tspan y="266" x="544 552 560 568 576" fill="blue" text-decoration="underline">Space</tspan>
+<tspan y="266" x="544 552 560 568 576" fill="#3B82F6" text-decoration="underline">Space</tspan>
 <tspan y="266" x=""></tspan>
 <tspan y="266" x="664">┃</tspan>
 <tspan y="266" x="904">│</tspan>
 <tspan y="280" x="32 40 48 56 64 72 80 88 96 104 112 120 128 136 144 152 160 168 176 184 192 200 208 216 224 232 240 248 256 264 272 280 288 296 304 312 320 328 336 344 352 360 368">├────────────────────────────┫-a1.+*_\\┣──┫</tspan>
 <tspan y="280" x="384 392 400 408">abc-</tspan>
 <tspan y="280" x="432 440 448 456">┣──┫</tspan>
-<tspan y="280" x="472" fill="green">0</tspan>
+<tspan y="280" x="472" fill="#22C55E">0</tspan>
 <tspan y="280" x="480">→</tspan>
-<tspan y="280" x="488" fill="green">9</tspan>
+<tspan y="280" x="488" fill="#22C55E">9</tspan>
 <tspan y="280" x="512 520 528 536">┣──┫</tspan>
-<tspan y="280" x="544 552 560 568 576 584 592 600 608" fill="orange" text-decoration="underline">Non-Space</tspan>
+<tspan y="280" x="544 552 560 568 576 584 592 600 608" fill="#F59E0B" text-decoration="underline">Non-Space</tspan>
 <tspan y="280" x=""></tspan>
 <tspan y="280" x="664 672 680 688 696 704 712 720 728 736 744 752 760 768 776 784 792 800 808 816 824 832 840 848 856 864 872 880 888 896 904">┣─────────────────────────────┤</tspan>
 <tspan y="294" x="32">│</tspan>
 <tspan y="294" x="264 272 280 288 296 304 312 320 328 336 344">┗━━━━━━━━━┛</tspan>
 <tspan y="294" x="368 376 384 392 400 408 416 424 432">┗╸╸╸╸╸╸╸┛</tspan>
 <tspan y="294" x="456">┃</tspan>
-<tspan y="294" x="472" fill="blue">A</tspan>
+<tspan y="294" x="472" fill="#3B82F6">A</tspan>
 <tspan y="294" x="480">→</tspan>
-<tspan y="294" x="488" fill="blue">Z</tspan>
+<tspan y="294" x="488" fill="#3B82F6">Z</tspan>
 <tspan y="294" x="512">┃</tspan>
 <tspan y="294" x="536">┃</tspan>
-<tspan y="294" x="544 552 560 568 576 584 592 600 608" fill="purple" text-decoration="underline">Form-Feed</tspan>
+<tspan y="294" x="544 552 560 568 576 584 592 600 608" fill="#8B5CF6" text-decoration="underline">Form-Feed</tspan>
 <tspan y="294" x=""></tspan>
 <tspan y="294" x="664">┃</tspan>
 <tspan y="294" x="904">│</tspan>
 <tspan y="308" x="32">│</tspan>
 <tspan y="308" x="456 464 472 480 488 496 504 512">┗━━━━━━┛</tspan>
 <tspan y="308" x="536">┃</tspan>
-<tspan y="308" x="544 552 560 568 576 584 592 600 608" fill="red" text-decoration="underline">Line-Feed</tspan>
+<tspan y="308" x="544 552 560 568 576 584 592 600 608" fill="#EF4444" text-decoration="underline">Line-Feed</tspan>
 <tspan y="308" x=""></tspan>
 <tspan y="308" x="664">┃</tspan>
 <tspan y="308" x="904">│</tspan>
 <tspan y="322" x="32">│</tspan>
 <tspan y="322" x="536">┃</tspan>
-<tspan y="322" x="544 552 560" fill="cyan" text-decoration="underline">Tab</tspan>
+<tspan y="322" x="544 552 560" fill="#06B6D4" text-decoration="underline">Tab</tspan>
 <tspan y="322" x=""></tspan>
 <tspan y="322" x="664">┃</tspan>
 <tspan y="322" x="904">│</tspan>
 <tspan y="336" x="32">│</tspan>
 <tspan y="336" x="536">┃</tspan>
-<tspan y="336" x="544 552 560 568 576 584 592 600 608 616 624 632" fill="green" text-decoration="underline">Vertical-Tab</tspan>
+<tspan y="336" x="544 552 560 568 576 584 592 600 608 616 624 632" fill="#22C55E" text-decoration="underline">Vertical-Tab</tspan>
 <tspan y="336" x=""></tspan>
 <tspan y="336" x="664">┃</tspan>
 <tspan y="336" x="904">│</tspan>
 <tspan y="350" x="32">│</tspan>
 <tspan y="350" x="536">┃</tspan>
-<tspan y="350" x="544 552 560 568" fill="blue" text-decoration="underline">Null</tspan>
+<tspan y="350" x="544 552 560 568" fill="#3B82F6" text-decoration="underline">Null</tspan>
 <tspan y="350" x=""></tspan>
 <tspan y="350" x="664">┃</tspan>
 <tspan y="350" x="904">│</tspan>
 <tspan y="364" x="32">│</tspan>
 <tspan y="364" x="536">┃</tspan>
-<tspan y="364" x="544 552 560 568 576 584 592 600 608 616 624 632 640 648 656" fill="orange" text-decoration="underline">Carriage-Return</tspan>
+<tspan y="364" x="544 552 560 568 576 584 592 600 608 616 624 632 640 648 656" fill="#F59E0B" text-decoration="underline">Carriage-Return</tspan>
 <tspan y="364" x=""></tspan>
 <tspan y="364" x="664">┃</tspan>
 <tspan y="364" x="904">│</tspan>
@@ -283,23 +283,23 @@
 <tspan y="392" x="784 792 800 808 816">╔\t═╗</tspan>
 <tspan y="392" x="904">│</tspan>
 <tspan y="406" x="32 40 48 56 64 72 80 88 96 104 112">├─────────╣</tspan>
-<tspan y="406" x="120 128 136" fill="purple">Any</tspan>
+<tspan y="406" x="120 128 136" fill="#8B5CF6">Any</tspan>
 <tspan y="406" x="144 152 160 168">╠──╣</tspan>
-<tspan y="406" x="176 184 192 200 208" fill="red">Digit</tspan>
+<tspan y="406" x="176 184 192 200 208" fill="#EF4444">Digit</tspan>
 <tspan y="406" x="216 224 232 240">╠──╣</tspan>
-<tspan y="406" x="248 256 264 272 280 288 296 304 312" fill="cyan">Non-Digit</tspan>
+<tspan y="406" x="248 256 264 272 280 288 296 304 312" fill="#06B6D4">Non-Digit</tspan>
 <tspan y="406" x="320 328 336 344">╠──╣</tspan>
-<tspan y="406" x="352 360 368 376" fill="green">Word</tspan>
+<tspan y="406" x="352 360 368 376" fill="#22C55E">Word</tspan>
 <tspan y="406" x="384 392 400 408">╠──╣</tspan>
-<tspan y="406" x="416 424 432 440 448 456 464 472" fill="blue">Non-Word</tspan>
+<tspan y="406" x="416 424 432 440 448 456 464 472" fill="#3B82F6">Non-Word</tspan>
 <tspan y="406" x="480 488 496 504">╠──╣</tspan>
-<tspan y="406" x="512 520 528 536 544" fill="orange">Space</tspan>
+<tspan y="406" x="512 520 528 536 544" fill="#F59E0B">Space</tspan>
 <tspan y="406" x="552 560 568 576">╠──╣</tspan>
-<tspan y="406" x="584 592 600 608 616 624 632 640 648" fill="purple">Non-Space</tspan>
+<tspan y="406" x="584 592 600 608 616 624 632 640 648" fill="#8B5CF6">Non-Space</tspan>
 <tspan y="406" x="656 664 672 680">╠──╣</tspan>
-<tspan y="406" x="688 696 704 712 720 728 736 744 752" fill="red">Line-Feed</tspan>
+<tspan y="406" x="688 696 704 712 720 728 736 744 752" fill="#EF4444">Line-Feed</tspan>
 <tspan y="406" x="760 768 776 784">╠──╣</tspan>
-<tspan y="406" x="792 800 808" fill="cyan">Tab</tspan>
+<tspan y="406" x="792 800 808" fill="#06B6D4">Tab</tspan>
 <tspan y="406" x="816 824 832 840 848 856 864 872 880 888 896 904">╠──────────┤</tspan>
 <tspan y="420" x="32">│</tspan>
 <tspan y="420" x="112 120 128 136 144">╚═══╝</tspan>
@@ -369,40 +369,40 @@
 <tspan y="476" x="904">│</tspan>
 <tspan y="490" x="32">│</tspan>
 <tspan y="490" x="48">└</tspan>
-<tspan y="490" x="56 64 72 80" fill="green">↺0→∞</tspan>
+<tspan y="490" x="56 64 72 80" fill="#22C55E">↺0→∞</tspan>
 <tspan y="490" x="88 96">─┘</tspan>
 <tspan y="490" x="120">└</tspan>
-<tspan y="490" x="128 136 144 152" fill="blue">↻1→∞</tspan>
+<tspan y="490" x="128 136 144 152" fill="#3B82F6">↻1→∞</tspan>
 <tspan y="490" x="160 168">─┘</tspan>
 <tspan y="490" x="192">└</tspan>
-<tspan y="490" x="200 208 216 224" fill="orange">↺0→1</tspan>
+<tspan y="490" x="200 208 216 224" fill="#F59E0B">↺0→1</tspan>
 <tspan y="490" x="232 240">─┘</tspan>
 <tspan y="490" x="264 272">└─</tspan>
-<tspan y="490" x="280 288" fill="purple">↻2</tspan>
+<tspan y="490" x="280 288" fill="#8B5CF6">↻2</tspan>
 <tspan y="490" x="296 304 312">──┘</tspan>
 <tspan y="490" x="336">└</tspan>
-<tspan y="490" x="344 352 360 368" fill="red">↻1→∞</tspan>
+<tspan y="490" x="344 352 360 368" fill="#EF4444">↻1→∞</tspan>
 <tspan y="490" x="376 384">─┘</tspan>
 <tspan y="490" x="408">└</tspan>
-<tspan y="490" x="416 424 432 440" fill="cyan">↻3→4</tspan>
+<tspan y="490" x="416 424 432 440" fill="#06B6D4">↻3→4</tspan>
 <tspan y="490" x="448 456">─┘</tspan>
 <tspan y="490" x="480">└</tspan>
-<tspan y="490" x="488 496 504 512" fill="green">↺0⇢∞</tspan>
+<tspan y="490" x="488 496 504 512" fill="#22C55E">↺0⇢∞</tspan>
 <tspan y="490" x="520 528">─┘</tspan>
 <tspan y="490" x="552">└</tspan>
-<tspan y="490" x="560 568 576 584" fill="blue">↻1⇢∞</tspan>
+<tspan y="490" x="560 568 576 584" fill="#3B82F6">↻1⇢∞</tspan>
 <tspan y="490" x="592 600">─┘</tspan>
 <tspan y="490" x="624">└</tspan>
-<tspan y="490" x="632 640 648 656" fill="orange">↺0⇢1</tspan>
+<tspan y="490" x="632 640 648 656" fill="#F59E0B">↺0⇢1</tspan>
 <tspan y="490" x="664 672">─┘</tspan>
 <tspan y="490" x="696 704">└─</tspan>
-<tspan y="490" x="712 720" fill="purple">↻2</tspan>
+<tspan y="490" x="712 720" fill="#8B5CF6">↻2</tspan>
 <tspan y="490" x="728 736 744">──┘</tspan>
 <tspan y="490" x="768">└</tspan>
-<tspan y="490" x="776 784 792 800" fill="red">↻1⇢∞</tspan>
+<tspan y="490" x="776 784 792 800" fill="#EF4444">↻1⇢∞</tspan>
 <tspan y="490" x="808 816">─┘</tspan>
 <tspan y="490" x="840">└</tspan>
-<tspan y="490" x="848 856 864 872" fill="cyan">↻3⇢4</tspan>
+<tspan y="490" x="848 856 864 872" fill="#06B6D4">↻3⇢4</tspan>
 <tspan y="490" x="880 888">─┘</tspan>
 <tspan y="490" x="904">│</tspan>
 <tspan y="504" x="32">│</tspan>
@@ -412,17 +412,17 @@
 <tspan y="504" x="504 512 520 528 536 544 552 560 568 576 584 592 600 608 616">╔═════\b══════╗</tspan>
 <tspan y="504" x="640 648 656 664 672">╔═$═╗</tspan>
 <tspan y="504" x="696">┏</tspan>
-<tspan y="504" x="704 712 720 728 736 744" fill="red">One of</tspan>
+<tspan y="504" x="704 712 720 728 736 744" fill="#EF4444">One of</tspan>
 <tspan y="504" x="752">┓</tspan>
 <tspan y="504" x="904">│</tspan>
 <tspan y="518" x="8 16 24 32 40 48 56 64 72 80 88 96 104 112 120 128 136 144 152 160 168 176 184">●──┼──────────────────╣</tspan>
-<tspan y="518" x="192 200 208 216 224" fill="green">Start</tspan>
+<tspan y="518" x="192 200 208 216 224" fill="#22C55E">Start</tspan>
 <tspan y="518" x="232 240 248 256">╠──╣</tspan>
-<tspan y="518" x="264 272 280 288 296 304 312 320 328 336 344 352 360 368 376 384 392" fill="blue">Non-Word Boundary</tspan>
+<tspan y="518" x="264 272 280 288 296 304 312 320 328 336 344 352 360 368 376 384 392" fill="#3B82F6">Non-Word Boundary</tspan>
 <tspan y="518" x="400 408 416 424 432 440 448 456 464 472 480 488 496 504">╠──┤anchor├──╣</tspan>
-<tspan y="518" x="512 520 528 536 544 552 560 568 576 584 592 600 608" fill="orange">Word Boundary</tspan>
+<tspan y="518" x="512 520 528 536 544 552 560 568 576 584 592 600 608" fill="#F59E0B">Word Boundary</tspan>
 <tspan y="518" x="616 624 632 640">╠──╣</tspan>
-<tspan y="518" x="648 656 664" fill="purple">End</tspan>
+<tspan y="518" x="648 656 664" fill="#8B5CF6">End</tspan>
 <tspan y="518" x="672 680 688 696">╠──┫</tspan>
 <tspan y="518" x="712 720 728 736">Bb^$</tspan>
 <tspan y="518" x="752 760 768 776 784 792 800 808 816 824 832 840 848 856 864 872 880 888 896 904 912 920 928">┣──────────────────┼──◎</tspan>
@@ -444,17 +444,17 @@
 <tspan y="546" x="752 760 768 776 784 792">╔═\0═╗</tspan>
 <tspan y="546" x="904">│</tspan>
 <tspan y="560" x="32 40 48 56 64 72 80 88 96 104 112 120 128 136 144 152 160 168 176 184 192 200 208">├─────────────┤ac1e├──╣</tspan>
-<tspan y="560" x="216 224 232 240 248 256 264 272 280" fill="cyan">Form-Feed</tspan>
+<tspan y="560" x="216 224 232 240 248 256 264 272 280" fill="#06B6D4">Form-Feed</tspan>
 <tspan y="560" x="288 296 304 312">╠──╣</tspan>
-<tspan y="560" x="320 328 336 344 352 360 368 376 384" fill="green">Line-Feed</tspan>
+<tspan y="560" x="320 328 336 344 352 360 368 376 384" fill="#22C55E">Line-Feed</tspan>
 <tspan y="560" x="392 400 408 416">╠──╣</tspan>
-<tspan y="560" x="424 432 440 448 456 464 472 480 488 496 504 512 520 528 536" fill="blue">Carriage-Return</tspan>
+<tspan y="560" x="424 432 440 448 456 464 472 480 488 496 504 512 520 528 536" fill="#3B82F6">Carriage-Return</tspan>
 <tspan y="560" x="544 552 560 568">╠──╣</tspan>
-<tspan y="560" x="576 584 592" fill="orange">Tab</tspan>
+<tspan y="560" x="576 584 592" fill="#F59E0B">Tab</tspan>
 <tspan y="560" x="600 608 616 624">╠──╣</tspan>
-<tspan y="560" x="632 640 648 656 664 672 680 688 696 704 712 720" fill="purple">Vertical-Tab</tspan>
+<tspan y="560" x="632 640 648 656 664 672 680 688 696 704 712 720" fill="#8B5CF6">Vertical-Tab</tspan>
 <tspan y="560" x="728 736 744 752">╠──╣</tspan>
-<tspan y="560" x="760 768 776 784" fill="red">Null</tspan>
+<tspan y="560" x="760 768 776 784" fill="#EF4444">Null</tspan>
 <tspan y="560" x="792 800 808 816 824 832 840 848 856 864 872 880 888 896 904">╠─────────────┤</tspan>
 <tspan y="574" x="32">│</tspan>
 <tspan y="574" x="144 152 160 168 176 184">└────┘</tspan>
@@ -468,35 +468,35 @@
 <tspan y="588" x="32">│</tspan>
 <tspan y="588" x="176 184 192 200 208 216 224 232">╔═\cA══╗</tspan>
 <tspan y="588" x="256 264 272 280">┏━━━</tspan>
-<tspan y="588" x="288 296 304 312 320 328" fill="green">One of</tspan>
+<tspan y="588" x="288 296 304 312 320 328" fill="#22C55E">One of</tspan>
 <tspan y="588" x="336 344 352 360 368">━━━━┓</tspan>
 <tspan y="588" x="392 400 408 416 424 432 440 448">╔\u9fa5╗</tspan>
 <tspan y="588" x="472 480 488 496">┏━━━</tspan>
-<tspan y="588" x="504 512 520 528 536 544" fill="purple">One of</tspan>
+<tspan y="588" x="504 512 520 528 536 544" fill="#8B5CF6">One of</tspan>
 <tspan y="588" x="552 560 568 576 584">━━━━┓</tspan>
 <tspan y="588" x="608 616 624 632 640 648">╔\xAa╗</tspan>
 <tspan y="588" x="672 680">┏━</tspan>
-<tspan y="588" x="688 696 704 712 720 728" fill="green">One of</tspan>
+<tspan y="588" x="688 696 704 712 720 728" fill="#22C55E">One of</tspan>
 <tspan y="588" x="736 744 752">━━┓</tspan>
 <tspan y="588" x="904">│</tspan>
 <tspan y="602" x="32 40 48 56 64 72 80 88 96 104 112 120 128 136 144 152 160 168 176">├─────────────────╣</tspan>
-<tspan y="602" x="184 192 200 208 216 224" fill="cyan">ctrl-A</tspan>
+<tspan y="602" x="184 192 200 208 216 224" fill="#06B6D4">Ctrl-A</tspan>
 <tspan y="602" x="232 240 248 256">╠──┫</tspan>
-<tspan y="602" x="264 272 280 288 296 304" fill="blue">ctrl-A</tspan>
+<tspan y="602" x="264 272 280 288 296 304" fill="#3B82F6">Ctrl-A</tspan>
 <tspan y="602" x="312">→</tspan>
-<tspan y="602" x="320 328 336 344 352 360" fill="blue">ctrl-Z</tspan>
+<tspan y="602" x="320 328 336 344 352 360" fill="#3B82F6">Ctrl-Z</tspan>
 <tspan y="602" x="368 376 384 392">┣──╣</tspan>
-<tspan y="602" x="400 408 416 424 432 440" fill="orange">U+9FA5</tspan>
+<tspan y="602" x="400 408 416 424 432 440" fill="#F59E0B">U+9FA5</tspan>
 <tspan y="602" x="448 456 464 472">╠──┫</tspan>
-<tspan y="602" x="480 488 496 504 512 520" fill="red">U+4E00</tspan>
+<tspan y="602" x="480 488 496 504 512 520" fill="#EF4444">U+4E00</tspan>
 <tspan y="602" x="528">→</tspan>
-<tspan y="602" x="536 544 552 560 568 576" fill="red">U+9FA5</tspan>
+<tspan y="602" x="536 544 552 560 568 576" fill="#EF4444">U+9FA5</tspan>
 <tspan y="602" x="584 592 600 608">┣──╣</tspan>
-<tspan y="602" x="616 624 632 640" fill="cyan">0xAA</tspan>
+<tspan y="602" x="616 624 632 640" fill="#06B6D4">0xAA</tspan>
 <tspan y="602" x="648 656 664 672">╠──┫</tspan>
-<tspan y="602" x="680 688 696 704" fill="blue">0x00</tspan>
+<tspan y="602" x="680 688 696 704" fill="#3B82F6">0x00</tspan>
 <tspan y="602" x="712">→</tspan>
-<tspan y="602" x="720 728 736 744" fill="blue">0xFF</tspan>
+<tspan y="602" x="720 728 736 744" fill="#3B82F6">0xFF</tspan>
 <tspan y="602" x="752 760 768 776 784 792 800 808 816 824 832 840 848 856 864 872 880 888 896 904">┣──────────────────┤</tspan>
 <tspan y="616" x="32">│</tspan>
 <tspan y="616" x="176 184 192 200 208 216 224 232">╚══════╝</tspan>
@@ -511,7 +511,7 @@
 <tspan y="630" x="904">│</tspan>
 <tspan y="644" x="32">│</tspan>
 <tspan y="644" x="288 296 304 312 320 328">╭╴╴╴╴╴</tspan>
-<tspan y="644" x="336 344 352 360 368 376 384 392" fill="orange">Group #1</tspan>
+<tspan y="644" x="336 344 352 360 368 376 384 392" fill="#F59E0B">Group #1</tspan>
 <tspan y="644" x="400 408 416 424 432 440 448">╴╴╴╴╴╴╮</tspan>
 <tspan y="644" x="472">╷</tspan>
 <tspan y="644" x="648">╷</tspan>
@@ -519,7 +519,7 @@
 <tspan y="658" x="32">│</tspan>
 <tspan y="658" x="288">╷</tspan>
 <tspan y="658" x="304">┏</tspan>
-<tspan y="658" x="312 320 328 336 344 352" fill="purple">One of</tspan>
+<tspan y="658" x="312 320 328 336 344 352" fill="#8B5CF6">One of</tspan>
 <tspan y="658" x="360">┓</tspan>
 <tspan y="658" x="384 392 400 408 416 424 432">╔═\d══╗</tspan>
 <tspan y="658" x="448">╷</tspan>
@@ -529,15 +529,15 @@
 <tspan y="658" x="648">╷</tspan>
 <tspan y="658" x="904">│</tspan>
 <tspan y="672" x="32 40 48 56 64 72 80 88 96 104 112 120 128 136 144 152 160 168 176 184 192 200 208 216 224 232 240 248 256 264 272 280 288 296 304">├───────────────────────────────┼─┫</tspan>
-<tspan y="672" x="320" fill="red">a</tspan>
+<tspan y="672" x="320" fill="#EF4444">a</tspan>
 <tspan y="672" x="328">→</tspan>
-<tspan y="672" x="336" fill="red">z</tspan>
+<tspan y="672" x="336" fill="#EF4444">z</tspan>
 <tspan y="672" x="360 368 376 384">┣──╣</tspan>
-<tspan y="672" x="392 400 408 416 424" fill="cyan">Digit</tspan>
+<tspan y="672" x="392 400 408 416 424" fill="#06B6D4">Digit</tspan>
 <tspan y="672" x="432 440 448 456 464 472 480 488">╠─┼──┼─╣</tspan>
-<tspan y="672" x="496 504 512 520" fill="blue">Word</tspan>
+<tspan y="672" x="496 504 512 520" fill="#3B82F6">Word</tspan>
 <tspan y="672" x="528 536 544 552 560 568">╠──┬─╣</tspan>
-<tspan y="672" x="576 584 592 600 608" fill="purple">Space</tspan>
+<tspan y="672" x="576 584 592 600 608" fill="#8B5CF6">Space</tspan>
 <tspan y="672" x="616 624 632 640 648 656 664 672 680 688 696 704 712 720 728 736 744 752 760 768 776 784 792 800 808 816 824 832 840 848 856 864 872 880 888 896 904">╠─┬─┼───────────────────────────────┤</tspan>
 <tspan y="686" x="32">│</tspan>
 <tspan y="686" x="288">╷</tspan>
@@ -555,7 +555,7 @@
 <tspan y="700" x="288 296 304 312 320 328 336 344 352 360 368 376 384 392 400 408 416 424 432 440 448">╰╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╯</tspan>
 <tspan y="700" x="472">╷</tspan>
 <tspan y="700" x="552 560 568">└──</tspan>
-<tspan y="700" x="576 584 592 600" fill="orange">↻1→∞</tspan>
+<tspan y="700" x="576 584 592 600" fill="#F59E0B">↻1→∞</tspan>
 <tspan y="700" x="608 616 624 632">───┘</tspan>
 <tspan y="700" x="648">╷</tspan>
 <tspan y="700" x="904">│</tspan>
@@ -564,10 +564,10 @@
 <tspan y="714" x="904">│</tspan>
 <tspan y="728" x="32">│</tspan>
 <tspan y="728" x="248 256 264 272 280 288">╭╴╴╴╴╴</tspan>
-<tspan y="728" x="296 304 312 320 328 336 344 352 360" fill="red">Lookahead</tspan>
+<tspan y="728" x="296 304 312 320 328 336 344 352 360" fill="#EF4444">Lookahead</tspan>
 <tspan y="728" x="368 376 384 392 400 408 416">╴╴╴╴╴╴╮</tspan>
 <tspan y="728" x="480 488 496 504 512 520 528 536">╭╴╴╴╴╴╴╴</tspan>
-<tspan y="728" x="544 552 560 568 576 584 592 600 608 616" fill="cyan">!Lookahead</tspan>
+<tspan y="728" x="544 552 560 568 576 584 592 600 608 616" fill="#06B6D4">!Lookahead</tspan>
 <tspan y="728" x="624 632 640 648 656 664 672 680">╴╴╴╴╴╴╴╮</tspan>
 <tspan y="728" x="904">│</tspan>
 <tspan y="742" x="32">│</tspan>
@@ -599,10 +599,10 @@
 <tspan y="784" x="904">│</tspan>
 <tspan y="798" x="32">│</tspan>
 <tspan y="798" x="264 272 280 288 296 304">╭╴╴╴╴╴</tspan>
-<tspan y="798" x="312 320 328 336 344 352 360 368 376 384" fill="green">Lookbehind</tspan>
+<tspan y="798" x="312 320 328 336 344 352 360 368 376 384" fill="#22C55E">Lookbehind</tspan>
 <tspan y="798" x="392 400 408 416 424 432">╴╴╴╴╴╮</tspan>
 <tspan y="798" x="496 504 512 520 528">╭╴╴╴╴</tspan>
-<tspan y="798" x="536 544 552 560 568 576 584 592 600 608 616" fill="blue">!Lookbehind</tspan>
+<tspan y="798" x="536 544 552 560 568 576 584 592 600 608 616" fill="#3B82F6">!Lookbehind</tspan>
 <tspan y="798" x="624 632 640 648 656 664">╴╴╴╴╴╮</tspan>
 <tspan y="798" x="904">│</tspan>
 <tspan y="812" x="32">│</tspan>
@@ -635,24 +635,24 @@
 <tspan y="868" x="32">│</tspan>
 <tspan y="868" x="200 208 216 224 232 240 248">╔══^══╗</tspan>
 <tspan y="868" x="272 280">┏━</tspan>
-<tspan y="868" x="288 296 304 312 320 328" fill="purple">One of</tspan>
+<tspan y="868" x="288 296 304 312 320 328" fill="#8B5CF6">One of</tspan>
 <tspan y="868" x="336 344">━┓</tspan>
 <tspan y="868" x="368 376 384 392 400 408 416 424 432 440 448 456 464 472 480 488 496 504 512">┌─────────────────┐</tspan>
 <tspan y="868" x="536">┏</tspan>
-<tspan y="868" x="544 552 560 568 576 584" fill="red">One of</tspan>
+<tspan y="868" x="544 552 560 568 576 584" fill="#EF4444">One of</tspan>
 <tspan y="868" x="592">┓</tspan>
 <tspan y="868" x="616 624 632 640 648 656 664 672">╔\u6587╗</tspan>
 <tspan y="868" x="696 704 712 720 728">╔═$═╗</tspan>
 <tspan y="868" x="904">│</tspan>
 <tspan y="882" x="32 40 48 56 64 72 80 88 96 104 112 120 128 136 144 152 160 168 176 184 192 200">└────────────────────╣</tspan>
-<tspan y="882" x="208 216 224 232 240" fill="orange">Start</tspan>
+<tspan y="882" x="208 216 224 232 240" fill="#F59E0B">Start</tspan>
 <tspan y="882" x="248 256 264 272 280 288 296 304 312 320 328 336 344 352 360 368 376 384 392 400 408 416 424 432 440 448 456 464 472 480 488 496 504 512 520 528 536">╠──┫▯a▯▯b▯▯▯┣──┤▯▯e▯m▯pty▯spaces▯├──┫</tspan>
-<tspan y="882" x="544 552 560 568 576 584" fill="cyan" text-decoration="underline">U+4E2D</tspan>
+<tspan y="882" x="544 552 560 568 576 584" fill="#06B6D4" text-decoration="underline">U+4E2D</tspan>
 <tspan y="882" x=""></tspan>
 <tspan y="882" x="592 600 608 616">┣──╣</tspan>
-<tspan y="882" x="624 632 640 648 656 664" fill="green">U+6587</tspan>
+<tspan y="882" x="624 632 640 648 656 664" fill="#22C55E">U+6587</tspan>
 <tspan y="882" x="672 680 688 696">╠──╣</tspan>
-<tspan y="882" x="704 712 720" fill="blue">End</tspan>
+<tspan y="882" x="704 712 720" fill="#3B82F6">End</tspan>
 <tspan y="882" x="728 736 744 752 760 768 776 784 792 800 808 816 824 832 840 848 856 864 872 880 888 896 904">╠─────────────────────┘</tspan>
 <tspan y="896" x="200 208 216 224 232 240 248">╚═════╝</tspan>
 <tspan y="896" x="272 280 288 296 304 312 320 328 336 344">┗━━━━━━━━┛</tspan>

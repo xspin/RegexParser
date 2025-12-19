@@ -146,7 +146,7 @@ static inline std::string escaped_name(const std::string &symbol)
         s = "U+" + symbol.substr(2);
         std::transform(s.begin(), s.end(), s.begin(), ::toupper);
     } else if (symbol.size() == 3 && symbol.substr(0,2) == "\\c") {
-        s = "ctrl-";
+        s = "Ctrl-";
         s += (char)toupper(symbol[2]);
     } else {
         s = symbol;

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-make -j4
+make -j4 || exit $?
 
 REGEX_PATH=examples/regex.txt
 
