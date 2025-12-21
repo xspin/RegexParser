@@ -65,16 +65,28 @@ private:
         if (w <= limit || w <= graph_width) {
             lines.push_back(line);
         } else {
+            std::vector<bool> color_open;
+            bool open = false;
+            for (std::string& s : line) {
+                if (s == NC) {
+                    open = false;
+                    color_open.push_back(false);
+                } else if (s[0] == ESC_PRE) {
+                    color_open.push_back(false);
+                    open = true;
+                } else {
+                    color_open.push_back(open);
+                }
+            }
+
             size_t n = line.size();
             size_t i = 0;;
             while (i < n) {
-                size_t j = i + limit;
-                if (j >= n) {
-                    lines.emplace_back(line.begin() + i, line.end());
-                    break;
-                }
-                while (j > i && line[j][0] != ESC_PRE) j--;
-                if (j <= i) j = i + limit;
+                size_t j = std::max(i, label.size());
+                size_t k = 0;
+                while (k < limit && j < n) k += visual_width(line[j++]);
+                while (j < n && color_open[j]) j++;
+                if (j < n && line[j] == NC) j++;
                 lines.emplace_back(line.begin() + i, line.begin() + j);
                 i = j;
             }
@@ -126,13 +138,27 @@ private:
         size_t height = y;
         size_t width = max_x + FONT_WIDTH;
 
+        std::string background = "#fafafa";
+        std::string foreground = "#000000";
+        std::string dark_bg = "#1a1a1a";
+        std::string dark_fg = "#bbbbbb";
+
+        bool dark_mode = false;
+        if (dark_mode) {
+            background = dark_bg;
+            foreground = dark_fg;
+        }
+
         std::stringstream ss;
         ss << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
            << "<svg width=" << strwraperr(width)
            << " height=" << strwraperr(height)
+           << " fill=" << strwraperr(foreground)
            << " xmlns=" << "\"http://www.w3.org/2000/svg\"" << ">\n";
 
-        ss << R"(<rect x="0" y="0" width="100%" height="100%" fill="#fafafa" />)";
+        ss << "<rect x=\"0\" y=\"0\" width=\"100%\" height=\"100%\""
+           << " fill=" << strwraperr(background)
+           << "/>";
 
         ss << expr_ss.str();
 

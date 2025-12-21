@@ -97,21 +97,6 @@ Block build_block(size_t width, size_t height, const std::string& tag="", TableI
 
 Block block_concat(const Block& a, const Block& b, size_t spaces=0, Dir d=Dir::Horizon);
 
-static inline std::string get_quantifier(int min, int max, bool lazy) {
-    std::string arrow = lazy? "⇢" : "→";
-    // std::string arrow = "->";
-    std::string a = std::to_string(min);
-    std::string b = max < INF? std::to_string(max) : "∞";
-    std::string c = min > 0 ? "↻" : "↺";
-    std::stringstream ss;
-    if (min != max) {
-        ss << c << a << arrow << b;
-    } else {
-        ss << c << a;
-    }
-    return ss.str();
-}
-
 static inline std::string escaped_name(const std::string &symbol)
 {
     std::string s;
@@ -154,13 +139,30 @@ static inline std::string escaped_name(const std::string &symbol)
     return s;
 }
 
+static inline std::string get_quantifier(int min, int max, QuantifierTag tag) {
+    std::string arrow = "→";
+    std::string a = std::to_string(min);
+    std::string b = max < INF? std::to_string(max) : "∞";
+    std::string c = min > 0 ? "↻" : "↺";
+    std::stringstream ss;
+    if (min != max) {
+        ss << c << a << arrow << b;
+    } else {
+        ss << c << a;
+    }
+    if (tag == QuantifierTag::POSSESSIVE) {
+        ss << "+";
+    } else if (tag == QuantifierTag::LAZY) {
+        ss << "?";
+    }
+    return ss.str();
+}
+
 struct Quant {
     std::string str;
-    bool lazy;
 
     Quant(const Quantifier* q) {
-        str = get_quantifier(q->min, q->max, q->lazy);
-        lazy = q->lazy;
+        str = get_quantifier(q->min, q->max, q->tag);
     }
 };
 
@@ -201,7 +203,7 @@ static inline std::pair<Rows,Span> box_ext(TableId id,
     const std::string& tag, const Quant* q=nullptr) {
     auto [res, span] = box_table(id, lines, tag);
     if (q) {
-        auto t = box_bottom(res, q->str, q->lazy);
+        auto t = box_bottom(res, q->str, false);
         res = t.first;
         span += t.second;
     }
@@ -251,6 +253,7 @@ enum class BoxType {
     QUANTIFIER,
     ESCAPED,
     ROOT,
+    BACKREF
 };
 
 class GraphBox {
@@ -487,8 +490,9 @@ private:
 
 class GroupBox: public GraphBox {
 public:
-    GroupBox(GraphBox* sub, int gid=0): GraphBox(BoxType::GROUP) {
+    GroupBox(GraphBox* sub, int gid=0, const std::string& name=""): GraphBox(BoxType::GROUP) {
         top = gid? "Group #" + std::to_string(gid) : "";
+        if (!name.empty()) top += " <" + name + ">";
         child.push_back(sub);
     }
 
@@ -794,6 +798,27 @@ private:
     std::string symbol;
 };
 
+class BackrefBox: public GraphBox {
+    std::string tag;
+
+public:
+    BackrefBox(const std::string& s, int id, const std::string& name): GraphBox(BoxType::BACKREF) {
+        raw = s;
+        if (name.empty()) {
+            tag = "#" + std::to_string(id);
+        } else if (isdigit(name[0])) {
+            tag = "#" + name;
+        } else {
+            tag = "<" + name + ">";
+        }
+    }
+
+    void render() {
+        std::string s = "Ref " + tag;
+        auto t = box_special({pack_color(s)}, raw, quant.get());
+        rows = t.first;
+    }
+};
 
 class RootBox: public GraphBox {
 public:

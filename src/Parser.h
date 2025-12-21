@@ -63,6 +63,7 @@ enum class ExprType {
     T_LOOKAHEAD,
     T_LOOKBEHIND,
     T_ESCAPED,
+    T_BACKREF
 };
 
 static inline std::string exprTypeName(ExprType t) {
@@ -80,6 +81,7 @@ static inline std::string exprTypeName(ExprType t) {
     case ExprType::T_LOOKAHEAD: return "Lookahead";
     case ExprType::T_LOOKBEHIND: return "Lookbehind";
     case ExprType::T_ESCAPED: return "Escaped";
+    case ExprType::T_BACKREF: return "Backreference";
     default:
         return "Unknown";
     }
@@ -193,11 +195,17 @@ struct Anchor: ExprNode {
     void travel(TravelFunc preFn, TravelFunc postFn, bool postorder);
 };
 
+enum class QuantifierTag {
+    GREEDY,
+    POSSESSIVE, // ...+
+    LAZY, // ...?
+};
+
 struct Quantifier: ExprNode {
     std::string val;
     int min;
     int max;
-    bool lazy;
+    QuantifierTag tag;
     ExprNode* prev;
 
     Quantifier(std::string s);
@@ -260,9 +268,21 @@ struct Group: ExprNode {
     ExprNode* expr;
     bool capture;
     int id;
+    std::string name;
 
-    Group(ExprNode* expr, bool capture=true);
+    Group(ExprNode* expr, bool capture=true, const std::string& name="");
     ~Group();
+    void travel(TravelFunc preFn, TravelFunc postFn, bool postorder);
+    std::string str(bool color);
+    std::string fmt(int indent, bool color);
+};
+
+struct Backref: ExprNode {
+    int id;
+    std::string name;
+
+    Backref(int id, const std::string& name="");
+    ~Backref();
     void travel(TravelFunc preFn, TravelFunc postFn, bool postorder);
     std::string str(bool color);
     std::string fmt(int indent, bool color);

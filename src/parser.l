@@ -37,8 +37,8 @@ int yylex() {
 %x CLASS
 
 escaped_literal \\[\\.*+?()\[\]{}|^$]
-special_escaped \\[dDwWsStnrfv0]|\\x[0-9a-fA-F]{2}|\\u[0-9a-fA-F]{4}|\\c[a-zA-Z]
-range_expr \\x[0-9a-fA-F]{2}-\\x[0-9a-fA-F]{2}|\\u[0-9a-fA-F]{4}-\\u[0-9a-fA-F]{4}|([^\\\[]|\\.)-([^\\\]]|\\.)|(\\c[a-zA-Z])-(\\c[a-zA-Z])
+special_escaped \\x[0-9a-fA-F]{2}|\\u[0-9a-fA-F]{4}|\\c[a-zA-Z]|\\0[0-7]{2}|\\[dDwWsStnrfv0]
+range_expr \\0[0-7]{2}-\\0[0-7]{2}|\\x[0-9a-fA-F]{2}-\\x[0-9a-fA-F]{2}|\\u[0-9a-fA-F]{4}-\\u[0-9a-fA-F]{4}|([^\\\[]|\\.)-([^\\\]]|\\.)|(\\c[a-zA-Z])-(\\c[a-zA-Z])
 
 %%
 
@@ -54,6 +54,21 @@ range_expr \\x[0-9a-fA-F]{2}-\\x[0-9a-fA-F]{2}|\\u[0-9a-fA-F]{4}-\\u[0-9a-fA-F]{
     return ESCAPED;
 }
 
+\\[1-9][0-9]{0,5} {
+    COMMON();
+    std::string s = yytext;
+    int id = std::stoi(s.substr(1));
+    yylval.expr = new Backref(id);
+    return BACKREF;
+}
+
+\\k<([a-zA-Z_][0-9a-zA-Z_]*|[0-9]+)> {
+    COMMON();
+    std::string s = yytext;
+    yylval.expr = new Backref(0, s.substr(3, s.size()-4));
+    return BACKREF;
+}
+
 \(\?[=!] {
     COMMON();
     yylval.expr = nullptr;
@@ -67,13 +82,25 @@ range_expr \\x[0-9a-fA-F]{2}-\\x[0-9a-fA-F]{2}|\\u[0-9a-fA-F]{4}-\\u[0-9a-fA-F]{
     return yytext[3] == '=' ? LOOKBEHIND : NEGLOOKBEHIND;
 }
 
+\(\?<[a-zA-Z_][0-9a-zA-Z_]*> {
+    // named group
+    COMMON();
+    std::string s = yytext;
+    s = s.substr(3);
+    s.pop_back();
+    yylval.expr = new Group(nullptr, true, s);
+    return NAMEDLPAREN;
+}
+
 "(?:" {
+    // no capture group start
     COMMON();
     yylval.expr = nullptr;
     return NLPAREN;
 }
 
 "(" {
+    // group start
     COMMON();
     yylval.expr = nullptr;
     return LPAREN;
@@ -147,13 +174,19 @@ range_expr \\x[0-9a-fA-F]{2}-\\x[0-9a-fA-F]{2}|\\u[0-9a-fA-F]{4}-\\u[0-9a-fA-F]{
     return LITERAL;
 }
 
-[?*+]\?? {
+[?*+][+?]? {
     COMMON();
     yylval.expr = new Quantifier(yytext);
     return QUANTIFIER;
 }
 
-(\{[0-9]+(,([0-9]+)?)?\})\?? {
+\{[0-9]+\}[+?]? {
+    COMMON();
+    yylval.expr = new Quantifier(yytext);
+    return QUANTIFIER;
+}
+
+\{([0-9]+)?,([0-9]+)?\}[+?]? {
     COMMON();
     yylval.expr = new Quantifier(yytext);
     return QUANTIFIER;
@@ -186,11 +219,13 @@ range_expr \\x[0-9a-fA-F]{2}-\\x[0-9a-fA-F]{2}|\\u[0-9a-fA-F]{4}-\\u[0-9a-fA-F]{
 %% 
 
 
-static const char* tokenstr(int t) {
+static inline const char* tokenstr(int t) {
     switch (t) {
         case LITERAL: return "LITERAL";
         case ANY: return "ANY";
         case QUANTIFIER: return "QUANTIFIER";
+        case NAMEDLPAREN: return "NAMEDLPAREN";
+        case BACKREF: return "BACKREF";
         case LPAREN: return "LPAREN";
         case RPAREN: return "RPAREN";
         case NLBRACKET: return "NLBRACKET";

@@ -7,7 +7,7 @@ ifeq ($(OS), windows)
     LD      = x86_64-w64-mingw32-ld
     SUFFIX  = .exe
     CFLAGS  = -static
-    LDFLAGS = -static
+    LDFLAGS = -static -lws2_32
 	BIN_DIR := C:/bin
 	BUILD_DIR := build_win
 	INC = -I/Library/Developer/CommandLineTools/usr/include/ -I/usr/local/include
@@ -73,21 +73,23 @@ $(LEX_BIN): $(LEX_CC) $(BISON_HH)
 	$(CXX) $(CFLAGS) -o $@ $< $(BISON_CC) $(SRC_DIR)/Parser.cpp $(SRC_DIR)/utils.cpp -DLEXER_BIN
 
 $(TARGET): $(OBJ)
-	$(CXX) $(CFLAGS) -o $@ $(OBJ) 
+	$(CXX) $(CFLAGS) -o $@ $(OBJ) $(LDFLAGS) 
 
 $(LEX_CC): $(SRC_DIR)/parser.l $(SRC_DIR)/Parser.h
 	$(YACC) -o $@ $< 
+	@echo "flex $< → $@ done"
 
 $(BISON_HH) $(BISON_CC): $(SRC_DIR)/parser.y
 	$(BISON) -o $(BISON_CC) -d $^ --report=all -k
+	@echo "bison $< → $@ done"
 
 $(OBJ_DIR)/%.o: $(BUILD_DIR)/%.cc 
 	$(CXX) $(CFLAGS) -c $< -o $@ 
-	@echo "cc $< → $@"
+	@echo "cc $< → $@ done"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp $(DEPENDS)
 	$(CXX) $(CFLAGS) -c $< -o $@ 
-	@echo "cc $< → $@"
+	@echo "cc $< → $@ done"
 
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)

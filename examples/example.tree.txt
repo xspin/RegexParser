@@ -1,4 +1,4 @@
-Regular Expression: a1\|\(\)\[\]\{\}\.\?\+\*\\\\\^\$[a1\(\)\[\]\{\}\.\?\+\*\\\\|^$]|[-a1.+*_\\\\][^abc-][a-z0-9A-Z][.\d\D\w\W\s\S\f\n\t\v\0\r]|.\d\D\w\W\s\S\n\t|a*b+c?d{2}e{1,}f{3,4}a*?b+?c??d{2}?e{1,}?f{3,4}?|^\Banchor\b$[\B\b^$]|\a\c1\e\f\n\r\t\v\0|\cA[\ca-\cZ]\u9fa5[\u4e00-\u9fa5]\xAa[\x00-\xff]|([a-z]\d)(?:\w\s+)|a(?=followed_by_this)b(?!not_followed_by_this)c|d(?<=preceded_by_this)e(?<!preceded_by_this)f|^[ a  b   ]  e m pty spaces [\u4E2D]\u6587$
+Regular Expression: a1\|\(\)\[\]\{\}\.\?\+\*\\\\\^\$[a1\(\)\[\]\{\}\.\?\+\*\\\\|^$]|[-a1.+*_\\\\][^abc-][a-z0-9A-Z][.\d\D\w\W\s\S\f\n\t\v\0\r]|.\d\D\w\W\s\S\n\t|a*b+c?d{2}e{1,}f{3,4}|a*?b+?c??d{2}?e{1,}?f{3,4}? |a*+b++c?+d{2}+e{1,}+f{3,4}+|^\Banchor\b$[\B\b^$]|\a\c1\e\f\n\r\t\v\0|\cA[\ca-\cZ]\u9fa5[\u4e00-\u9fa5]\xAa[\x00-\xff][\000-\077]\012|([a-z]\d)(?:\w\s+)|a(?=followed_by_this)b(?!not_followed_by_this)c|d(?<=preceded_by_this)e(?<!preceded_by_this)f|^[ a  b   ]  e m pty spaces [\u4E2D]\u6587$|(?<name>a+b*(?<_name2_>xxx))ref\0\1\123\k<_ref>\k<0123>
 
 (
     <Literal a1|()[]{}.?+*\\^$>
@@ -49,12 +49,21 @@ Regular Expression: a1\|\(\)\[\]\{\}\.\?\+\*\\\\\^\$[a1\(\)\[\]\{\}\.\?\+\*\\\\|
     <Literal d><Quantifier {2,2}>
     <Literal e><Quantifier {1,}>
     <Literal f><Quantifier {3,4}>
+) OR (
     <Literal a><Quantifier {0,}?>
     <Literal b><Quantifier {1,}?>
     <Literal c><Quantifier {0,1}?>
     <Literal d><Quantifier {2,2}?>
     <Literal e><Quantifier {1,}?>
     <Literal f><Quantifier {3,4}?>
+    <Literal  >
+) OR (
+    <Literal a><Quantifier {0,}+>
+    <Literal b><Quantifier {1,}+>
+    <Literal c><Quantifier {0,1}+>
+    <Literal d><Quantifier {2,2}+>
+    <Literal e><Quantifier {1,}+>
+    <Literal f><Quantifier {3,4}+>
 ) OR (
     <Anchor ^>
     <Anchor \B>
@@ -85,6 +94,10 @@ Regular Expression: a1\|\(\)\[\]\{\}\.\?\+\*\\\\\^\$[a1\(\)\[\]\{\}\.\?\+\*\\\\|
     [Class
         <Range \x00-\xff>
     ]
+    [Class
+        <Range \000-\077>
+    ]
+    <Escaped \012>
 ) OR (
     (Group#1
         [Class
@@ -127,5 +140,19 @@ Regular Expression: a1\|\(\)\[\]\{\}\.\?\+\*\\\\\^\$[a1\(\)\[\]\{\}\.\?\+\*\\\\|
     ]
     <Escaped \u6587>
     <Anchor $>
+) OR (
+    (Group#2<name>
+        <Literal a><Quantifier {1,}>
+        <Literal b><Quantifier {0,}>
+        (Group#3<_name2_>
+            <Literal xxx>
+        #3<_name2_>)
+    #2<name>)
+    <Literal ref>
+    <Escaped \0>
+    <Ref \1>
+    <Ref \123>
+    <Ref \k<_ref>>
+    <Ref \k<0123>>
 )
 

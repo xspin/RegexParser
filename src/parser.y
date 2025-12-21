@@ -76,7 +76,9 @@ void yyerror_throw(const std::string& msg) {
     ExprNode* expr;
 }
 
-%token <expr> LITERAL ANY QUANTIFIER RANGE OR ANCHOR ESCAPED LOOKAHEAD LOOKBEHIND NEGLOOKAHEAD NEGLOOKBEHIND
+%token <expr> LITERAL ANY QUANTIFIER RANGE OR ANCHOR ESCAPED
+    LOOKAHEAD LOOKBEHIND NEGLOOKAHEAD NEGLOOKBEHIND NAMEDLPAREN BACKREF
+
 %token LPAREN NLPAREN RPAREN LBRACKET NLBRACKET RBRACKET
 
 %type <expr> expr group term class class_seq optional_q
@@ -118,6 +120,11 @@ group: LPAREN expr RPAREN optional_q {
     | NLPAREN expr RPAREN optional_q {
         $$ = attach(new Group($2, false), $4);
     }
+    | NAMEDLPAREN expr RPAREN optional_q {
+        auto group = static_cast<Group*>($1);
+        group->expr = $2;
+        $$ = attach(group, $4);
+    }
     | LOOKAHEAD expr RPAREN {
         $$ = new Lookahead($2);
     }
@@ -151,6 +158,7 @@ class_seq: class_seq LITERAL { $$ = combine($1, $2); }
 term: LITERAL optional_q { $$ = attach($1, $2); }
     | ANY optional_q { $$ = attach($1, $2); }
     | ESCAPED optional_q { $$ = attach($1, $2); }
+    | BACKREF optional_q { $$ = attach($1, $2); }
     | ANCHOR { $$ = $1; }
     ;
 %%

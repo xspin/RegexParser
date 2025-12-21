@@ -338,7 +338,7 @@ std::unique_ptr<RootBox> expr_to_box(ExprNode* expr) {
         } else if (node->isType(ExprType::T_GROUP)) {
             auto group = static_cast<Group*>(node);
             assert(t);
-            p = new GroupBox(t, group->id);
+            p = new GroupBox(t, group->id, group->name);
             stk.pop();
         } else if (node->isType(ExprType::T_QUANTIFIER)) {
             assert(t);
@@ -377,6 +377,9 @@ std::unique_ptr<RootBox> expr_to_box(ExprNode* expr) {
         } else if (node->isType(ExprType::T_RANGE)) {
             auto range = static_cast<Range*>(node);
             p = new RangeBox(range->start, range->end);
+        } else if (node->isType(ExprType::T_BACKREF)) {
+            auto ref = static_cast<Backref*>(node);
+            p = new BackrefBox(ref->str(false), ref->id, ref->name);
         } else {
             // T_LITERAL,
             p = new NormalBox(node->str());

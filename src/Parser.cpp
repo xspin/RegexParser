@@ -36,7 +36,7 @@ static inline std::pair<int,int> parse_quantifier(const std::string& s) {
         return {a, a};
     }
 
-    a = stoi(t.substr(0, i));
+    a = i > 0 ? stoi(t.substr(0, i)) : 0;
     b = i == t.size()-1 ? INF : stoi(t.substr(i+1));
 
     return {a, b};
@@ -189,10 +189,13 @@ void Anchor::travel(TravelFunc preFn, TravelFunc postFn, bool postorder) {
 
 Quantifier::Quantifier(std::string s): ExprNode(ExprType::T_QUANTIFIER), val(s), prev(nullptr) {
     std::pair<int,int> ret;
-    lazy = false;
-    if (s.size() > 1 && s.back() == '?') lazy = true;
+    tag = QuantifierTag::GREEDY;
+    if (s.size() > 1) {
+        if (s.back() == '+') tag = QuantifierTag::POSSESSIVE;
+        else if (s.back() == '?') tag = QuantifierTag::LAZY;
+    }
     if (s.front() == '{') {
-        if (s.back() == '?') s.pop_back();
+        if (tag != QuantifierTag::GREEDY) s.pop_back();
         ret = parse_quantifier(s);
     } else {
         ret = parse_quantifier(s[0]);
@@ -230,7 +233,8 @@ std::string Quantifier::_str() {
         }
     }
     ss << "}";
-    if (lazy) ss << "?";
+    if (tag == QuantifierTag::LAZY) ss << "?";
+    else if (tag == QuantifierTag::POSSESSIVE) ss << "+";
     return ss.str();
 }
 
@@ -422,8 +426,8 @@ std::string Class::fmt(int indent, bool color) {
 
 /* Group */
 
-Group::Group(ExprNode* expr, bool capture)
-: ExprNode(ExprType::T_GROUP), expr(expr), capture(capture), id(0) {}
+Group::Group(ExprNode* expr, bool capture, const std::string& name)
+: ExprNode(ExprType::T_GROUP), expr(expr), capture(capture), id(0), name(name) {}
 
 Group::~Group() {
     delete expr;
@@ -437,17 +441,52 @@ void Group::travel(TravelFunc preFn, TravelFunc postFn, bool postorder) {
 
 std::string Group::str(bool color) {
     std::string c = color? iter_color() : "";
-    return c + (capture? "(" : "(?:") + expr->str(color) + c + ")";
+    if (name.empty()) {
+        return c + (capture? "(" : "(?:") + expr->str(color) + c + ")";
+    } else {
+        return c + "(?<" + name + ">" + expr->str(color) + c + ")";
+    }
 }
 
 std::string Group::fmt(int indent, bool color) {
     std::string c = color? iter_color() : "";
     std::string gid = capture? "#" + std::to_string(id) : "";
+    if (!name.empty()) gid += "<" + name + ">";
     std::string s = prefix(indent) + c + "(Group" + gid;  
     s += expr->fmt(indent + this->indent, color);
     s += prefix(indent) + c + gid + ")";
     return s;
 }
+
+/* Backref */
+Backref::Backref(int id, const std::string& name)
+: ExprNode(ExprType::T_BACKREF), id(id), name(name) { }
+
+Backref::~Backref() { }
+
+void Backref::travel(TravelFunc preFn, TravelFunc postFn, bool postorder)
+{
+    if (preFn) preFn(this);
+    if (postFn) postFn(this);
+}
+
+std::string Backref::str(bool color)
+{
+    std::string c = color? iter_color() : "";
+    if (name.empty()) {
+        return c + "\\" + std::to_string(id);
+    } else {
+        return c + "\\k<" + name + ">";
+    }
+}
+
+std::string Backref::fmt(int indent, bool color)
+{
+    std::string c = color? iter_color() : "";
+    std::string s = prefix(indent) + c + "<Ref " + str(false) + ">";
+    return s;
+}
+
 
 /* Lookahead */
 

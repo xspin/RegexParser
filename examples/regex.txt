@@ -1,11 +1,14 @@
 a1\|\(\)\[\]\{\}\.\?\+\*\\\\\^\$[a1\(\)\[\]\{\}\.\?\+\*\\\\|^$]
 |[-a1.+*_\\\\][^abc-][a-z0-9A-Z][.\d\D\w\W\s\S\f\n\t\v\0\r]
 |.\d\D\w\W\s\S\n\t
-|a*b+c?d{2}e{1,}f{3,4}a*?b+?c??d{2}?e{1,}?f{3,4}?
+|a*b+c?d{2}e{1,}f{3,4}
+|a*?b+?c??d{2}?e{1,}?f{3,4}? 
+|a*+b++c?+d{2}+e{1,}+f{3,4}+
 |^\Banchor\b$[\B\b^$]
 |\a\c1\e\f\n\r\t\v\0
-|\cA[\ca-\cZ]\u9fa5[\u4e00-\u9fa5]\xAa[\x00-\xff]
+|\cA[\ca-\cZ]\u9fa5[\u4e00-\u9fa5]\xAa[\x00-\xff][\000-\077]\012
 |([a-z]\d)(?:\w\s+)
 |a(?=followed_by_this)b(?!not_followed_by_this)c
 |d(?<=preceded_by_this)e(?<!preceded_by_this)f
 |^[ a  b   ]  e m pty spaces [中]文$
+|(?<name>a+b*(?<_name2_>xxx))ref\0\1\123\k<_ref>\k<0123>

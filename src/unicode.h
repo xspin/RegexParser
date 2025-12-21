@@ -346,7 +346,7 @@ static inline size_t ansi_size(const std::string& str) {
     if (str.empty()) return 0;
     // 正则表达式：匹配所有 ANSI 转义序列
     // \x1B：ESC 字符（\033）；\[：匹配 [；[0-9;]*：匹配数字/分号；[a-zA-Z]：匹配结束符（m/H/J/K 等）
-    std::regex ansi_regex("\x1B\\[[0-9;]*[a-zA-Z]");
+    std::regex ansi_regex("\x1B\\[[0-9;]*m"); // 只匹配m结束符
     
     std::sregex_iterator it(str.begin(), str.end(), ansi_regex);
     std::sregex_iterator end;
