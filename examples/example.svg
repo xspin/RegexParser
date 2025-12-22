@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="1032" height="1148" fill="#000000" xmlns="http://www.w3.org/2000/svg">
-<rect x="0" y="0" width="100%" height="100%" fill="#fafafa"/><text x="0" y="28" font-size="14" font-family="Consolas, Monaco, 'Courier New', monospace">
+<svg id="regexsvg" width="1032" height="1148" fill="#000000" xmlns="http://www.w3.org/2000/svg">
+<rect id="svgbg" x="0" y="0" width="100%" height="100%" fill="#fafafa"/><text x="0" y="28" font-size="14" font-family="Consolas, Monaco, 'Courier New', monospace">
 <tspan y="28" x="8 16 24 32 40 48 56">Regular</tspan>
 <tspan y="28" x="72 80 88 96 104 112 120 128 136 144 152">Expression:</tspan>
 <tspan y="28" x=""></tspan>

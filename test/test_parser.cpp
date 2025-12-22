@@ -6,7 +6,7 @@
 
 TEST(PARSER, regex_parse) {
     std::string expr;
-    std::unique_ptr<ExprNode> root;
+    std::unique_ptr<ExprRoot> root;
 
     // test quantifier
     expr = "..??.+.*.{3,}a?b*c+d{2}|a??b*?c+?d{2}?e{1,4}";

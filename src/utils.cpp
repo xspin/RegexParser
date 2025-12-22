@@ -94,6 +94,7 @@ int parse_args(Args& args, int argc, char* argv[]) {
         << "  -c           print with ansi color\n"
         << "  -g           generate a random regular expression with specified length limit\n"
         << "  -u           enable utf8 encoding\n"
+        << "  -p port      run as http server with specified port\n"
         << "  [REGEX]      specify regular expression input (read from stdin if missing)\n";
 
     args.format = FMT_NULL;
@@ -101,6 +102,7 @@ int parse_args(Args& args, int argc, char* argv[]) {
     args.debug = false;
     args.utf8 = false;
     args.rand = 0;
+    args.port = 0;
 
     auto parse_format = [&args](const std::string& arg) {
         for (auto [i, k] : split(arg, ',')) {
@@ -128,7 +130,7 @@ int parse_args(Args& args, int argc, char* argv[]) {
 
     auto parse_opt = [&]() {
         int opt;
-        while ((opt = getopt(argc, argv, "g:f:o:hvcdu")) != -1) {
+        while ((opt = getopt(argc, argv, "p:g:f:o:hvcdu")) != -1) {
             switch (opt) {
                 case 'd':
                     args.debug = true;
@@ -144,6 +146,17 @@ int parse_args(Args& args, int argc, char* argv[]) {
                     break;
                 case 'c':
                     args.color = true;
+                    break;
+                case 'p':
+                    try {
+                        args.port = std::stoi(optarg);
+                        if (args.port <= 0 || args.port > 65535) {
+                            throw std::runtime_error("Invalid port");
+                        }
+                    } catch(const std::exception& e) {
+                        std::cerr << "Failed to parse option -p: " << e.what() << std::endl; 
+                        return 1;
+                    } 
                     break;
                 case 'g':
                     try {
@@ -185,7 +198,7 @@ int parse_args(Args& args, int argc, char* argv[]) {
 
     if (args.format == FMT_NULL) args.format = FMT_GRAPH;
 
-    if (args.expr.empty()) {
+    if (args.port == 0 && args.expr.empty()) {
         if (args.rand > 0) {
             RegexGenerator g;
             args.expr = g.generate(args.rand);
@@ -197,7 +210,7 @@ int parse_args(Args& args, int argc, char* argv[]) {
         }
     }
 
-    if (args.expr.empty()) {
+    if (args.port == 0 && args.expr.empty()) {
         std::cerr << "No expression input!" << std::endl;
         std::cerr << help.str() << std::endl;
         return -1;
@@ -205,8 +218,8 @@ int parse_args(Args& args, int argc, char* argv[]) {
 
     g_debug = args.debug;
 
-    LOG_DEBUG("options: {format: 0x%x, color: %d, utf8: %d, rand: %d}\n",
-        args.format, args.color, args.utf8, args.rand);
+    LOG_DEBUG("options: {format: 0x%x, color: %d, utf8: %d, rand: %d, port: %d}\n",
+        args.format, args.color, args.utf8, args.rand, args.port);
     return 0;
 }
 

@@ -63,7 +63,8 @@ enum class ExprType {
     T_LOOKAHEAD,
     T_LOOKBEHIND,
     T_ESCAPED,
-    T_BACKREF
+    T_BACKREF,
+    T_ROOT,
 };
 
 static inline std::string exprTypeName(ExprType t) {
@@ -82,12 +83,12 @@ static inline std::string exprTypeName(ExprType t) {
     case ExprType::T_LOOKBEHIND: return "Lookbehind";
     case ExprType::T_ESCAPED: return "Escaped";
     case ExprType::T_BACKREF: return "Backreference";
+    case ExprType::T_ROOT: return "Root";
     default:
         return "Unknown";
     }
 }
 
-extern void yyerror_throw(const std::string& msg);
 
 void reset_color();
 std::string iter_color();
@@ -123,14 +124,28 @@ struct ExprNode {
 
     std::string prefix(int indent);
 
-    virtual std::string format(int indent=2, bool color=false) final;
-    virtual std::string stringify(bool color=false) final;
     virtual ~ExprNode() {}
     virtual std::string str(bool color=false) = 0;
     virtual std::string fmt(int indent, bool color) = 0;
     virtual void travel(TravelFunc preFn=nullptr, TravelFunc postFn=nullptr, bool postorder=false) =0;
 };
 
+struct ExprRoot: ExprNode {
+    ExprNode* expr;
+
+    ExprRoot(ExprNode* expr);
+    ~ExprRoot();
+
+    std::string stringify(bool color=false);
+    std::string format(int indent, bool color);
+
+    void travel(TravelFunc preFn, TravelFunc postFn, bool postorder);
+    void process_groupid();
+
+private:
+    std::string str(bool color);
+    std::string fmt(int indent, bool color);
+};
 
 struct Literal: ExprNode {
     std::string escaped;
@@ -143,6 +158,7 @@ struct Literal: ExprNode {
     std::string fmt(int indent, bool color);
     void travel(TravelFunc preFn, TravelFunc postFn, bool postorder);
 };
+
 
 struct Escaped: ExprNode {
     /*
@@ -332,20 +348,7 @@ struct Or: ExprNode {
 };
 
 
-static inline void process_groupid(ExprNode* root) {
-    static int gid = 1;
 
-    root->travel([](ExprNode* node){
-        if (node && node->isGroup()) {
-            auto p = static_cast<Group*>(node);
-            if (p->capture) {
-                p->id = gid++;
-            } else {
-                p->id = 0;
-            }
-        }
-    });
-}
 
 static inline ExprNode* attach(ExprNode* a, ExprNode* b) {
     if (!b) return a;
@@ -392,12 +395,13 @@ static inline std::string escape(const std::string& str) {
             case '\v': s += "\\v"; break;
             case '\a': s += "\\a"; break;
             case '\e': s += "\\e"; break;
+            case '\0': s += "\\0"; break;
             default: s += c;
         }
     }
     return s;
 }
 
-extern std::unique_ptr<ExprNode> regex_parse(const std::string& expr, bool debug=false);
+extern std::unique_ptr<ExprRoot> regex_parse(const std::string& expr, bool debug=false);
 
 #endif

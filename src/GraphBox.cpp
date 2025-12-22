@@ -406,9 +406,10 @@ std::unique_ptr<RootBox> expr_to_box(ExprNode* expr) {
         stk.pop();
     }
 
+    reset_color();
+
     root->render();
     // root->layout();
-
     return std::unique_ptr<RootBox>(root);
 };
 

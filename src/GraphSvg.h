@@ -151,12 +151,12 @@ private:
 
         std::stringstream ss;
         ss << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-           << "<svg width=" << strwraperr(width)
+           << "<svg id=\"regexsvg\" width=" << strwraperr(width)
            << " height=" << strwraperr(height)
            << " fill=" << strwraperr(foreground)
            << " xmlns=" << "\"http://www.w3.org/2000/svg\"" << ">\n";
 
-        ss << "<rect x=\"0\" y=\"0\" width=\"100%\" height=\"100%\""
+        ss << "<rect id=\"svgbg\" x=\"0\" y=\"0\" width=\"100%\" height=\"100%\""
            << " fill=" << strwraperr(background)
            << "/>";
 

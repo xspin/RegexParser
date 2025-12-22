@@ -1,5 +1,7 @@
 #include "Parser.h"
 
+extern void yyerror_throw(const std::string& msg);
+
 int ExprNode::indent = 0;
 
 static std::vector<std::string> colors = {GREEN, BLUE, YELLOW, PURPLE, RED, CYAN};
@@ -85,7 +87,32 @@ std::string ExprNode::prefix(int indent) {
     }
 }
 
-std::string ExprNode::format(int indent, bool color) {
+
+/* ExprRoot */
+ExprRoot::ExprRoot(ExprNode* expr): ExprNode(ExprType::T_ROOT), expr(expr) { }
+
+ExprRoot::~ExprRoot() {
+    delete expr;
+}
+
+std::string ExprRoot::str(bool color) {
+    return expr->str(color);
+}
+
+std::string ExprRoot::fmt(int indent, bool color) {
+    return expr->fmt(indent, color);
+}
+
+void ExprRoot::travel(TravelFunc preFn, TravelFunc postFn, bool postorder) {
+    expr->travel(preFn, postFn, postorder);
+}
+
+std::string ExprRoot::stringify(bool color) {
+    reset_color();
+    return this->str(color) + (color? NC : "");
+}
+
+std::string ExprRoot::format(int indent, bool color) {
     reset_color();
     this->indent = indent;
     if (indent > 0) {
@@ -106,10 +133,20 @@ std::string ExprNode::format(int indent, bool color) {
     }
 }
 
-std::string ExprNode::stringify(bool color) {
-    return this->str(color) + (color? NC : "");
-}
+void ExprRoot::process_groupid() {
+    int gid = 1;
 
+    expr->travel([&gid](ExprNode* node){
+        if (node && node->isGroup()) {
+            auto p = static_cast<Group*>(node);
+            if (p->capture) {
+                p->id = gid++;
+            } else {
+                p->id = 0;
+            }
+        }
+    });
+}
 
 /* Literal */
 Literal::Literal(const std::string& s): ExprNode(ExprType::T_LITERAL), escaped(s) {

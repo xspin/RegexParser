@@ -17,41 +17,45 @@ extern void reset_flex(const std::string& text);
 extern void lex_parse(const std::string& s);
 
 static std::string g_text;
-static ExprNode* g_expr = nullptr;
+static ExprRoot* g_expr = nullptr;
 
 void yyerror(const std::string& msg)
 {
     int col = (g_yytext && *g_yytext)? yylloc.first_column : yylloc.last_column + 1;
+    std::string tok = g_yytext? g_yytext : "";
 
-    std::cerr << "\033[31m" << "Error: " << msg
-    << ", at column " << col
-    << ": Token `" << g_yytext << "` " << (yylval.expr?yylval.expr->format(0):"")
-    << "\033[0m"
-    << std::endl;
+    std::stringstream ss;
+    ss << "Error: " << msg << ", at column " << col;
+    if (!tok.empty()) ss << ": Token `" << tok << "` ";
+
+    std::cerr << "\033[31m" << ss.str() << "\033[0m" << std::endl;
 
     std::string code;
     int err_col;
     if (g_text.size() > 80) {
         size_t a = col;
         std::string prefix;
-        if (col > 10) {
-            a -= 10;
-            prefix = " ... ";
+        if (col > 20) {
+            a = col - 20;
+            prefix = "... ";
         }
-        code = prefix + g_text.substr(a, 80);
+        code = prefix + g_text.substr(a, 40);
         err_col = col - a + prefix.size();
     } else {
         code = g_text;
         err_col = col;
     }
 
+    ss << "\n\n" << code << "\n" << std::setfill('_') << std::setw(err_col) << std::right << "^";
+
     std::cerr << code << std::endl
         << std::setfill('_') << std::setw(err_col) << std::right << "^" << std::endl;
+
+    throw std::runtime_error(ss.str());
 } 
 
 void yyerror_throw(const std::string& msg) {
     yyerror(msg);
-    throw std::runtime_error(msg);
 }
 
 #ifdef RULE_DEBUG
@@ -85,8 +89,8 @@ void yyerror_throw(const std::string& msg) {
 
 %%
 root: expr {
-        process_groupid($1);
-        g_expr = $1;
+        g_expr = new ExprRoot($1);
+        g_expr->process_groupid();
     };
 
 expr: expr OR {
@@ -163,7 +167,11 @@ term: LITERAL optional_q { $$ = attach($1, $2); }
     ;
 %%
 
-std::unique_ptr<ExprNode> regex_parse(const std::string& expr, bool debug) {
+std::unique_ptr<ExprRoot> regex_parse(const std::string& expr, bool debug) {
+    if (expr.empty()) {
+        throw std::runtime_error("Empty Expr!");
+    }
+    g_expr = nullptr;
     g_text = escape(expr);
     reset_flex(g_text);
     int ret = yyparse();
@@ -172,5 +180,5 @@ std::unique_ptr<ExprNode> regex_parse(const std::string& expr, bool debug) {
         if (g_expr) delete g_expr; 
         return nullptr;
     }
-    return std::unique_ptr<ExprNode>(g_expr);
+    return std::unique_ptr<ExprRoot>(g_expr);
 }

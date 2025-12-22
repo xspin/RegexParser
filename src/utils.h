@@ -5,7 +5,7 @@
 #include <vector>
 #include <cstdio>
 
-#define APP_VERSION "0.4.3"
+#define APP_VERSION "0.4.4"
 
 extern bool g_debug;
 
@@ -39,6 +39,7 @@ struct Args {
     bool debug;
     bool utf8;
     int rand;
+    int port;
 };
 
 int parse_args(Args& args, int argc, char* argv[]);

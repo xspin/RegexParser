@@ -9,6 +9,7 @@
 #include "DFACanvas.h"
 #include "GraphSvg.h"
 #include "GraphHtml.h"
+#include "GraphHttp.h"
 
 
 int run(int argc, char* argv[]) {
@@ -19,21 +20,23 @@ int run(int argc, char* argv[]) {
         return ret;
     }
 
+    if (args.port > 0) {
+        GraphHttp http(args.port);
+        http.Start();
+        return 0;
+    }
+
     args.expr = utf8_to_uhhhh(args.expr);
 
     if (g_debug) std::cout << "  Input Expression: " << args.expr << std::endl;
 
-    std::unique_ptr<ExprNode> root(regex_parse(args.expr, args.debug));
+    std::unique_ptr<ExprRoot> root(regex_parse(args.expr, args.debug));
     if (!root) {
         return -1;
     }
 
     auto dump = [&args, &root](std::ostream& os) {
         std::string expr_str = root->stringify(args.color);
-
-        if (args.debug) {
-            assert(root->str() == args.expr);
-        }
 
         GraphBox::set_encoding(args.utf8);
         GraphBox::set_color(args.color);
