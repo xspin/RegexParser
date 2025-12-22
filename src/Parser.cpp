@@ -3,6 +3,7 @@
 extern void yyerror_throw(const std::string& msg);
 
 int ExprNode::indent = 0;
+std::unordered_set<void*> ExprNode::allocs;
 
 static std::vector<std::string> colors = {GREEN, BLUE, YELLOW, PURPLE, RED, CYAN};
 static int color_idx = 0;
@@ -75,6 +76,15 @@ bool ExprNode::isGroup() {
     return isType(ExprType::T_GROUP);
 }
 
+bool ExprNode::isClass() {
+    return isType(ExprType::T_CLASS);
+}
+
+bool ExprNode::isRoot() {
+    return isType(ExprType::T_ROOT);
+}
+
+
 bool ExprNode::isLiteral() {
     return isType(ExprType::T_LITERAL);
 }
@@ -87,6 +97,40 @@ std::string ExprNode::prefix(int indent) {
     }
 }
 
+void* ExprNode::operator new(std::size_t size) {
+    void* ptr = std::malloc(size);
+    if (!ptr) throw std::bad_alloc();
+    allocs.insert(ptr);
+    return ptr;
+}
+
+void* ExprNode::operator new[](std::size_t size) {
+    void* ptr = std::malloc(size);
+    if (!ptr) throw std::bad_alloc();
+    allocs.insert(ptr);
+    return ptr;
+}
+
+void ExprNode::operator delete(void* ptr) noexcept {
+    if (allocs.find(ptr) != allocs.end()) {
+        allocs.erase(ptr);
+        std::free(ptr);
+    }
+}
+
+void ExprNode::operator delete[](void* ptr) noexcept {
+    if (allocs.find(ptr) != allocs.end()) {
+        allocs.erase(ptr);
+        std::free(ptr);
+    }
+}
+
+void ExprNode::destroy() noexcept {
+    for (auto ptr : allocs) {
+        std::free(ptr);
+    }
+    allocs.clear();
+}
 
 /* ExprRoot */
 ExprRoot::ExprRoot(ExprNode* expr): ExprNode(ExprType::T_ROOT), expr(expr) { }
@@ -246,7 +290,7 @@ Quantifier::Quantifier(std::string s): ExprNode(ExprType::T_QUANTIFIER), val(s),
 }
 
 Quantifier::~Quantifier() {
-    delete prev;
+    if (prev) delete prev;
 }
 
 void Quantifier::attach(ExprNode* node) {
@@ -434,7 +478,7 @@ Class::Class(ExprNode* seq, bool negative)
 : ExprNode(ExprType::T_CLASS), seq(seq), negative(negative) {}
 
 Class::~Class() {
-    delete seq;
+    if (seq) delete seq;
 }
 
 void Class::travel(TravelFunc preFn, TravelFunc postFn, bool postorder) {
@@ -467,7 +511,7 @@ Group::Group(ExprNode* expr, bool capture, const std::string& name)
 : ExprNode(ExprType::T_GROUP), expr(expr), capture(capture), id(0), name(name) {}
 
 Group::~Group() {
-    delete expr;
+    if (expr) delete expr;
 }
 
 void Group::travel(TravelFunc preFn, TravelFunc postFn, bool postorder) {
@@ -531,7 +575,7 @@ Lookahead::Lookahead(ExprNode* expr, bool negative)
 : ExprNode(ExprType::T_LOOKAHEAD), expr(expr), negative(negative) { }
 
 Lookahead::~Lookahead() {
-    delete expr;
+    if (expr) delete expr;
 }
 
 void Lookahead::travel(TravelFunc preFn, TravelFunc postFn, bool postorder) {
@@ -564,7 +608,7 @@ Lookbehind::Lookbehind(ExprNode* expr, bool negative)
 : ExprNode(ExprType::T_LOOKBEHIND), expr(expr), negative(negative) { }
 
 Lookbehind::~Lookbehind() {
-    delete expr;
+    if (expr) delete expr;
 }
 
 void Lookbehind::travel(TravelFunc preFn, TravelFunc postFn, bool postorder) {

@@ -11,6 +11,7 @@
 #include <vector>
 #include <functional>
 #include <climits>  
+#include <unordered_set>
 #include "utils.h"
 
 #define INF INT_MAX
@@ -107,7 +108,6 @@ struct ExprNode {
     using TravelFunc = std::function<void(ExprNode*)>;
 
     ExprType type;
-    static int indent;
 
     ExprNode(ExprType t);
 
@@ -120,6 +120,8 @@ struct ExprNode {
     bool isOR();
     bool isSequence();
     bool isGroup();
+    bool isClass();
+    bool isRoot();
     bool isLiteral();
 
     std::string prefix(int indent);
@@ -128,6 +130,15 @@ struct ExprNode {
     virtual std::string str(bool color=false) = 0;
     virtual std::string fmt(int indent, bool color) = 0;
     virtual void travel(TravelFunc preFn=nullptr, TravelFunc postFn=nullptr, bool postorder=false) =0;
+
+    void* operator new(std::size_t size);
+    void* operator new[](std::size_t size);
+    void operator delete(void* ptr) noexcept;
+    void operator delete[](void* ptr) noexcept;
+    static void destroy() noexcept;
+
+    static int indent;
+    static std::unordered_set<void*> allocs;
 };
 
 struct ExprRoot: ExprNode {
@@ -177,8 +188,6 @@ struct Escaped: ExprNode {
 
         \xHH	匹配 ASCII 码为 HH 的字符（HH 为两位十六进制数）
         \uHHHH	匹配 Unicode 码为 HHHH 的字符（HHHH 为四位十六进制数）
-
-        TODO:
 
         \cX	匹配控制字符
     */

@@ -13,7 +13,7 @@ extern bool g_debug;
     std::cerr << "[DEBUG][" << __FILE_NAME__ << ":" << __LINE__ << "][" << __FUNCTION__ << "] "
 
 #define LOG_DEBUG(fmt,...) \
-    if (g_debug) fprintf(stderr, "DBG|%s:%d|%s| " fmt, __FILE_NAME__, __LINE__, __FUNCTION__, __VA_ARGS__)
+    if (g_debug) fprintf(stderr, "DBG|%s:%d|%s| " fmt "\n", __FILE_NAME__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
 
 #define is_odd(v) ((v)&1)
 #define is_even(v) (!is_odd(v))

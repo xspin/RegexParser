@@ -1,5 +1,6 @@
 
 OS ?= unix
+DEBUG ?= 0
 
 ifeq ($(OS), windows)
     CC      = x86_64-w64-mingw32-gcc
@@ -12,7 +13,7 @@ ifeq ($(OS), windows)
 	BUILD_DIR := build_win
 	INC = -I/Library/Developer/CommandLineTools/usr/include/ -I/usr/local/include
 else
-    CC      = gcc
+    CC      = clang
     CXX     = clang++
     LD      = ld
     SUFFIX  =
@@ -20,6 +21,12 @@ else
     LDFLAGS =
 	BIN_DIR := /usr/local/bin
 	BUILD_DIR := build
+endif
+
+ifeq ($(DEBUG), 1)
+	CFLAGS += -g -DDEBUG=1 -O0 -gdwarf-2
+else
+	CFLAGS += -O2
 endif
 
 OBJ_DIR := $(BUILD_DIR)/obj
@@ -31,7 +38,7 @@ TEST_DIR := test
 YACC := flex
 BISON := bison
 
-CFLAGS += -O2 -Wall -std=c++17 -I./src -I./$(BUILD_DIR) $(INC)
+CFLAGS += -Wall -std=c++17 -I./src -I./$(BUILD_DIR) $(INC)
 
 GTEST_FLAGS := -lgtest -lgtest_main 
 

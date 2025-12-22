@@ -154,11 +154,17 @@ static std::string http_response_to_string(const HttpResponse& res) {
 }
 
 Http::Http(unsigned int port): port(port) {
-
+    client_fd = INVALID_FD;
+    fd = INVALID_FD;
 }
 
 Http::~Http() {
+    if (client_fd > 0) {
+        LOG_DEBUG("close fd %d", client_fd);
+        CLOSE_FD(client_fd);
+    }
     if (fd > 0) {
+        LOG_DEBUG("close fd %d", fd);
         CLOSE_FD(fd);
         socket_cleanup();
     }
@@ -201,7 +207,6 @@ int Http::Start() {
     }
     printf("Server started on http:://127.0.0.1:%u\n", port);
 
-    SOCKET_FD client_fd;
     struct sockaddr_in client_addr;
     socklen_t client_len = sizeof(client_addr);
     while (true) {
@@ -216,6 +221,7 @@ int Http::Start() {
             DEBUG_OS << "error: " << e.what() << "\n";
         }
         CLOSE_FD(client_fd);
+        client_fd = INVALID_FD;
     }
 
     CLOSE_FD(fd);

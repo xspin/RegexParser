@@ -55,6 +55,7 @@ class Http {
 
     unsigned int port;
     SOCKET_FD fd;
+    SOCKET_FD client_fd;
     std::unordered_map<std::string,RouteFn> routes;
 
 public:

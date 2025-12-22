@@ -1,4 +1,5 @@
 %{
+#include <unistd.h>
 #include <iostream>
 #include <iomanip>
 #include <FlexLexer.h>
@@ -8,6 +9,8 @@
 // #define YYDEBUG 1
 #define YYTOKEN_TABLE 1
 #define YYERROR_VERBOSE 1
+#define YYMALLOC yy_malloc
+#define YYFREE yy_free
 
 extern size_t yycolumn;
 extern const char* g_yytext;
@@ -18,6 +21,30 @@ extern void lex_parse(const std::string& s);
 
 static std::string g_text;
 static ExprRoot* g_expr = nullptr;
+
+static std::unordered_set<void*> yy_allocs;
+
+static void* yy_malloc(size_t size) {
+    void* ptr = std::malloc(size);
+    if (!ptr) throw std::bad_alloc();
+    yy_allocs.insert(ptr);
+    LOG_DEBUG("malloc %p", ptr);
+    return ptr;
+}
+
+static void yy_free(void* ptr) {
+    yy_allocs.erase(ptr);
+    LOG_DEBUG("free %p", ptr);
+    std::free(ptr);
+}
+
+static void yy_destroy() {
+    for (void* ptr : yy_allocs) {
+        LOG_DEBUG("free %p", ptr);
+        std::free(ptr);
+    }
+    yy_allocs.clear();
+}
 
 void yyerror(const std::string& msg)
 {
@@ -171,14 +198,23 @@ std::unique_ptr<ExprRoot> regex_parse(const std::string& expr, bool debug) {
     if (expr.empty()) {
         throw std::runtime_error("Empty Expr!");
     }
-    g_expr = nullptr;
-    g_text = escape(expr);
-    reset_flex(g_text);
-    int ret = yyparse();
-    if (ret) {
+    try {
+        g_expr = nullptr;
+        g_text = escape(expr);
+        reset_flex(g_text);
+        int ret = yyparse();
+        if (ret) {
+            throw std::runtime_error("yyparse failed");
+        }
+        return std::unique_ptr<ExprRoot>(g_expr);
+    } catch (const std::exception& e) {
         if (debug) lex_parse(g_text);
-        if (g_expr) delete g_expr; 
-        return nullptr;
+        LOG_DEBUG("Exception occurred, destroy all");
+        ExprRoot::destroy();
+        yy_destroy();
+        g_expr = nullptr;
+        // todo: memory leaks
+        
+        throw;
     }
-    return std::unique_ptr<ExprRoot>(g_expr);
 }

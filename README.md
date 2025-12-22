@@ -39,6 +39,9 @@ build/regexparser -g 20
 # Output the syntax tree
 build/regexparser -g 20 -f tree
 
+# Run as HTTP server
+build/regexparser -p 8080
+
 # Show more usage details
 build/regexparser -h
 ```
