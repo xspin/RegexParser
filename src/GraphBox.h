@@ -130,6 +130,10 @@ static inline std::string escaped_name(const std::string &symbol)
     } else if (symbol.size() == 6 && symbol.substr(0,2) == "\\u") {
         s = "U+" + symbol.substr(2);
         std::transform(s.begin(), s.end(), s.begin(), ::toupper);
+    } else if (symbol.size() == 10 && symbol.substr(0,2) == "\\U") {
+        size_t i = 2; while (symbol[i] == '0') i++;
+        s = "U+" + symbol.substr(i);
+        std::transform(s.begin(), s.end(), s.begin(), ::toupper);
     } else if (symbol.size() == 3 && symbol.substr(0,2) == "\\c") {
         s = "Ctrl-";
         s += (char)toupper(symbol[2]);
@@ -770,12 +774,9 @@ class EscapedBox: public GraphBox {
 public:
     EscapedBox(const std::string symbol): GraphBox(BoxType::ESCAPED), symbol(symbol) {
         std::string s;
-        if (symbol.size() == 6 && symbol.substr(0,2) == "\\u") {
-            if (utf8_encoding) {
-                s = uhhhh_to_utf8(symbol);
-            } else {
-                s = escaped_name(symbol);
-            }
+        if (utf8_encoding && ((symbol.size() == 6 && symbol.substr(0,2) == "\\u")
+        || (symbol.size() == 10 && symbol.substr(0,2) == "\\U"))) {
+            s = uhhhh_to_utf8(symbol);
         } else {
             s = escaped_name(symbol);
         }

@@ -56,6 +56,33 @@ TEST(UTF8, uhhhh) {
     EXPECT_FALSE(uhhhh_is_chinese("\\u9FA6"));
 }
 
+TEST(UTF8, uhhhhh) {
+    std::string s;
+    s = utf8_to_uhhhh("😋");
+    EXPECT_STREQ(s.c_str(), "\\U0001F60B");
+
+    s = uhhhh_to_utf8("\\U0001F60B");
+    EXPECT_STREQ(s.c_str(), "😋");
+
+    // 代理模式
+    s = uhhhh_to_utf8("\\uD83D\\uDE0B");
+    EXPECT_STREQ(s.c_str(), "😋");
+
+    // \U模式
+    s = uhhhh_to_utf8("\\U0001F60B");
+    EXPECT_STREQ(s.c_str(), "😋");
+
+    // 长度不够
+    s = uhhhh_to_utf8("\\U001F60B");
+    EXPECT_STREQ(s.c_str(), "\\U001F60B");
+
+    s = uhhhh_to_utf8("\\u60B");
+    EXPECT_STREQ(s.c_str(), "\\u60B");
+
+    s = uhhhh_to_utf8("\\u60B\\Uxx\\ux");
+    EXPECT_STREQ(s.c_str(), "\\u60B\\Uxx\\ux");
+}
+
 
 TEST(UTF8, visual_width) {
     EXPECT_EQ(ansi_size("\033[0m这是测试文本\033[1;31m红色加粗\033[0m"), 15);
@@ -71,6 +98,8 @@ TEST(UTF8, visual_width) {
     EXPECT_EQ(ansi_size("12297829382473034410"), 0);
     EXPECT_EQ(ansi_size(""), 0);
     EXPECT_EQ(visual_width(""), 0);
+
+    EXPECT_EQ(visual_width("😋"), 2);
 }
 
 TEST(UTF8, split) {

@@ -12,7 +12,7 @@
     // Windows 平台
     #include <winsock2.h>
     #include <ws2tcpip.h>
-    #pragma comment(lib, "ws2_32.lib") // 链接 Winsock 库
+    // #pragma comment(lib, "ws2_32.lib") // 链接 Winsock 库
     typedef SOCKET SOCKET_FD;
     #define INVALID_FD INVALID_SOCKET
     #define CLOSE_FD(fd) closesocket(fd)
@@ -23,7 +23,7 @@
     #include <netinet/in.h>
     #include <unistd.h>
     #include <errno.h>
-    typedef int SOCKET_FD;
+    typedef long long SOCKET_FD;
     #define INVALID_FD -1
     #define CLOSE_FD(fd) close(fd)
     #define GET_ERR() errno

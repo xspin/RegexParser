@@ -160,11 +160,11 @@ Http::Http(unsigned int port): port(port) {
 
 Http::~Http() {
     if (client_fd > 0) {
-        LOG_DEBUG("close fd %d", client_fd);
+        LOG_DEBUG("close fd %lld", client_fd);
         CLOSE_FD(client_fd);
     }
     if (fd > 0) {
-        LOG_DEBUG("close fd %d", fd);
+        LOG_DEBUG("close fd %lld", fd);
         CLOSE_FD(fd);
         socket_cleanup();
     }

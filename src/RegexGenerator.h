@@ -93,16 +93,41 @@ private:
         size_t i = rand(0, hex.size()-1);
         return hex[i];
     }
+    char rand_octal() {
+        size_t v = rand(0, 7);
+        return '0' + v;
+    }
+    std::string rand_name() {
+        std::string s = "_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXY";
+        int n = rand(1, 7);
+        std::string res;
+        while (n--) {
+            size_t i = rand(0, s.size()-1);
+            res += s[i];
+        }
+        return res;
+    }
 
     void gen_escaped() {
         if (prob(40)) {
             size_t i = rand(0, escaped.size()-1);
             output({'\\', escaped[i]});
-        } else if (prob(50)) {
+        } else if (prob(40)) {
             output({'\\', 'x', rand_hex(), rand_hex()});
+        } else if (prob(50)) {
+            output({'\\', '0', rand_octal(), rand_octal()});
+        } else if (prob(40)) {
+            output("\\" + std::to_string(rand(1, 99)));
+        } else if (prob(40)) {
+            output("\\k<" + rand_name() + ">");
         } else {
             try {
-                std::string uhhhh = {'\\', 'u', rand_hex(), rand_hex(), rand_hex(), rand_hex()};
+                std::string uhhhh;
+                if (prob(70)) {
+                    uhhhh = {'\\', 'u', rand_hex(), rand_hex(), rand_hex(), rand_hex()};
+                } else {
+                    uhhhh = {'\\', 'U', rand_hex(), rand_hex(), rand_hex(), rand_hex(), rand_hex(), rand_hex(), rand_hex(), rand_hex()};
+                }
                 uhhhh_to_utf8(uhhhh);
                 output(uhhhh);
             } catch (...) {
@@ -155,6 +180,8 @@ private:
         output("(", 1);
         if (prob(40)) {
             output("?:");
+        } else if (prob(40)) {
+            output("?<" + rand_name() + ">");
         }
         gen_least_one();
         output(")", -1);

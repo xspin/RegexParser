@@ -37,8 +37,8 @@ int yylex() {
 %x CLASS
 
 escaped_literal \\[\\.*+?()\[\]{}|^$]
-special_escaped \\x[0-9a-fA-F]{2}|\\u[0-9a-fA-F]{4}|\\c[a-zA-Z]|\\0[0-7]{2}|\\[dDwWsStnrfv0]
-range_expr \\0[0-7]{2}-\\0[0-7]{2}|\\x[0-9a-fA-F]{2}-\\x[0-9a-fA-F]{2}|\\u[0-9a-fA-F]{4}-\\u[0-9a-fA-F]{4}|([^\\\[]|\\.)-([^\\\]]|\\.)|(\\c[a-zA-Z])-(\\c[a-zA-Z])
+special_escaped \\x[0-9a-fA-F]{2}|\\u[0-9a-fA-F]{4}|\\U[0-9a-fA-F]{8}|\\c[a-zA-Z]|\\0[0-7]{2}|\\[dDwWsStnrfv0]
+range_expr \\0[0-7]{2}-\\0[0-7]{2}|\\x[0-9a-fA-F]{2}-\\x[0-9a-fA-F]{2}|\\u[0-9a-fA-F]{4}-\\u[0-9a-fA-F]{4}|\\U[0-9a-fA-F]{8}-\\U[0-9a-fA-F]{8}|([^\\\[]|\\.)-([^\\\]]|\\.)|(\\c[a-zA-Z])-(\\c[a-zA-Z])
 
 %%
 

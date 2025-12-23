@@ -21,8 +21,11 @@ static inline std::string unicode_to_uhhhh(uint32_t codepoint) {
     if (codepoint <= 0xFFFF) {
         // 普通码点：直接转为 4 位十六进制
         ss << "\\u" << std::hex << std::setw(4) << std::setfill('0') << std::uppercase << codepoint;
+    } else {
+        ss << "\\U" << std::hex << std::setw(8) << std::setfill('0') << std::uppercase << codepoint;
+    }
+/*
     } else if (codepoint <= 0x10FFFF) {
-        // throw std::invalid_argument("Invalid Unicode codepoint (exceeds U+FFFF)");
         // 超出 BMP 码点：转为 UTF-16 代理对
         uint32_t surrogate = codepoint - 0x10000;
         uint16_t high = static_cast<uint16_t>(0xD800 + (surrogate >> 10));  // 高 10 位
@@ -32,6 +35,7 @@ static inline std::string unicode_to_uhhhh(uint32_t codepoint) {
     } else {
         throw std::invalid_argument("Invalid Unicode codepoint (exceeds U+10FFFF)");
     }
+*/
 
     return ss.str();
 }
@@ -63,7 +67,7 @@ static inline size_t utf8_next(const char* data, size_t len=4) {
     return i;
 }
 
-static inline std::pair<uint32_t, size_t> utf8_to_unicode(const char* data, size_t len=4) {
+static inline std::pair<uint32_t, size_t> utf8_to_unicode(const char* data, size_t len) {
     uint32_t codepoint;
     uint8_t first_byte = *data;
     size_t i = 0;
@@ -132,7 +136,7 @@ static inline std::string utf8_to_uhhhh(const std::string& utf8_str) {
             continue; // 1字节保持原样
         }
 
-        auto [c, k] = utf8_to_unicode(data + i);
+        auto [c, k] = utf8_to_unicode(data + i, len - i);
         codepoint = c;
         i += k;
 
@@ -166,6 +170,18 @@ static inline uint16_t parse_4hex(const std::string& hex_str) {
         val = (val << 4) | hex_char_to_val(c);
     }
     return val;
+}
+
+static inline uint32_t parse_8hex(const std::string& hex_str) {
+    if (hex_str.size() != 8) {
+        throw std::invalid_argument("Hex std::string must be 8 characters long");
+    }
+    uint32_t codepoint;
+    std::istringstream hex_stream(hex_str);
+    if (!(hex_stream >> std::hex >> codepoint)) {
+        throw std::invalid_argument("Invalid hex digits: " + hex_str);
+    }
+    return codepoint;
 }
 
 // 辅助函数：Unicode 码点转为 UTF-8 字节序列
@@ -206,9 +222,17 @@ static inline std::string uhhhh_to_utf8(const std::string& uhhhh_str) {
         if (i + 1 < len && uhhhh_str[i] == '\\' && uhhhh_str[i+1] == 'u') {
             // 提取 \u 后的 4 位十六进制数
             if (i + 5 > len) {
-                throw std::runtime_error("Incomplete \\uhhhh sequence (missing hex digits)");
+                result += uhhhh_str.substr(i);
+                i += 6;
+                break;
+                // throw std::runtime_error("Incomplete \\uhhhh sequence (missing hex digits)");
             }
             std::string hex_part = uhhhh_str.substr(i + 2, 4);  // 从 i+2 开始取 4 个字符
+            if (hex_part.size() < 4 || hex_part.find("\\") != std::string::npos) {
+                result += "\\u";
+                i += 2;
+                continue;
+            }
             uint16_t code_unit = parse_4hex(hex_part);
             i += 6;  // 跳过 \u 和 4 位十六进制（共 6 个字符：\uXXXX）
 
@@ -236,6 +260,20 @@ static inline std::string uhhhh_to_utf8(const std::string& uhhhh_str) {
                     throw std::runtime_error("Invalid low surrogate without high surrogate");
                 }
                 result += codepoint_to_utf8(static_cast<uint32_t>(code_unit));
+            }
+            // \Uxxxxxxxx
+        } else if (i + 1 < len && uhhhh_str[i] == '\\' && uhhhh_str[i+1] == 'U') {
+            std::string hex_part = uhhhh_str.substr(i + 2, 8); 
+            if (hex_part.size() < 8 || hex_part.find("\\") != std::string::npos) {
+                result += "\\U";
+                i += 2;
+            } else {
+                i += 10;
+                uint32_t codepoint = parse_8hex(hex_part);
+                if ((codepoint >= 0xD800 && codepoint <= 0xDFFF) || codepoint > 0x10FFFF) {
+                    throw std::invalid_argument("Unsupported codepoint: U+" + hex_part);
+                }
+                result += codepoint_to_utf8(codepoint);
             }
         } else {
             // 非 \u 序列：直接保留原字符（如 ASCII 字符）
@@ -321,6 +359,8 @@ static inline bool is_double_width_char(uint32_t unicode) {
     if ((unicode >= 0xF900 && unicode <= 0xFAFF)) return true;
     if ((unicode >= 0x3100 && unicode <= 0x312F)) return true;
     if ((unicode >= 0x2580 && unicode <= 0x25FF)) return true;
+    
+    if (unicode > 0xFFFF) return true;
     return false;
 }
 
