@@ -2,8 +2,9 @@
 
 extern void yyerror_throw(const std::string& msg);
 
-int ExprNode::indent = 0;
-std::unordered_set<void*> ExprNode::allocs;
+int ExprNode::indent_ = 0;
+int ExprNode::depth_ = 0;
+std::unordered_set<void*> ExprNode::allocs_;
 
 static std::vector<std::string> colors = {GREEN, BLUE, YELLOW, PURPLE, RED, CYAN};
 static int color_idx = 0;
@@ -89,9 +90,9 @@ bool ExprNode::isLiteral() {
     return isType(ExprType::T_LITERAL);
 }
 
-std::string ExprNode::prefix(int indent) {
-    if (this->indent > 0) {
-        return "\n" + std::string(indent, ' ');
+std::string ExprNode::prefix() {
+    if (this->indent_ > 0) {
+        return "\n" + std::string(depth_ * indent_, ' ');
     } else {
         return "";
     }
@@ -100,36 +101,36 @@ std::string ExprNode::prefix(int indent) {
 void* ExprNode::operator new(std::size_t size) {
     void* ptr = std::malloc(size);
     if (!ptr) throw std::bad_alloc();
-    allocs.insert(ptr);
+    allocs_.insert(ptr);
     return ptr;
 }
 
 void* ExprNode::operator new[](std::size_t size) {
     void* ptr = std::malloc(size);
     if (!ptr) throw std::bad_alloc();
-    allocs.insert(ptr);
+    allocs_.insert(ptr);
     return ptr;
 }
 
 void ExprNode::operator delete(void* ptr) noexcept {
-    if (allocs.find(ptr) != allocs.end()) {
-        allocs.erase(ptr);
+    if (allocs_.find(ptr) != allocs_.end()) {
+        allocs_.erase(ptr);
         std::free(ptr);
     }
 }
 
 void ExprNode::operator delete[](void* ptr) noexcept {
-    if (allocs.find(ptr) != allocs.end()) {
-        allocs.erase(ptr);
+    if (allocs_.find(ptr) != allocs_.end()) {
+        allocs_.erase(ptr);
         std::free(ptr);
     }
 }
 
 void ExprNode::destroy() noexcept {
-    for (auto ptr : allocs) {
+    for (auto ptr : allocs_) {
         std::free(ptr);
     }
-    allocs.clear();
+    allocs_.clear();
 }
 
 /* ExprRoot */
@@ -143,8 +144,19 @@ std::string ExprRoot::str(bool color) {
     return expr->str(color);
 }
 
-std::string ExprRoot::fmt(int indent, bool color) {
-    return expr->fmt(indent, color);
+std::string ExprRoot::fmt(bool color) {
+    return expr->fmt(color);
+}
+
+std::string ExprRoot::xml() {
+    depth_ = 0;
+    indent_ = 2;
+    std::string s = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+    ++depth_;
+    s += "\n<RegularExpression expr=\"" + escape_xml(stringify(false)) + "\">"
+      + expr->xml() +  "\n</RegularExpression>";
+    --depth_;
+    return s;
 }
 
 void ExprRoot::travel(TravelFunc preFn, TravelFunc postFn, bool postorder) {
@@ -157,12 +169,13 @@ std::string ExprRoot::stringify(bool color) {
 }
 
 std::string ExprRoot::format(int indent, bool color) {
+    depth_ = 0;
     reset_color();
-    this->indent = indent;
+    this->indent_ = indent;
     if (indent > 0) {
         size_t pos = 0;
         size_t width = 0;
-        std::string f = this->fmt(0, color) + "\n" + (color?NC:"");
+        std::string f = this->fmt(color) + "\n" + (color?NC:"");
 
         for (size_t i=0; i<f.size(); i++) {
             if (f[i] == '\n') {
@@ -170,10 +183,9 @@ std::string ExprRoot::format(int indent, bool color) {
                 pos = i;
             }
         }
-
         return f;
     } else {
-        return this->fmt(0, color);
+        return this->fmt(color);
     }
 }
 
@@ -215,9 +227,13 @@ std::string Literal::str(bool color) {
     return c + escaped;
 }
 
-std::string Literal::fmt(int indent, bool color) {
+std::string Literal::fmt(bool color) {
     std::string c = color? NC : "";
-    return prefix(indent) + c + "<Literal " + chars + ">";
+    return prefix() + c + "<Literal " + chars + ">";
+}
+
+std::string Literal::xml() {
+    return prefix() + "<Literal>" + escape_xml(chars) +  "</Literal>";
 }
 
 void Literal::travel(TravelFunc preFn, TravelFunc postFn, bool postorder) {
@@ -233,9 +249,24 @@ std::string Escaped::str(bool color) {
     return c + ch;
 }
 
-std::string Escaped::fmt(int indent, bool color) {
+std::string Escaped::fmt(bool color) {
     std::string c = color? iter_color() : "";
-    return prefix(indent) + c + "<Escaped " + ch + ">";
+    return prefix() + c + "<Escaped " + ch + ">";
+}
+
+std::string Escaped::xml() {
+    std::string s = prefix();
+    std::string tag;
+    if (ch.size() == 4 && ch.substr(0, 2) == "\\x") {
+        tag = "Hex";
+    } else if (ch.size() == 4 && ch.substr(0, 2) == "\\0") {
+        tag = "Octal";
+    } else if (ch.size() >= 4 && (ch.substr(0, 2) == "\\u" || ch.substr(0, 2) == "\\U")) {
+        tag = "Unicode";
+    } else {
+        tag = "Escaped";
+    }
+    return prefix() + "<" + tag + ">" + escape_xml(ch) +  "</" + tag + ">";
 }
 
 void Escaped::travel(TravelFunc preFn, TravelFunc postFn, bool postorder) {
@@ -255,9 +286,25 @@ std::string Anchor::str(bool color) {
     return c + val;
 }
 
-std::string Anchor::fmt(int indent, bool color) {
+std::string Anchor::fmt(bool color) {
     std::string c = color? iter_color() : "";
-    return prefix(indent) + c + "<Anchor " + val +">";
+    return prefix() + c + "<Anchor " + val +">";
+}
+
+std::string Anchor::xml() {
+    std::string s;
+    if (val == "^") {
+        s = "<StartOfLine/>";
+    } else if (val == "$") {
+        s = "<EndOfLine/>";
+    } else if (val == "\\b") {
+        s = "<WordBoundary/>";
+    } else if (val == "\\B") {
+        s = "<NonWordBoundary/>";
+    } else {
+        s = "<Anchor>" + val +  "</Anchor>";
+    }
+    return prefix() + s;
 }
 
 void Anchor::travel(TravelFunc preFn, TravelFunc postFn, bool postorder) {
@@ -327,13 +374,35 @@ std::string Quantifier::str(bool color) {
     return s;
 }
 
-std::string Quantifier::fmt(int indent, bool color) {
+std::string Quantifier::fmt(bool color) {
     std::string c = color? iter_color() : "";
     std::string s;
-    if (prev) s = prev->fmt(indent, color);
-    else s = prefix(indent);
+    if (prev) s = prev->fmt(color);
+    else s = prefix();
     s += c + "<Quantifier " + _str() + ">";
     return s;
+}
+
+std::string Quantifier::xml() {
+    std::stringstream ss;
+    ss << prefix() << "<Quantifier" << " min=\"" << min << '"'  << " max=\"";
+    if (max < INF) {
+        ss << max;
+    } else {
+        ss << "Infinity";
+    }
+    ss << "\" mode=\"";
+    if (tag == QuantifierTag::LAZY) ss << "lazy";
+    else if (tag == QuantifierTag::POSSESSIVE) ss << "possessive";
+    else ss << "greedy";
+    ss  << '"'<< ">";
+
+    ++depth_;
+    ss << prev->xml();
+    --depth_;
+
+    ss << prefix() <<  "</Quantifier>";
+    return ss.str();
 }
 
 
@@ -384,9 +453,16 @@ std::string Range::str(bool color) {
     return s;
 }
 
-std::string Range::fmt(int indent, bool color) {
+std::string Range::fmt(bool color) {
     std::string c = color? iter_color() : "";
-    return prefix(indent) + c + "<Range " + start + "-" + end + ">";
+    return prefix() + c + "<Range " + start + "-" + end + ">";
+}
+
+std::string Range::xml() {
+    std::string s = prefix() + "<Range";
+    s += " start=\"" + escape_xml(start) + "\"";
+    s += " end=\"" + escape_xml(end) + "\"/>";
+    return s;
 }
 
 /* Any */
@@ -402,9 +478,13 @@ std::string Any::str(bool color) {
     return color? iter_color() + "." : ".";
 }
 
-std::string Any::fmt(int indent, bool color) {
+std::string Any::fmt(bool color) {
     std::string c = color? iter_color() : "";
-    return prefix(indent) + c + "<Any .>";
+    return prefix() + c + "<Any .>";
+}
+
+std::string Any::xml() {
+    return prefix() + "<Any/>";
 }
 
 /* Sequence */
@@ -463,13 +543,21 @@ std::string Sequence::str(bool color) {
     return t;
 }
 
-std::string Sequence::fmt(int indent, bool color) {
+std::string Sequence::fmt(bool color) {
     std::string c = color? NC : "";
     std::string t;
     for (auto node : nodes) {
-        t += node->fmt(indent, color) + c;
+        t += node->fmt(color) + c;
     }
     return t;
+}
+
+std::string Sequence::xml() {
+    std::string s;
+    for (auto node : nodes) {
+        s += node->xml();
+    }
+    return s;
 }
 
 /* Class */
@@ -496,14 +584,26 @@ std::string Class::str(bool color) {
     return t;
 }
 
-std::string Class::fmt(int indent, bool color) {
+std::string Class::fmt(bool color) {
     std::string c = color? iter_color() : "";
-    std::string t = prefix(indent) + c + (negative? "[Neg-Class" : "[Class");
-    t += seq->fmt(indent + this->indent, color);
-    t += prefix(indent) + c + "]";
+    std::string t = prefix() + c + (negative? "[Neg-Class" : "[Class");
+    depth_++;
+    t += seq->fmt(color);
+    depth_--;
+    t += prefix() + c + "]";
     return t;
 }
 
+std::string Class::xml() {
+    std::string s = prefix() + "<Class";
+    if (negative) s += " negative=\"true\"";
+    s += ">";
+    ++depth_;
+    s += seq->xml();
+    --depth_;
+    s += prefix() + "</Class>";
+    return s;
+}
 
 /* Group */
 
@@ -529,15 +629,36 @@ std::string Group::str(bool color) {
     }
 }
 
-std::string Group::fmt(int indent, bool color) {
+std::string Group::fmt(bool color) {
     std::string c = color? iter_color() : "";
     std::string gid = capture? "#" + std::to_string(id) : "";
     if (!name.empty()) gid += "<" + name + ">";
-    std::string s = prefix(indent) + c + "(Group" + gid;  
-    s += expr->fmt(indent + this->indent, color);
-    s += prefix(indent) + c + gid + ")";
+    std::string s = prefix() + c + "(Group" + gid;  
+    depth_++;
+    s += expr->fmt(color);
+    depth_--;
+    s += prefix() + c + gid + ")";
     return s;
 }
+
+std::string Group::xml() {
+    std::string s = prefix() + "<Group";
+    if (capture) {
+        s += " id=\"" + std::to_string(id) + "\"";
+        if (!name.empty()) {
+            s += " name=\"" + name + "\"";
+        }
+    } else {
+        s += " capture=\"false\"";
+    }
+    s += ">";
+    ++depth_;
+    s += expr->xml();
+    --depth_;
+    s += prefix() + "</Group>";
+    return s;
+}
+
 
 /* Backref */
 Backref::Backref(int id, const std::string& name)
@@ -561,13 +682,23 @@ std::string Backref::str(bool color)
     }
 }
 
-std::string Backref::fmt(int indent, bool color)
+std::string Backref::fmt(bool color)
 {
     std::string c = color? iter_color() : "";
-    std::string s = prefix(indent) + c + "<Ref " + str(false) + ">";
+    std::string s = prefix() + c + "<Ref " + str(false) + ">";
     return s;
 }
 
+std::string Backref::xml() {
+    std::string s = prefix() + "<Reference";
+    if (name.empty()) {
+        s += " id=\"" + std::to_string(id) + "\"";
+    } else {
+        s += " name=\"" + name + "\"";
+    }
+    s += "/>";
+    return s;
+}
 
 /* Lookahead */
 
@@ -593,14 +724,26 @@ std::string Lookahead::str(bool color) {
     return s;
 }
 
-std::string Lookahead::fmt(int indent, bool color) {
+std::string Lookahead::fmt(bool color) {
     std::string c = color? iter_color() : "";
-    std::string s = prefix(indent) + c + (negative? "<Neg-Lookahead" : "<Lookahead");
-    s += expr->fmt(indent + this->indent, color);
-    s += prefix(indent) + c + ">";
+    std::string s = prefix() + c + (negative? "<Neg-Lookahead" : "<Lookahead");
+    ++depth_;
+    s += expr->fmt(color);
+    --depth_;
+    s += prefix() + c + ">";
     return s;
 }
 
+std::string Lookahead::xml() {
+    std::string s = prefix() + "<Lookahead";
+    if (negative) s += " negative=\"true\"";
+    s += ">";
+    ++depth_;
+    s += expr->xml();
+    --depth_;
+    s += prefix() + "</Lookahead>";
+    return s;
+}
 
 /* Lookbehind */
 
@@ -625,11 +768,24 @@ std::string Lookbehind::str(bool color) {
     return s;
 }
 
-std::string Lookbehind::fmt(int indent, bool color) {
+std::string Lookbehind::fmt(bool color) {
     std::string c = color? iter_color() : "";
-    std::string s = prefix(indent) + c + (negative? "<Neg-Lookbehind" : "<Lookbehind");
-    s += expr->fmt(indent + this->indent, color);
-    s += prefix(indent) + c + ">";
+    std::string s = prefix() + c + (negative? "<Neg-Lookbehind" : "<Lookbehind");
+    ++depth_;
+    s += expr->fmt(color);
+    --depth_;
+    s += prefix() + c + ">";
+    return s;
+}
+
+std::string Lookbehind::xml() {
+    std::string s = prefix() + "<Lookbehind";
+    if (negative) s += " negative=\"true\"";
+    s += ">";
+    ++depth_;
+    s += expr->xml();
+    --depth_;
+    s += prefix() + "</Lookbehind>";
     return s;
 }
 
@@ -695,21 +851,38 @@ std::string Or::str(bool color) {
     return s;
 }
 
-std::string Or::fmt(int indent, bool color) {
+std::string Or::fmt(bool color) {
     std::string c = color? iter_color() : "";
     std::string s;
-    s += prefix(indent) + c + "(";
+    s += prefix() + c + "(";
     for (size_t i=0; i<items.size(); i++) {
         if (i > 0) {
-            s += prefix(indent) + c + ") OR (";
+            s += prefix() + c + ") OR (";
         }
+        ++depth_;
         if (items[i]) {
-            s += items[i]->fmt(indent + this->indent, color);
+            s += items[i]->fmt(color);
         } else {
-            s += prefix(indent + this->indent) + (color?NC:"") + "<Empty>";
+            s += prefix() + (color?NC:"") + "<Empty>";
+        }
+        --depth_;
+    }
+    s += prefix() + c + ")";
+    return s;
+}
+
+std::string Or::xml() {
+    std::string s = prefix() + "<Alternation>";
+    ++depth_;
+    for (auto item : items) {
+        if (item) {
+            s += item->xml();
+        } else {
+            s += prefix() + "<Empty/>";
         }
     }
-    s += prefix(indent) + c + ")";
+    --depth_;
+    s += prefix() + "</Alternation>";
     return s;
 }
 

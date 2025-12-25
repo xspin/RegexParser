@@ -51,6 +51,21 @@ static inline std::string esc_code_color(const std::string& code) {
     return color;
 }
 
+static inline std::string escape_xml(const std::string& s) {
+    std::string res;
+    for (char ch : s) {
+        switch (ch) {
+            case '&': res += "&amp;"; break;
+            case '<': res += "&lt;"; break;
+            case '>': res += "&gt;"; break;
+            case '"': res += "&quot;"; break;
+            case '\'': res += "&apos;"; break;
+            default: res += ch; break;
+        }
+    }
+    return res;
+}
+
 enum class ExprType {
     T_LITERAL,
     T_QUANTIFIER,
@@ -124,11 +139,12 @@ struct ExprNode {
     bool isRoot();
     bool isLiteral();
 
-    std::string prefix(int indent);
+    std::string prefix();
 
     virtual ~ExprNode() {}
     virtual std::string str(bool color=false) = 0;
-    virtual std::string fmt(int indent, bool color) = 0;
+    virtual std::string fmt(bool color) = 0;
+    virtual std::string xml() = 0;
     virtual void travel(TravelFunc preFn=nullptr, TravelFunc postFn=nullptr, bool postorder=false) =0;
 
     void* operator new(std::size_t size);
@@ -137,8 +153,9 @@ struct ExprNode {
     void operator delete[](void* ptr) noexcept;
     static void destroy() noexcept;
 
-    static int indent;
-    static std::unordered_set<void*> allocs;
+    static int indent_;
+    static int depth_;
+    static std::unordered_set<void*> allocs_;
 };
 
 struct ExprRoot: ExprNode {
@@ -149,13 +166,14 @@ struct ExprRoot: ExprNode {
 
     std::string stringify(bool color=false);
     std::string format(int indent, bool color);
+    std::string xml();
 
     void travel(TravelFunc preFn, TravelFunc postFn, bool postorder);
     void process_groupid();
 
 private:
     std::string str(bool color);
-    std::string fmt(int indent, bool color);
+    std::string fmt(bool color);
 };
 
 struct Literal: ExprNode {
@@ -166,7 +184,8 @@ struct Literal: ExprNode {
     ~Literal();
     void append(Literal* rhs);
     std::string str(bool color);
-    std::string fmt(int indent, bool color);
+    std::string fmt(bool color);
+    std::string xml();
     void travel(TravelFunc preFn, TravelFunc postFn, bool postorder);
 };
 
@@ -186,8 +205,11 @@ struct Escaped: ExprNode {
         \v  垂直制表符（Vertical Tab）
         \0  空字符（Null）
 
+        \0xx (0<=x<8) 8进制数
+
         \xHH	匹配 ASCII 码为 HH 的字符（HH 为两位十六进制数）
         \uHHHH	匹配 Unicode 码为 HHHH 的字符（HHHH 为四位十六进制数）
+        \UHHHHHHHH 32位Unicode
 
         \cX	匹配控制字符
     */
@@ -195,7 +217,8 @@ struct Escaped: ExprNode {
 
     Escaped(const std::string& s);
     std::string str(bool color);
-    std::string fmt(int indent, bool color);
+    std::string fmt(bool color);
+    std::string xml();
     void travel(TravelFunc preFn, TravelFunc postFn, bool postorder);
     bool isUnicode() {
         return ch.size() == 6 && ch.substr(0,2) == "\\u";
@@ -216,7 +239,8 @@ struct Anchor: ExprNode {
 
     Anchor(const std::string s);
     std::string str(bool color);
-    std::string fmt(int indent, bool color);
+    std::string fmt(bool color);
+    std::string xml();
     void travel(TravelFunc preFn, TravelFunc postFn, bool postorder);
 };
 
@@ -238,7 +262,8 @@ struct Quantifier: ExprNode {
     void attach(ExprNode* node);
     void travel(TravelFunc preFn, TravelFunc postFn, bool postorder);
     std::string str(bool color);
-    std::string fmt(int indent, bool color);
+    std::string fmt(bool color);
+    std::string xml();
 
 private:
     std::string _str();
@@ -255,7 +280,8 @@ struct Range: ExprNode {
     bool isValid();
     void travel(TravelFunc preFn, TravelFunc postFn, bool postorder);
     std::string str(bool color);
-    std::string fmt(int indent, bool color);
+    std::string fmt(bool color);
+    std::string xml();
 };
 
 struct Any: ExprNode {
@@ -263,7 +289,8 @@ struct Any: ExprNode {
     ~Any();
     void travel(TravelFunc preFn, TravelFunc postFn, bool postorder);
     std::string str(bool color);
-    std::string fmt(int indent, bool color);
+    std::string fmt(bool color);
+    std::string xml();
 };
 
 struct Sequence: ExprNode {
@@ -275,7 +302,8 @@ struct Sequence: ExprNode {
     void append(ExprNode* node);
     void travel(TravelFunc preFn, TravelFunc postFn, bool postorder);
     std::string str(bool color);
-    std::string fmt(int indent, bool color);
+    std::string fmt(bool color);
+    std::string xml();
 };
 
 struct Class: ExprNode {
@@ -286,7 +314,8 @@ struct Class: ExprNode {
     ~Class();
     void travel(TravelFunc preFn, TravelFunc postFn, bool postorder);
     std::string str(bool color);
-    std::string fmt(int indent, bool color);
+    std::string fmt(bool color);
+    std::string xml();
 };
 
 struct Group: ExprNode {
@@ -299,7 +328,8 @@ struct Group: ExprNode {
     ~Group();
     void travel(TravelFunc preFn, TravelFunc postFn, bool postorder);
     std::string str(bool color);
-    std::string fmt(int indent, bool color);
+    std::string fmt(bool color);
+    std::string xml();
 };
 
 struct Backref: ExprNode {
@@ -310,7 +340,8 @@ struct Backref: ExprNode {
     ~Backref();
     void travel(TravelFunc preFn, TravelFunc postFn, bool postorder);
     std::string str(bool color);
-    std::string fmt(int indent, bool color);
+    std::string fmt(bool color);
+    std::string xml();
 };
 
 struct Lookahead: ExprNode {
@@ -325,7 +356,8 @@ struct Lookahead: ExprNode {
     ~Lookahead();
     void travel(TravelFunc preFn, TravelFunc postFn, bool postorder);
     std::string str(bool color);
-    std::string fmt(int indent, bool color);
+    std::string fmt(bool color);
+    std::string xml();
 };
 
 
@@ -341,7 +373,8 @@ struct Lookbehind: ExprNode {
     ~Lookbehind();
     void travel(TravelFunc preFn, TravelFunc postFn, bool postorder);
     std::string str(bool color);
-    std::string fmt(int indent, bool color);
+    std::string fmt(bool color);
+    std::string xml();
 };
 
 struct Or: ExprNode {
@@ -352,7 +385,8 @@ struct Or: ExprNode {
     void appendLeft(ExprNode* node);
     void append(ExprNode* node);
     std::string str(bool color);
-    std::string fmt(int indent, bool color);
+    std::string fmt(bool color);
+    std::string xml();
     void travel(TravelFunc preFn, TravelFunc postFn, bool postorder);
 };
 

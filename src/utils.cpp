@@ -90,7 +90,7 @@ int parse_args(Args& args, int argc, char* argv[]) {
         << "  -v           show version info\n"
         << "  -o path      specify output file path (default stdout)\n"
         << "  -f format    specify output format (default graph):\n"
-        << "                  graph/g, tree/t, nfa/n, dfa/d, svg/s, html/h (multiply example: g,t,d)\n"
+        << "                  graph/g, tree/t, nfa/n, dfa/d, svg/s, html/h, xml/x (multiply example: g,t,d)\n"
         << "  -c           print with ansi color\n"
         << "  -g           generate a random regular expression with specified length limit\n"
         << "  -u           enable utf8 encoding\n"
@@ -120,6 +120,8 @@ int parse_args(Args& args, int argc, char* argv[]) {
                 fmt = FMT_DFA;
             } else if (s == "h" || s == "html") {
                 fmt = FMT_HTML;
+            } else if (s == "x" || s == "xml") {
+                fmt = FMT_XML;
             } else {
                 return false;
             }

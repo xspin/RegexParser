@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RegularExpression expr="a1\|\(\)\[\]\{\}\.\?\+\*\\\^\$[a1\(\)\[\]\{\}\.\?\+\*\\|^$]|[-a1.+*_\\][^abc-][a-z0-9A-Z][.\d\D\w\W\s\S\f\n\t\v\0\r]|.\d\D\w\W\s\S\n\t|a*b+c?d{2}e{1,}f{3,4}|a*?b+?c??d{2}?e{1,}?f{3,4}? |a*+b++c?+d{2}+e{1,}+f{3,4}+|^\Banchor\b$[\B\b^$]|\a\c1\e\f\n\r\t\v\0|\cA[\ca-\cZ]\u9fa5[\u4e00-\u9fa5]\xAa[\x00-\xff][\000-\077]\012|([a-z]\d)(?:\w\s+)|a(?=followed_by_this)b(?!not_followed_by_this)c|d(?&lt;=preceded_by_this)e(?&lt;!preceded_by_this)f|^[ a  b   ]  e m pty spaces [\u4E2D]\u6587$|(?&lt;name&gt;a+b*(?&lt;_name2_&gt;xxx))ref(\0\1\123|\k&lt;_ref&gt;\k&lt;0123&gt;)|&lt;&gt;&amp;&quot;&apos;[&lt;&gt;&amp;&quot;&apos;][&lt;-&gt;]\\||">
+  <Alternation>
+    <Literal>a1|()[]{}.?+*\^$</Literal>
+    <Class>
+      <Literal>a1()[]{}.?+*\|^$</Literal>
+    </Class>
+    <Class>
+      <Literal>-a1.+*_\</Literal>
+    </Class>
+    <Class negative="true">
+      <Literal>abc-</Literal>
+    </Class>
+    <Class>
+      <Range start="a" end="z"/>
+      <Range start="0" end="9"/>
+      <Range start="A" end="Z"/>
+    </Class>
+    <Class>
+      <Literal>.</Literal>
+      <Escaped>\d</Escaped>
+      <Escaped>\D</Escaped>
+      <Escaped>\w</Escaped>
+      <Escaped>\W</Escaped>
+      <Escaped>\s</Escaped>
+      <Escaped>\S</Escaped>
+      <Escaped>\f</Escaped>
+      <Escaped>\n</Escaped>
+      <Escaped>\t</Escaped>
+      <Escaped>\v</Escaped>
+      <Escaped>\0</Escaped>
+      <Escaped>\r</Escaped>
+    </Class>
+    <Any/>
+    <Escaped>\d</Escaped>
+    <Escaped>\D</Escaped>
+    <Escaped>\w</Escaped>
+    <Escaped>\W</Escaped>
+    <Escaped>\s</Escaped>
+    <Escaped>\S</Escaped>
+    <Escaped>\n</Escaped>
+    <Escaped>\t</Escaped>
+    <Quantifier min="0" max="Infinity" mode="greedy">
+      <Literal>a</Literal>
+    </Quantifier>
+    <Quantifier min="1" max="Infinity" mode="greedy">
+      <Literal>b</Literal>
+    </Quantifier>
+    <Quantifier min="0" max="1" mode="greedy">
+      <Literal>c</Literal>
+    </Quantifier>
+    <Quantifier min="2" max="2" mode="greedy">
+      <Literal>d</Literal>
+    </Quantifier>
+    <Quantifier min="1" max="Infinity" mode="greedy">
+      <Literal>e</Literal>
+    </Quantifier>
+    <Quantifier min="3" max="4" mode="greedy">
+      <Literal>f</Literal>
+    </Quantifier>
+    <Quantifier min="0" max="Infinity" mode="lazy">
+      <Literal>a</Literal>
+    </Quantifier>
+    <Quantifier min="1" max="Infinity" mode="lazy">
+      <Literal>b</Literal>
+    </Quantifier>
+    <Quantifier min="0" max="1" mode="lazy">
+      <Literal>c</Literal>
+    </Quantifier>
+    <Quantifier min="2" max="2" mode="lazy">
+      <Literal>d</Literal>
+    </Quantifier>
+    <Quantifier min="1" max="Infinity" mode="lazy">
+      <Literal>e</Literal>
+    </Quantifier>
+    <Quantifier min="3" max="4" mode="lazy">
+      <Literal>f</Literal>
+    </Quantifier>
+    <Literal> </Literal>
+    <Quantifier min="0" max="Infinity" mode="possessive">
+      <Literal>a</Literal>
+    </Quantifier>
+    <Quantifier min="1" max="Infinity" mode="possessive">
+      <Literal>b</Literal>
+    </Quantifier>
+    <Quantifier min="0" max="1" mode="possessive">
+      <Literal>c</Literal>
+    </Quantifier>
+    <Quantifier min="2" max="2" mode="possessive">
+      <Literal>d</Literal>
+    </Quantifier>
+    <Quantifier min="1" max="Infinity" mode="possessive">
+      <Literal>e</Literal>
+    </Quantifier>
+    <Quantifier min="3" max="4" mode="possessive">
+      <Literal>f</Literal>
+    </Quantifier>
+    <StartOfLine/>
+    <NonWordBoundary/>
+    <Literal>anchor</Literal>
+    <WordBoundary/>
+    <EndOfLine/>
+    <Class>
+      <Literal>Bb^$</Literal>
+    </Class>
+    <Literal>ac1e</Literal>
+    <Escaped>\f</Escaped>
+    <Escaped>\n</Escaped>
+    <Escaped>\r</Escaped>
+    <Escaped>\t</Escaped>
+    <Escaped>\v</Escaped>
+    <Escaped>\0</Escaped>
+    <Escaped>\cA</Escaped>
+    <Class>
+      <Range start="\ca" end="\cZ"/>
+    </Class>
+    <Unicode>\u9fa5</Unicode>
+    <Class>
+      <Range start="\u4e00" end="\u9fa5"/>
+    </Class>
+    <Hex>\xAa</Hex>
+    <Class>
+      <Range start="\x00" end="\xff"/>
+    </Class>
+    <Class>
+      <Range start="\000" end="\077"/>
+    </Class>
+    <Octal>\012</Octal>
+    <Group id="1">
+      <Class>
+        <Range start="a" end="z"/>
+      </Class>
+      <Escaped>\d</Escaped>
+    </Group>
+    <Group capture="false">
+      <Escaped>\w</Escaped>
+      <Quantifier min="1" max="Infinity" mode="greedy">
+        <Escaped>\s</Escaped>
+      </Quantifier>
+    </Group>
+    <Literal>a</Literal>
+    <Lookahead>
+      <Literal>followed_by_this</Literal>
+    </Lookahead>
+    <Literal>b</Literal>
+    <Lookahead negative="true">
+      <Literal>not_followed_by_this</Literal>
+    </Lookahead>
+    <Literal>c</Literal>
+    <Literal>d</Literal>
+    <Lookbehind>
+      <Literal>preceded_by_this</Literal>
+    </Lookbehind>
+    <Literal>e</Literal>
+    <Lookbehind negative="true">
+      <Literal>preceded_by_this</Literal>
+    </Lookbehind>
+    <Literal>f</Literal>
+    <StartOfLine/>
+    <Class>
+      <Literal> a  b   </Literal>
+    </Class>
+    <Literal>  e m pty spaces </Literal>
+    <Class>
+      <Unicode>\u4E2D</Unicode>
+    </Class>
+    <Unicode>\u6587</Unicode>
+    <EndOfLine/>
+    <Group id="2" name="name">
+      <Quantifier min="1" max="Infinity" mode="greedy">
+        <Literal>a</Literal>
+      </Quantifier>
+      <Quantifier min="0" max="Infinity" mode="greedy">
+        <Literal>b</Literal>
+      </Quantifier>
+      <Group id="3" name="_name2_">
+        <Literal>xxx</Literal>
+      </Group>
+    </Group>
+    <Literal>ref</Literal>
+    <Group id="4">
+      <Alternation>
+        <Escaped>\0</Escaped>
+        <Reference id="1"/>
+        <Reference id="123"/>
+        <Reference name="_ref"/>
+        <Reference name="0123"/>
+      </Alternation>
+    </Group>
+    <Literal>&lt;&gt;&amp;&quot;&apos;</Literal>
+    <Class>
+      <Literal>&lt;&gt;&amp;&quot;&apos;</Literal>
+    </Class>
+    <Class>
+      <Range start="&lt;" end="&gt;"/>
+    </Class>
+    <Literal>\</Literal>
+    <Empty/>
+    <Empty/>
+  </Alternation>
+</RegularExpression>

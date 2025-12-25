@@ -29,6 +29,7 @@ enum FMT {
     FMT_NFA = 0x10,
     FMT_DFA = 0x20,
     FMT_HTML = 0x40,
+    FMT_XML = 0x80,
 };
 
 struct Args {

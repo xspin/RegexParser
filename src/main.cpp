@@ -49,9 +49,12 @@ int run(int argc, char* argv[]) {
             GraphHtml html(expr_str, html_os.str());
             html.dump(os);
             return;
-        }else if (args.format & Utils::FMT_SVG) {
+        } else if (args.format & Utils::FMT_SVG) {
             GraphSvg svg(expr_str, box->get_rows());
             svg.dump(os);
+            return;
+        } else if (args.format & Utils::FMT_XML) {
+            os << root->xml() << std::endl;
             return;
         }
 
