@@ -8,7 +8,7 @@ ifeq ($(OS), windows)
     LD      = x86_64-w64-mingw32-ld
     SUFFIX  = .exe
     CFLAGS  = -static
-    LDFLAGS = -static -lws2_32
+    LDFLAGS = -static -lws2_32 -s
 	BIN_DIR := C:/bin
 	BUILD_DIR := build_win
 	INC = -I/Library/Developer/CommandLineTools/usr/include/ -I/usr/local/include

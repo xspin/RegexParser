@@ -4,3 +4,5 @@ build
 build_win
 lines.txt
 mem.sh
+pack.sh
+
