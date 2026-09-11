@@ -83,19 +83,22 @@ int parse_args(Args& args, int argc, char* argv[]) {
 
     std::stringstream help;
     help 
-        << "Version " << APP_VERSION << " (Tool to parse and visualize regular expression)\n"
-        << "Usage: " << app << " [-h|-v|-c|-u] [-o path] [-f format(s)] [-g len] [REGEX]\n"
+        << "Version " << APP_VERSION << "\n"
+        << "regexv is a tool to parse and visualize a regular expression.\n"
+        << "Project home page: https://github.com/xspin/RegexParser.\n\n"
+
+        << "Usage: " << app << " [-h|-v|-c|-u] [-o path] [-f format(s)] [-g len] [PATTERN]\n"
         << "Options:\n"
         << "  -h           show this helpful usage message\n"
         << "  -v           show version info\n"
-        << "  -o path      specify output file path (default stdout)\n"
-        << "  -f format    specify output format (default graph):\n"
+        << "  -o <path>    specify output file path (default stdout)\n"
+        << "  -f <format>  specify output format (default graph):\n"
         << "                  graph/g, tree/t, nfa/n, dfa/d, svg/s, html/h, xml/x (multiply example: g,t,d)\n"
         << "  -c           print with ansi color\n"
-        << "  -g           generate a random regular expression with specified length limit\n"
+        << "  -g <len>     generate a random regular expression with specified length limit\n"
         << "  -u           enable utf8 encoding\n"
-        << "  -p port      run as http server with specified port\n"
-        << "  [REGEX]      specify regular expression input (read from stdin if missing)\n";
+        << "  -p <port>    run as http server with specified port\n"
+        << "  [PATTERN]    specify the regular expression to parse (read from stdin if missing)\n";
 
     args.format = FMT_NULL;
     args.color = false;
