@@ -55,6 +55,7 @@ int run(int argc, char* argv[]) {
             return;
         } else if (args.format & Utils::FMT_XML) {
             os << root->xml() << std::endl;
+            // os << root->html() << std::endl;
             return;
         }
 

@@ -145,6 +145,7 @@ struct ExprNode {
     virtual std::string str(bool color=false) = 0;
     virtual std::string fmt(bool color) = 0;
     virtual std::string xml() = 0;
+    virtual std::string html() = 0;
     virtual void travel(TravelFunc preFn=nullptr, TravelFunc postFn=nullptr, bool postorder=false) =0;
 
     void* operator new(std::size_t size);
@@ -167,6 +168,7 @@ struct ExprRoot: ExprNode {
     std::string stringify(bool color=false);
     std::string format(int indent, bool color);
     std::string xml();
+    std::string html();
 
     void travel(TravelFunc preFn, TravelFunc postFn, bool postorder);
     void process_groupid();
@@ -186,6 +188,7 @@ struct Literal: ExprNode {
     std::string str(bool color);
     std::string fmt(bool color);
     std::string xml();
+    std::string html();
     void travel(TravelFunc preFn, TravelFunc postFn, bool postorder);
 };
 
@@ -219,6 +222,7 @@ struct Escaped: ExprNode {
     std::string str(bool color);
     std::string fmt(bool color);
     std::string xml();
+    std::string html();
     void travel(TravelFunc preFn, TravelFunc postFn, bool postorder);
     bool isUnicode() {
         return ch.size() == 6 && ch.substr(0,2) == "\\u";
@@ -241,6 +245,7 @@ struct Anchor: ExprNode {
     std::string str(bool color);
     std::string fmt(bool color);
     std::string xml();
+    std::string html();
     void travel(TravelFunc preFn, TravelFunc postFn, bool postorder);
 };
 
@@ -264,6 +269,7 @@ struct Quantifier: ExprNode {
     std::string str(bool color);
     std::string fmt(bool color);
     std::string xml();
+    std::string html();
 
 private:
     std::string _str();
@@ -282,6 +288,7 @@ struct Range: ExprNode {
     std::string str(bool color);
     std::string fmt(bool color);
     std::string xml();
+    std::string html();
 };
 
 struct Any: ExprNode {
@@ -291,6 +298,7 @@ struct Any: ExprNode {
     std::string str(bool color);
     std::string fmt(bool color);
     std::string xml();
+    std::string html();
 };
 
 struct Sequence: ExprNode {
@@ -304,6 +312,7 @@ struct Sequence: ExprNode {
     std::string str(bool color);
     std::string fmt(bool color);
     std::string xml();
+    std::string html();
 };
 
 struct Class: ExprNode {
@@ -316,6 +325,7 @@ struct Class: ExprNode {
     std::string str(bool color);
     std::string fmt(bool color);
     std::string xml();
+    std::string html();
 };
 
 struct Group: ExprNode {
@@ -330,6 +340,7 @@ struct Group: ExprNode {
     std::string str(bool color);
     std::string fmt(bool color);
     std::string xml();
+    std::string html();
 };
 
 struct Backref: ExprNode {
@@ -342,6 +353,7 @@ struct Backref: ExprNode {
     std::string str(bool color);
     std::string fmt(bool color);
     std::string xml();
+    std::string html();
 };
 
 struct Lookahead: ExprNode {
@@ -358,6 +370,7 @@ struct Lookahead: ExprNode {
     std::string str(bool color);
     std::string fmt(bool color);
     std::string xml();
+    std::string html();
 };
 
 
@@ -375,6 +388,7 @@ struct Lookbehind: ExprNode {
     std::string str(bool color);
     std::string fmt(bool color);
     std::string xml();
+    std::string html();
 };
 
 struct Or: ExprNode {
@@ -387,6 +401,7 @@ struct Or: ExprNode {
     std::string str(bool color);
     std::string fmt(bool color);
     std::string xml();
+    std::string html();
     void travel(TravelFunc preFn, TravelFunc postFn, bool postorder);
 };
 
