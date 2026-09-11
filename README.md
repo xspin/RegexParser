@@ -1,8 +1,10 @@
-# RegexParser
+# regexv
 
 A terminal tool to parse and visualize regular expression.
 
 Supported Syntax: [Regular Expression Syntax](RegularExpression.md)
+
+[GitHub](https://github.com/xspin/RegexParser)
 
 ## Build and Install
 
@@ -25,25 +27,25 @@ make test
 
 ```sh
 # Parse a specified regular expression
-build/regexparser '^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$'
+build/regexv '^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$'
 
 # Read from stdin
-echo "a+b*[0-9]+" | build/regexparser
+echo "a+b*[0-9]+" | build/regexv
 
 # Print ansi-colored result
-build/regexparser -c '[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\.?'
+build/regexv -c '[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\.?'
 
 # Generate and parse a random regular expression
-build/regexparser -g 20
+build/regexv -g 20
 
 # Output the syntax tree
-build/regexparser -g 20 -f tree
+build/regexv -g 20 -f tree
 
 # Run as HTTP server
-build/regexparser -p 8080
+build/regexv -p 8080
 
 # Show more usage details
-build/regexparser -h
+build/regexv -h
 ```
 
 ## An Example of Text Graph Output
@@ -68,7 +70,7 @@ Regular Expression: ^(\-|\+)?\d+(\.\d+)?$
 
 ```sh
 # DFA states table and graph output
-build/regexparser -fd '(a[ab]c|b[bc]c|c[ac]c)'
+build/regexv -fd '(a[ab]c|b[bc]c|c[ac]c)'
 ```
 
 ```

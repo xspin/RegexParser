@@ -45,8 +45,8 @@ GTEST_FLAGS := -lgtest -lgtest_main -L/usr/local/lib
 LEX_CC := $(BUILD_DIR)/lex.yy.cc
 BISON_CC := $(BUILD_DIR)/y.tab.cc
 BISON_HH := $(BUILD_DIR)/y.tab.hh
-TARGET := $(BUILD_DIR)/regexparser$(SUFFIX)
-TARGET_BIN := $(BIN_DIR)/regexparser$(SUFFIX)
+TARGET := $(BUILD_DIR)/regexv$(SUFFIX)
+TARGET_BIN := $(BIN_DIR)/regexv$(SUFFIX)
 TARGET_TEST := $(BUILD_DIR)/test_parser$(SUFFIX)
 LEX_BIN := $(BUILD_DIR)/lexer
 
