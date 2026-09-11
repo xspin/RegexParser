@@ -40,7 +40,7 @@ BISON := bison
 
 CFLAGS += -Wall -std=c++17 -I./src -I./$(BUILD_DIR) $(INC)
 
-GTEST_FLAGS := -lgtest -lgtest_main 
+GTEST_FLAGS := -lgtest -lgtest_main -L/usr/local/lib
 
 LEX_CC := $(BUILD_DIR)/lex.yy.cc
 BISON_CC := $(BUILD_DIR)/y.tab.cc
@@ -103,7 +103,7 @@ $(OBJ_DIR):
 	@echo "mkdir: $@"
 
 $(TARGET_TEST): $(TEST_OBJS) $(TEST_SRC)
-	$(CXX) $(CFLAGS) $(GTEST_FLAGS) -o $@ $^
+	$(CXX) $(CFLAGS) -o $@ $^ $(GTEST_FLAGS)
 
 clean:
 	-rm -rf $(BUILD_DIR)/*

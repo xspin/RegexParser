@@ -1,3 +1,4 @@
+#include <map>
 #include "Parser.h"
 
 extern void yyerror_throw(const std::string& msg);
@@ -16,6 +17,17 @@ void reset_color() {
 std::string iter_color() {
     color_idx %= colors.size();
     return colors[color_idx++];
+}
+
+static inline std::string span_wrapper(const std::string cls, int lv,
+    const std::string content, const std::map<std::string,std::string>& mp={}) {
+    std::stringstream ss;
+    ss << "<span class=\"" << cls << " lv" << lv << "\"";
+    for (auto& [k, v] : mp) {
+        ss << " " << k << "=\"" << v << "\"";
+    }
+    ss << ">" << content << "</span>";
+    return ss.str();
 }
 
 
@@ -159,6 +171,26 @@ std::string ExprRoot::xml() {
     return s;
 }
 
+std::string ExprRoot::html() {
+    depth_ = 1;
+    std::string s;
+    s = R"(
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>RegxParser — Test</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body><div class="RegularExpression">)";
+    s += span_wrapper("Regex", 0, expr->html(), {{"expr", escape_xml(stringify(false))}});
+    s += "</div></body>";
+    s += "</html>";
+    return s;
+}
+
+
 void ExprRoot::travel(TravelFunc preFn, TravelFunc postFn, bool postorder) {
     expr->travel(preFn, postFn, postorder);
 }
@@ -236,6 +268,11 @@ std::string Literal::xml() {
     return prefix() + "<Literal>" + escape_xml(chars) +  "</Literal>";
 }
 
+
+std::string Literal::html() {
+    return span_wrapper("Literal", depth_,  escape_xml(chars));
+}
+
 void Literal::travel(TravelFunc preFn, TravelFunc postFn, bool postorder) {
     if (preFn) preFn(this);
     if (postFn) postFn(this);
@@ -267,6 +304,10 @@ std::string Escaped::xml() {
         tag = "Escaped";
     }
     return prefix() + "<" + tag + ">" + escape_xml(ch) +  "</" + tag + ">";
+}
+
+std::string Escaped::html() {
+    return span_wrapper("Escaped", depth_,  escape_xml(ch));
 }
 
 void Escaped::travel(TravelFunc preFn, TravelFunc postFn, bool postorder) {
@@ -305,6 +346,10 @@ std::string Anchor::xml() {
         s = "<Anchor>" + val +  "</Anchor>";
     }
     return prefix() + s;
+}
+
+std::string Anchor::html() {
+    return span_wrapper("Anchor", depth_, val);
 }
 
 void Anchor::travel(TravelFunc preFn, TravelFunc postFn, bool postorder) {
@@ -405,6 +450,9 @@ std::string Quantifier::xml() {
     return ss.str();
 }
 
+std::string Quantifier::html() {
+    return span_wrapper("Quantifier", depth_, prev->html() + _str());
+}
 
 /* Range */
 
@@ -465,6 +513,10 @@ std::string Range::xml() {
     return s;
 }
 
+std::string Range::html() {
+    return span_wrapper("Range", depth_, escape_xml(str(false)));
+}
+
 /* Any */
 Any::Any(): ExprNode(ExprType::T_ANY) {}
 Any::~Any() {}
@@ -485,6 +537,10 @@ std::string Any::fmt(bool color) {
 
 std::string Any::xml() {
     return prefix() + "<Any/>";
+}
+
+std::string Any::html() {
+    return span_wrapper("Any", depth_, ".");
 }
 
 /* Sequence */
@@ -560,6 +616,14 @@ std::string Sequence::xml() {
     return s;
 }
 
+std::string Sequence::html() {
+    std::string s;
+    for (auto node : nodes) {
+        s += node->html();
+    }
+    return s;
+}
+
 /* Class */
 
 Class::Class(ExprNode* seq, bool negative)
@@ -602,6 +666,14 @@ std::string Class::xml() {
     s += seq->xml();
     --depth_;
     s += prefix() + "</Class>";
+    return s;
+}
+
+std::string Class::html() {
+    std::string t = "[";
+    if (negative) t += "^";
+    std::string s = span_wrapper("Class", depth_++, t + seq->html() + "]");
+    --depth_;
     return s;
 }
 
@@ -659,6 +731,18 @@ std::string Group::xml() {
     return s;
 }
 
+std::string Group::html() {
+    std::string t;
+    if (name.empty()) {
+        t = (capture? "(" : "(?:") ;
+    } else {
+        t = "(?&lt;" + name + "&gt;";
+    }
+
+    std::string s = span_wrapper("Group", depth_++, t + expr->html() + ")");
+    --depth_;
+    return s;
+}
 
 /* Backref */
 Backref::Backref(int id, const std::string& name)
@@ -698,6 +782,10 @@ std::string Backref::xml() {
     }
     s += "/>";
     return s;
+}
+
+std::string Backref::html() {
+    return span_wrapper("Reference", depth_, str(false));
 }
 
 /* Lookahead */
@@ -745,6 +833,14 @@ std::string Lookahead::xml() {
     return s;
 }
 
+std::string Lookahead::html() {
+    std::string t = str(false);
+    t.pop_back();
+    std::string s = span_wrapper("Lookahead", depth_++, t + expr->html() + ")");
+    --depth_;
+    return s;
+}
+
 /* Lookbehind */
 
 Lookbehind::Lookbehind(ExprNode* expr, bool negative)
@@ -786,6 +882,14 @@ std::string Lookbehind::xml() {
     s += expr->xml();
     --depth_;
     s += prefix() + "</Lookbehind>";
+    return s;
+}
+
+std::string Lookbehind::html() {
+    std::string t = str(false);
+    t.pop_back();
+    std::string s = span_wrapper("Lookbehind", depth_++, t + expr->html() + ")");
+    --depth_;
     return s;
 }
 
@@ -884,6 +988,21 @@ std::string Or::xml() {
     --depth_;
     s += prefix() + "</Alternation>";
     return s;
+}
+
+std::string Or::html() {
+    std::string s;
+    ++depth_;
+    for (size_t i=0; i<items.size(); i++) {
+        if (i > 0) {
+            s += span_wrapper("Or", depth_-1, "|");
+        }
+        if (items[i]) {
+            s += items[i]->html();
+        }
+    }
+    --depth_;
+    return span_wrapper("Alternation", depth_, s);
 }
 
 void Or::travel(TravelFunc preFn, TravelFunc postFn, bool postorder) {
